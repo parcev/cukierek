@@ -96,10 +96,10 @@ app.add_middleware(
     allow_methods=[
         #"GET",
         #"POST"
-        *
+        "*"
     ],
 
-    allow_headers=[*],
+    allow_headers=["*"],
         #"Content-Type"
     #],
 )
