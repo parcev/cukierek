@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Darmowy Cukierek!</title>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: #f4f4f9;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      max-width: 400px;
+      margin: 0 auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:disabled {
+      background: #ccc !important;
+      cursor: not-allowed;
+    }
+
+    .btn-fb {
+      background: #1877F2;
+      color: white;
+    }
+
+    .btn-candy {
+      background: #28a745;
+      color: white;
+    }
+
+    .status {
+      margin-top: 15px;
+      font-weight: bold;
+      min-height: 24px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <h2>🍬 Odbierz darmowego cukierka!</h2>
+
+  <p>
+    Zaobserwuj naszą stronę na Facebooku,
+    a następnie wróć tutaj i odbierz nagrodę.
+  </p>
+
+  <button
+    id="startBtn"
+    class="btn-fb"
+    onclick="startSession()"
+  >
+    1. Zaobserwuj nas na Facebooku
+  </button>
+
+  <button
+    id="verifyBtn"
+    class="btn-candy"
+    onclick="verifyFollow()"
+    disabled
+  >
+    2. Sprawdź i odbierz cukierka
+  </button>
+
+  <p id="status" class="status"></p>
+
+</div>
+
+<script>
+  const API_BASE = "https://YOUR-BACKEND-DOMAIN.COM";
+  const FACEBOOK_PAGE_URL = "https://www.facebook.com/TwojProfil";
+
+  const CANDY_STORAGE_KEY = "candy_claimed";
+
+  let sessionId = null;
+  let sessionExpiresAt = null;
+  let verificationStarted = false;
+
+  const startBtn = document.getElementById("startBtn");
+  const verifyBtn = document.getElementById("verifyBtn");
+  const status = document.getElementById("status");
+
+  function hasAlreadyClaimed() {
+    return localStorage.getItem(CANDY_STORAGE_KEY) === "true";
+  }
+
+  function setStatus(message) {
+    status.innerText = message;
+  }
+
+  window.addEventListener("load", () => {
+    if (hasAlreadyClaimed()) {
+      startBtn.disabled = true;
+      verifyBtn.disabled = true;
+
+      setStatus(
+        "🍬 Już odebrałeś cukierka z tej przeglądarki."
+      );
+
+      return;
+    }
+
+    setStatus(
+      "Kliknij pierwszy przycisk, aby rozpocząć."
+    );
+  });
+
+  async function startSession() {
+    if (hasAlreadyClaimed()) {
+      setStatus(
+        "🍬 Już odebrałeś cukierka z tej przeglądarki."
+      );
+
+      startBtn.disabled = true;
+      verifyBtn.disabled = true;
+
+      return;
+    }
+
+    startBtn.disabled = true;
+
+    setStatus(
+      "⏳ Przygotowywanie sesji..."
+    );
+
+    try {
+      const response = await fetch(
+        `${API_BASE}/api/start-session`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      let data = null;
+
+      try {
+        data = await response.json();
+      } catch (_) {}
+
+      if (
+        response.status === 429 &&
+        data &&
+        data.detail === "FULL"
+      ) {
+        throw new Error(
+          "Automat jest obecnie zajęty. Spróbuj ponownie za chwilę."
+        );
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          "Nie udało się rozpocząć sesji."
+        );
+      }
+
+      if (!data || !data.session_id) {
+        throw new Error(
+          "Backend nie zwrócił identyfikatora sesji."
+        );
+      }
+
+      sessionId = data.session_id;
+
+      sessionExpiresAt =
+        Date.now() + data.expires_in * 1000;
+
+      window.open(
+        FACEBOOK_PAGE_URL,
+        "_blank"
+      );
+
+      verifyBtn.disabled = false;
+
+      startBtn.innerText =
+        "✅ Facebook został otwarty";
+
+      setStatus(
+        "👆 Zaobserwuj stronę na Facebooku, wróć tutaj i kliknij „Sprawdź”."
+      );
+
+    } catch (error) {
+      console.error(
+        "startSession error:",
+        error
+      );
+
+      sessionId = null;
+      startBtn.disabled = false;
+
+      setStatus(
+        "⚠️ " + error.message
+      );
+    }
+  }
+
+  async function verifyFollow() {
+    if (hasAlreadyClaimed()) {
+      sessionId = null;
+
+      startBtn.disabled = true;
+      verifyBtn.disabled = true;
+
+      setStatus(
+        "🍬 Już odebrałeś cukierka z tej przeglądarki."
+      );
+
+      return;
+    }
+
+    if (!sessionId) {
+      setStatus(
+        "⚠️ Najpierw rozpocznij sesję."
+      );
+
+      return;
+    }
+
+    if (
+      sessionExpiresAt &&
+      Date.now() >= sessionExpiresAt
+    ) {
+      sessionId = null;
+
+      verifyBtn.disabled = true;
+      startBtn.disabled = false;
+
+      startBtn.innerText =
+        "1. Zaobserwuj nas na Facebooku";
+
+      setStatus(
+        "⌛ Sesja wygasła. Rozpocznij ponownie."
+      );
+
+      return;
+    }
+
+    if (verificationStarted) {
+      return;
+    }
+
+    verificationStarted = true;
+
+    verifyBtn.disabled = true;
+    startBtn.disabled = true;
+
+    setStatus(
+      "🔎 Sprawdzam obserwowanie..."
+    );
+
+    try {
+      const response = await fetch(
+        `${API_BASE}/api/verify`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            session_id: sessionId
+          })
+        }
+      );
+
+      let data = null;
+
+      try {
+        data = await response.json();
+      } catch (_) {}
+
+      if (
+        response.ok &&
+        data &&
+        data.status === "success"
+      ) {
+        localStorage.setItem(
+          CANDY_STORAGE_KEY,
+          "true"
+        );
+
+        sessionId = null;
+
+        setStatus(
+          "🎉 Gotowe! Zabierz cukierka z podajnika."
+        );
+
+        startBtn.disabled = true;
+        verifyBtn.disabled = true;
+
+        return;
+      }
+
+      if (
+        response.ok &&
+        data &&
+        data.status === "not_verified"
+      ) {
+        verificationStarted = false;
+        verifyBtn.disabled = false;
+
+        setStatus(
+          "❌ Nie wykryto jeszcze nowego obserwującego. Upewnij się, że zaobserwowałeś stronę i spróbuj ponownie."
+        );
+
+        return;
+      }
+
+      if (
+        response.status === 404 ||
+        response.status === 410
+      ) {
+        sessionId = null;
+        verificationStarted = false;
+
+        verifyBtn.disabled = true;
+        startBtn.disabled = false;
+
+        startBtn.innerText =
+          "1. Zaobserwuj nas na Facebooku";
+
+        setStatus(
+          "⌛ Sesja wygasła. Rozpocznij ponownie."
+        );
+
+        return;
+      }
+
+      if (
+        response.status === 409 &&
+        data &&
+        data.detail === "ALREADY_USED"
+      ) {
+        localStorage.setItem(
+          CANDY_STORAGE_KEY,
+          "true"
+        );
+
+        sessionId = null;
+
+        startBtn.disabled = true;
+        verifyBtn.disabled = true;
+
+        setStatus(
+          "🍬 Ten cukierek został już odebrany."
+        );
+
+        return;
+      }
+
+      if (
+        response.status === 429 &&
+        data &&
+        data.detail === "TRY_AGAIN"
+      ) {
+        verificationStarted = false;
+
+        setStatus(
+          "⏳ Automat jest właśnie używany. Spróbuj ponownie za chwilę."
+        );
+
+        setTimeout(() => {
+          if (!hasAlreadyClaimed()) {
+            verifyBtn.disabled = false;
+          }
+        }, 5000);
+
+        return;
+      }
+
+      if (response.status === 502) {
+        verificationStarted = false;
+        verifyBtn.disabled = false;
+
+        setStatus(
+          "⚠️ Wystąpił problem z systemem. Spróbuj ponownie."
+        );
+
+        return;
+      }
+
+      verificationStarted = false;
+      verifyBtn.disabled = false;
+
+      setStatus(
+        "⚠️ Wystąpił nieoczekiwany błąd."
+      );
+
+    } catch (error) {
+      console.error(
+        "verifyFollow error:",
+        error
+      );
+
+      verificationStarted = false;
+      verifyBtn.disabled = false;
+
+      setStatus(
+        "⚠️ Brak połączenia z serwerem."
+      );
+    }
+  }
+</script>
+
+</body>
+</html>
