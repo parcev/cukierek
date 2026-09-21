@@ -14,80 +14,119 @@
       align-items: center;
       min-height: 100vh;
       margin: 0;
+      user-select: none;
     }
 
     .card {
       background: #16213e;
-      padding: 30px;
-      border-radius: 12px;
+      padding: 30px 20px;
+      border-radius: 16px;
       width: 100%;
-      max-width: 420px;
+      max-width: 320px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
       border: 1px solid #0f3460;
+      text-align: center;
     }
 
     h2 {
       margin-top: 0;
+      margin-bottom: 20px;
       color: #e94560;
-      text-align: center;
+      font-size: 20px;
     }
 
-    .form-group {
-      margin-bottom: 15px;
-      text-align: left;
+    /* Wyświetlacz PIN */
+    .pin-display {
+      background: #0f3460;
+      border: 1px solid #1a1a2e;
+      border-radius: 8px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      letter-spacing: 8px;
+      color: #e94560;
+      margin-bottom: 25px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
     }
 
-    label {
-      display: block;
-      margin-bottom: 5px;
+    .pin-display.empty {
+      color: #4e5d78;
       font-size: 14px;
+      letter-spacing: normal;
+    }
+
+    /* Klawiatura PIN */
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .key {
+      background: #0f3460;
+      color: #ffffff;
+      border: none;
+      border-radius: 50%;
+      width: 65px;
+      height: 65px;
+      margin: 0 auto;
+      font-size: 22px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    .key:active {
+      background: #e94560;
+      transform: scale(0.95);
+    }
+
+    .key.action-key {
+      background: #1a1a2e;
+      font-size: 18px;
       color: #a0a0a0;
     }
 
-    input {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #0f3460;
-      border-radius: 6px;
-      background: #0f3460;
+    .key.action-key:active {
+      background: #e94560;
       color: #ffffff;
-      font-size: 14px;
-      box-sizing: border-box;
     }
 
-    input:focus {
-      outline: none;
-      border-color: #e94560;
-    }
-
-    button {
+    /* Przycisk wysyłania */
+    .btn-submit {
       width: 100%;
       padding: 14px;
       background: #e94560;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 10px;
       transition: background 0.2s ease-in-out;
     }
 
-    button:hover {
+    .btn-submit:hover {
       background: #ff5277;
     }
 
-    button:disabled {
-      background: #555 !important;
+    .btn-submit:disabled {
+      background: #4e5d78 !important;
       cursor: not-allowed;
     }
 
+    /* Komunikaty statusu */
     .status {
-      margin-top: 20px;
-      padding: 12px;
+      margin-top: 15px;
+      padding: 10px;
       border-radius: 6px;
-      font-size: 14px;
+      font-size: 13px;
       display: none;
       word-break: break-all;
     }
@@ -110,68 +149,103 @@
 <body>
 
 <div class="card">
-  <h2>⚙️ Panel Kontrolny</h2>
+  <h2>⚙️ Wprowadź PIN Admina</h2>
 
-  <div class="form-group">
-    <label for="apiBase">URL Backendu API:</label>
-    <input type="text" id="apiBase" placeholder="https://twoj-backend.com">
+  <!-- Wyświetlacz wpisanego PIN-u -->
+  <div id="pinDisplay" class="pin-display empty">Wprowadź PIN</div>
+
+  <!-- Klawiatura numeryczna -->
+  <div class="keypad">
+    <button class="key" onclick="pressNum('1')">1</button>
+    <button class="key" onclick="pressNum('2')">2</button>
+    <button class="key" onclick="pressNum('3')">3</button>
+
+    <button class="key" onclick="pressNum('4')">4</button>
+    <button class="key" onclick="pressNum('5')">5</button>
+    <button class="key" onclick="pressNum('6')">6</button>
+
+    <button class="key" onclick="pressNum('7')">7</button>
+    <button class="key" onclick="pressNum('8')">8</button>
+    <button class="key" onclick="pressNum('9')">9</button>
+
+    <button class="key action-key" onclick="clearPin()">C</button>
+    <button class="key" onclick="pressNum('0')">0</button>
+    <button class="key action-key" onclick="backspacePin()">⌫</button>
   </div>
 
-  <div class="form-group">
-    <label for="adminKey">Klucz Admina (ADMIN_KEY):</label>
-    <input type="password" id="adminKey" placeholder="Wprowadź ADMIN_KEY">
-  </div>
-
-  <button id="sendBtn" onclick="sendManualSignal()">🚀 Wydaj Cukierka (Manualnie)</button>
+  <button id="sendBtn" class="btn-submit" onclick="sendManualSignal()">🚀 Wydaj Cukierka</button>
 
   <div id="status" class="status"></div>
 </div>
 
 <script>
-  // Wczytaj zapisane dane z localStorage
-  document.getElementById("apiBase").value = localStorage.getItem("admin_api_base") || "";
-  document.getElementById("adminKey").value = localStorage.getItem("admin_key") || "";
+  const API_BASE = "https://YOUR-BACKEND-DOMAIN.COM";
+
+  let currentPin = "";
+
+  function pressNum(num) {
+    if (currentPin.length < 8) { // Maksymalna długość PIN-u
+      currentPin += num;
+      updateDisplay();
+    }
+  }
+
+  function backspacePin() {
+    currentPin = currentPin.slice(0, -1);
+    updateDisplay();
+  }
+
+  function clearPin() {
+    currentPin = "";
+    updateDisplay();
+  }
+
+  function updateDisplay() {
+    const display = document.getElementById("pinDisplay");
+    if (currentPin.length === 0) {
+      display.innerText = "Wprowadź PIN";
+      display.classList.add("empty");
+    } else {
+      display.innerText = "•".repeat(currentPin.length);
+      display.classList.remove("empty");
+    }
+  }
 
   async function sendManualSignal() {
-    const apiBase = document.getElementById("apiBase").value.trim().replace(/\/$/, "");
-    const adminKey = document.getElementById("adminKey").value.trim();
     const sendBtn = document.getElementById("sendBtn");
-    const status = document.getElementById("status");
 
-    if (!apiBase || !adminKey) {
-      showStatus("Uzupełnij adres URL backendu oraz Klucz Admina.", false);
+    if (!currentPin) {
+      showStatus("Najpierw wprowadź PIN.", false);
       return;
     }
 
-    // Zapisz ustawienia
-    localStorage.setItem("admin_api_base", apiBase);
-    localStorage.setItem("admin_key", adminKey);
-
     sendBtn.disabled = true;
-    showStatus("Sending signal to Adafruit IO...", true, true);
+    showStatus("Wysyłanie sygnału do Adafruit IO...", true, true);
 
     try {
-      const response = await fetch(`${apiBase}/api/admin/manual-dispense`, {
+      const response = await fetch(`${API_BASE}/api/admin/manual-dispense`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          admin_key: adminKey
+          admin_key: currentPin
         })
       });
 
       const data = await response.json();
 
       if (response.ok && data.status === "success") {
-        showStatus(`✅ Sukces! ${data.message}<br><small>ID: ${data.dispense_id}</small>`, true);
+        showStatus(`✅ Sukces!<br><small>ID: ${data.dispense_id}</small>`, true);
+        clearPin();
       } else if (response.status === 401) {
-        showStatus("❌ Nieprawidłowy Klucz Admina (UNAUTHORIZED).", false);
+        showStatus("❌ Nieprawidłowy PIN.", false);
+        clearPin();
       } else {
         showStatus(`⚠️ Błąd (${response.status}): ${data.detail || "Nieznany błąd"}`, false);
       }
     } catch (err) {
-      showStatus(`⚠️ Błąd połączenia: ${err.message}`, false);
+      showStatus(`⚠️ Błąd połączenia z serwerem: ${err.message}`, false);
     } finally {
       sendBtn.disabled = false;
     }
