@@ -5,7 +5,7 @@ import threading
 
 import requests
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -82,13 +82,18 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://parcev.github.io/cukierek"],
+    allow_origins=["*"],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
+@app.middleware("http")
+async def log_origin_middleware(request: Request, call_next):
+    origin = request.headers.get("origin") or request.headers.get("referer") or "Direct/Unknown"
+    print(f"Incoming request to {request.url.path} from website: {origin}")
+    response = await call_next(request)
+    return response
 # =========================================================
 # MEMORY STATE
 # =========================================================
