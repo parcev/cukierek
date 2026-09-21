@@ -5,7 +5,7 @@ import threading
 
 import requests
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -34,6 +34,8 @@ META_ACCESS_TOKEN = os.getenv("FB_ACCESS_TOKEN")
 ADAFRUIT_USERNAME = os.getenv("ADAFRUIT_USERNAME")
 ADAFRUIT_KEY = os.getenv("ADAFRUIT_KEY")
 
+ADMIN_KEY = os.getenv("ADMIN_KEY", "super-secret-admin-key")
+
 DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 
 FRONTEND_ORIGIN = os.getenv(
@@ -60,7 +62,6 @@ missing = [
 ]
 
 if missing:
-
     print(
         "WARNING: Missing environment variables:",
         ", ".join(missing)
@@ -88,29 +89,19 @@ if FRONTEND_ORIGIN and FRONTEND_ORIGIN != "*":
 
 app.add_middleware(
     CORSMiddleware,
-
     allow_origins=origins if origins else ["*"],
-
     allow_credentials=False,
-
     allow_methods=[
-        #"GET",
-        #"POST"
-        "*"
+        "GET",
+        "POST"
     ],
-
-    allow_headers=["*"],
-        #"Content-Type"
-    #],
+    allow_headers=[
+        "Content-Type",
+        "X-Admin-Key"
+    ],
 )
 
 
-@app.middleware("http")
-async def log_origin_middleware(request: Request, call_next):
-    origin = request.headers.get("origin") or request.headers.get("referer") or "Direct/Unknown"
-    print(f"Incoming request to {request.url.path} from website: {origin}")
-    response = await call_next(request)
-    return response
 # =========================================================
 # MEMORY STATE
 # =========================================================
@@ -127,15 +118,16 @@ last_dispense_time = 0
 # =========================================================
 
 class StartSessionResponse(BaseModel):
-
     session_id: str
-
     expires_in: int
 
 
 class VerifyRequest(BaseModel):
-
     session_id: str
+
+
+class ManualDispenseRequest(BaseModel):
+    admin_key: str
 
 
 # =========================================================
@@ -143,15 +135,11 @@ class VerifyRequest(BaseModel):
 # =========================================================
 
 def cleanup_sessions():
-
     now = time.time()
-
     expired = []
 
     with state_lock:
-
         for session_id, data in sessions.items():
-
             if data["expires_at"] <= now:
                 expired.append(session_id)
 
@@ -160,21 +148,13 @@ def cleanup_sessions():
 
 
 def get_follower_count():
-
     if not META_PAGE_ID:
-        raise RuntimeError(
-            "FB_PAGE_ID is not configured"
-        )
+        raise RuntimeError("FB_PAGE_ID is not configured")
 
     if not META_ACCESS_TOKEN:
-        raise RuntimeError(
-            "FB_ACCESS_TOKEN is not configured"
-        )
+        raise RuntimeError("FB_ACCESS_TOKEN is not configured")
 
-    url = (
-        f"https://graph.facebook.com/"
-        f"{META_PAGE_ID}"
-    )
+    url = f"https://graph.facebook.com/{META_PAGE_ID}"
 
     params = {
         "fields": "followers_count",
@@ -188,30 +168,21 @@ def get_follower_count():
     )
 
     response.raise_for_status()
-
     data = response.json()
-
     count = data.get("followers_count")
 
     if count is None:
-        raise RuntimeError(
-            "Meta API did not return followers_count"
-        )
+        raise RuntimeError("Meta API did not return followers_count")
 
     return int(count)
 
 
 def send_to_adafruit(dispense_id):
-
     if not ADAFRUIT_USERNAME:
-        raise RuntimeError(
-            "ADAFRUIT_USERNAME is not configured"
-        )
+        raise RuntimeError("ADAFRUIT_USERNAME is not configured")
 
     if not ADAFRUIT_KEY:
-        raise RuntimeError(
-            "ADAFRUIT_KEY is not configured"
-        )
+        raise RuntimeError("ADAFRUIT_KEY is not configured")
 
     url = (
         f"https://io.adafruit.com/api/v2/"
@@ -238,32 +209,26 @@ def send_to_adafruit(dispense_id):
     response.raise_for_status()
 
 
-def send_discord(dispense_id):
-
+def send_discord(dispense_id, manual=False):
     if not DISCORD_WEBHOOK_URL:
         return
 
+    tag = "🔴 **[MANUAL]** " if manual else "🍬 "
     payload = {
-        "content":
-            "🍬 **Cukierko-Bot:** "
-            "wysłano polecenie wydania cukierka."
-            f"\nID: `{dispense_id}`"
+        "content": (
+            f"{tag}**Cukierko-Bot:** wysłano polecenie wydania cukierka.\n"
+            f"ID: `{dispense_id}`"
+        )
     }
 
     try:
-
         requests.post(
             DISCORD_WEBHOOK_URL,
             json=payload,
             timeout=3
         )
-
     except Exception as error:
-
-        print(
-            "Discord error:",
-            error
-        )
+        print("Discord error:", error)
 
 
 # =========================================================
@@ -272,7 +237,6 @@ def send_discord(dispense_id):
 
 @app.get("/")
 def root():
-
     return {
         "status": "online",
         "system": "Candy Dispenser Backend"
@@ -288,30 +252,21 @@ def root():
     response_model=StartSessionResponse
 )
 def start_session():
-
     cleanup_sessions()
 
     with state_lock:
-
         if len(sessions) >= MAX_ACTIVE_SESSIONS:
-
             raise HTTPException(
                 status_code=429,
                 detail="FULL"
             )
 
         try:
-
             initial_count = get_follower_count()
-
         except Exception as error:
-
             raise HTTPException(
                 status_code=502,
-                detail=(
-                    "Nie można sprawdzić "
-                    f"Facebook followers_count: {error}"
-                )
+                detail=f"Nie można sprawdzić Facebook followers_count: {error}"
             )
 
         session_id = secrets.token_urlsafe(32)
@@ -319,8 +274,7 @@ def start_session():
         sessions[session_id] = {
             "initial_count": initial_count,
             "created_at": time.time(),
-            "expires_at":
-                time.time() + SESSION_DURATION,
+            "expires_at": time.time() + SESSION_DURATION,
             "verified": False,
             "dispensed": False
         }
@@ -337,118 +291,75 @@ def start_session():
 
 @app.post("/api/verify")
 def verify(req: VerifyRequest):
-
     cleanup_sessions()
 
     with state_lock:
-
-        session = sessions.get(
-            req.session_id
-        )
+        session = sessions.get(req.session_id)
 
         if not session:
-
             raise HTTPException(
                 status_code=404,
                 detail="SESSION_EXPIRED"
             )
 
         if session["expires_at"] < time.time():
-
             del sessions[req.session_id]
-
             raise HTTPException(
                 status_code=410,
                 detail="SESSION_EXPIRED"
             )
 
         if session["dispensed"]:
-
             raise HTTPException(
                 status_code=409,
                 detail="ALREADY_USED"
             )
 
-        initial_count = session[
-            "initial_count"
-        ]
-
-    # -----------------------------------------------------
-    # Sprawdzamy kilka razy.
-    # -----------------------------------------------------
+        initial_count = session["initial_count"]
 
     current_count = initial_count
 
     for attempt in range(FOLLOWER_CHECKS):
-
         try:
-
             current_count = get_follower_count()
-
         except Exception as error:
-
             raise HTTPException(
                 status_code=502,
-                detail=(
-                    "Błąd sprawdzania "
-                    f"Facebook: {error}"
-                )
+                detail=f"Błąd sprawdzania Facebook: {error}"
             )
 
         if current_count > initial_count:
             break
 
         if attempt < FOLLOWER_CHECKS - 1:
-
-            time.sleep(
-                FOLLOWER_CHECK_INTERVAL
-            )
-
-    # -----------------------------------------------------
-    # Brak wzrostu.
-    # -----------------------------------------------------
+            time.sleep(FOLLOWER_CHECK_INTERVAL)
 
     if current_count <= initial_count:
-
         return {
             "status": "not_verified",
             "initial_count": initial_count,
             "current_count": current_count
         }
 
-    # -----------------------------------------------------
-    # Dodatkowy globalny cooldown.
-    # -----------------------------------------------------
-
     global last_dispense_time
-
     now = time.time()
 
     with state_lock:
-
-        if (
-            now - last_dispense_time
-            < DISPENSE_COOLDOWN
-        ):
-
+        if now - last_dispense_time < DISPENSE_COOLDOWN:
             raise HTTPException(
                 status_code=429,
                 detail="TRY_AGAIN"
             )
 
-        session = sessions.get(
-            req.session_id
-        )
+        session = sessions.get(req.session_id)
 
         if not session:
-
             raise HTTPException(
                 status_code=404,
                 detail="SESSION_EXPIRED"
             )
 
         if session["dispensed"]:
-
             raise HTTPException(
                 status_code=409,
                 detail="ALREADY_USED"
@@ -462,63 +373,58 @@ def verify(req: VerifyRequest):
 
         last_dispense_time = now
 
-    # -----------------------------------------------------
-    # Wyślij polecenie do Adafruit IO.
-    # -----------------------------------------------------
-
     try:
-
-        send_to_adafruit(
-            dispense_id
-        )
-
+        send_to_adafruit(dispense_id)
     except Exception as error:
-
-        # Jeżeli Adafruit się nie udał,
-        # cofamy stan sesji.
-
         with state_lock:
-
-            session = sessions.get(
-                req.session_id
-            )
-
+            session = sessions.get(req.session_id)
             if session:
                 session["verified"] = False
                 session["dispensed"] = False
-                session.pop(
-                    "dispense_id",
-                    None
-                )
+                session.pop("dispense_id", None)
 
         raise HTTPException(
             status_code=502,
-            detail=(
-                "Błąd Adafruit IO: "
-                f"{error}"
-            )
+            detail=f"Błąd Adafruit IO: {error}"
         )
 
-    # -----------------------------------------------------
-    # Discord
-    # -----------------------------------------------------
-
-    send_discord(
-        dispense_id
-    )
-
-    # -----------------------------------------------------
-    # Sesja zakończona.
-    # -----------------------------------------------------
+    send_discord(dispense_id)
 
     with state_lock:
-
-        sessions.pop(
-            req.session_id,
-            None
-        )
+        sessions.pop(req.session_id, None)
 
     return {
         "status": "success",
         "message": "Polecenie wydania wysłane."
+    }
+
+
+# =========================================================
+# MANUAL DISPENSE (ADMIN)
+# =========================================================
+
+@app.post("/api/admin/manual-dispense")
+def manual_dispense(req: ManualDispenseRequest):
+    if req.admin_key != ADMIN_KEY:
+        raise HTTPException(
+            status_code=401,
+            detail="UNAUTHORIZED"
+        )
+
+    dispense_id = f"MANUAL_{secrets.token_urlsafe(16)}"
+
+    try:
+        send_to_adafruit(dispense_id)
+    except Exception as error:
+        raise HTTPException(
+            status_code=502,
+            detail=f"Błąd Adafruit IO: {error}"
+        )
+
+    send_discord(dispense_id, manual=True)
+
+    return {
+        "status": "success",
+        "message": "Manualny sygnał został pomyślnie wysłany do Adafruit IO.",
+        "dispense_id": dispense_id
     }
