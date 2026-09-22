@@ -1517,3 +1517,27 @@ window.addEventListener(
   }
 );
 
+// =========================================================
+// LICZNIK SESJI
+// =========================================================
+
+setInterval(
+  () => {
+
+    if (
+      sessionIsValid()
+    ) {
+
+      updateSessionInfo();
+
+    }
+
+  },
+  1000
+);
+
+</script>
+
+</body>
+
+</html>
