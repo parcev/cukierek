@@ -10,9 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 
-# =========================================================
 # CONFIG
-# =========================================================
 
 SESSION_DURATION = 8 * 60
 
@@ -24,26 +22,53 @@ FOLLOWER_CHECK_INTERVAL = 2
 DISPENSE_COOLDOWN = 5
 
 
-# =========================================================
+# META GRAPH API
+
+# Wersja API jest ustawiona bezpośrednio w kodzie.
+META_API_VERSION = "v24.0"
+
+
 # ENVIRONMENT VARIABLES
-# =========================================================
 
 # FACEBOOK
+#
+# FB_ACCESS_TOKEN musi być Page Access Tokenem
+# strony Facebook połączonej z Instagramem.
+
 FB_PAGE_ID = os.getenv("FB_PAGE_ID")
-FB_ACCESS_TOKEN = os.getenv("FB_ACCESS_TOKEN")
+
+FB_ACCESS_TOKEN = os.getenv(
+    "FB_ACCESS_TOKEN"
+)
 
 
 # INSTAGRAM
-IG_USER_ID = os.getenv("IG_USER_ID")
-IG_ACCESS_TOKEN = os.getenv("IG_ACCESS_TOKEN")
+#
+# Nie potrzebujemy osobnego IG_ACCESS_TOKEN.
+#
+# IG_USER_ID to:
+# instagram_business_account.id
+#
+# związanego ze stroną Facebook.
+
+IG_USER_ID = os.getenv(
+    "IG_USER_ID"
+)
 
 
 # ADAFRUIT
-ADAFRUIT_USERNAME = os.getenv("ADAFRUIT_USERNAME")
-ADAFRUIT_KEY = os.getenv("ADAFRUIT_KEY")
+
+ADAFRUIT_USERNAME = os.getenv(
+    "ADAFRUIT_USERNAME"
+)
+
+ADAFRUIT_KEY = os.getenv(
+    "ADAFRUIT_KEY"
+)
 
 
 # ADMIN
+
 ADMIN_KEY = os.getenv(
     "ADMIN_KEY",
     "super-secret-admin-key"
@@ -51,31 +76,37 @@ ADMIN_KEY = os.getenv(
 
 
 # DISCORD - OPTIONAL
+
 DISCORD_WEBHOOK_URL = os.getenv(
     "DISCORD_WEBHOOK_URL"
 )
 
 
 # FRONTEND
+
 FRONTEND_ORIGIN = os.getenv(
     "FRONTEND_ORIGIN",
     "*"
 )
 
 
-# =========================================================
 # CHECK ENVIRONMENT
-# =========================================================
 
 required_vars = {
-    "FB_PAGE_ID": FB_PAGE_ID,
-    "FB_ACCESS_TOKEN": FB_ACCESS_TOKEN,
+    "FB_PAGE_ID":
+        FB_PAGE_ID,
 
-    "IG_USER_ID": IG_USER_ID,
-    "IG_ACCESS_TOKEN": IG_ACCESS_TOKEN,
+    "FB_ACCESS_TOKEN":
+        FB_ACCESS_TOKEN,
 
-    "ADAFRUIT_USERNAME": ADAFRUIT_USERNAME,
-    "ADAFRUIT_KEY": ADAFRUIT_KEY,
+    "IG_USER_ID":
+        IG_USER_ID,
+
+    "ADAFRUIT_USERNAME":
+        ADAFRUIT_USERNAME,
+
+    "ADAFRUIT_KEY":
+        ADAFRUIT_KEY,
 }
 
 
@@ -87,24 +118,21 @@ missing = [
 
 
 if missing:
+
     print(
         "WARNING: Missing environment variables:",
         ", ".join(missing)
     )
 
 
-# =========================================================
 # APP
-# =========================================================
 
 app = FastAPI(
     title="Candy Dispenser API"
 )
 
 
-# =========================================================
 # CORS
-# =========================================================
 
 origins = []
 
@@ -112,12 +140,14 @@ if (
     FRONTEND_ORIGIN
     and FRONTEND_ORIGIN != "*"
 ):
+
     origins = [
         FRONTEND_ORIGIN
     ]
 
 
 app.add_middleware(
+
     CORSMiddleware,
 
     allow_origins=(
@@ -140,9 +170,7 @@ app.add_middleware(
 )
 
 
-# =========================================================
 # MEMORY
-# =========================================================
 
 sessions = {}
 
@@ -151,9 +179,7 @@ state_lock = threading.Lock()
 last_dispense_time = 0
 
 
-# =========================================================
 # MODELS
-# =========================================================
 
 class StartSessionResponse(BaseModel):
 
@@ -174,9 +200,7 @@ class ManualDispenseRequest(BaseModel):
     admin_key: str
 
 
-# =========================================================
 # SESSION CLEANUP
-# =========================================================
 
 def cleanup_sessions():
 
@@ -207,9 +231,7 @@ def cleanup_sessions():
             ]
 
 
-# =========================================================
 # FACEBOOK FOLLOWERS
-# =========================================================
 
 def get_facebook_follower_count():
 
@@ -229,6 +251,7 @@ def get_facebook_follower_count():
 
     url = (
         "https://graph.facebook.com/"
+        f"{META_API_VERSION}/"
         f"{FB_PAGE_ID}"
     )
 
@@ -253,7 +276,26 @@ def get_facebook_follower_count():
     )
 
 
-    response.raise_for_status()
+    if not response.ok:
+
+        try:
+
+            error_data = (
+                response.json()
+            )
+
+        except Exception:
+
+            error_data = {
+                "raw":
+                    response.text
+            }
+
+
+        raise RuntimeError(
+            "Facebook Meta API error: "
+            f"{error_data}"
+        )
 
 
     data = response.json()
@@ -267,17 +309,23 @@ def get_facebook_follower_count():
     if count is None:
 
         raise RuntimeError(
-            "Meta API did not return "
-            "followers_count"
+            "Facebook Meta API did not "
+            "return followers_count"
         )
 
 
     return int(count)
 
 
-# =========================================================
 # INSTAGRAM FOLLOWERS
-# =========================================================
+#
+# Instagram API with Facebook Login
+#
+# Używamy tego samego Page Access Tokena
+# co dla strony Facebook.
+#
+# IG_USER_ID wskazuje konto Instagram
+# Professional połączone ze stroną Facebook.
 
 def get_instagram_follower_count():
 
@@ -288,15 +336,16 @@ def get_instagram_follower_count():
         )
 
 
-    if not IG_ACCESS_TOKEN:
+    if not FB_ACCESS_TOKEN:
 
         raise RuntimeError(
-            "IG_ACCESS_TOKEN is not configured"
+            "FB_ACCESS_TOKEN is not configured"
         )
 
 
     url = (
-        "https://graph.instagram.com/"
+        "https://graph.facebook.com/"
+        f"{META_API_VERSION}/"
         f"{IG_USER_ID}"
     )
 
@@ -307,7 +356,7 @@ def get_instagram_follower_count():
             "followers_count",
 
         "access_token":
-            IG_ACCESS_TOKEN
+            FB_ACCESS_TOKEN
     }
 
 
@@ -321,7 +370,26 @@ def get_instagram_follower_count():
     )
 
 
-    response.raise_for_status()
+    if not response.ok:
+
+        try:
+
+            error_data = (
+                response.json()
+            )
+
+        except Exception:
+
+            error_data = {
+                "raw":
+                    response.text
+            }
+
+
+        raise RuntimeError(
+            "Instagram Meta API error: "
+            f"{error_data}"
+        )
 
 
     data = response.json()
@@ -335,17 +403,15 @@ def get_instagram_follower_count():
     if count is None:
 
         raise RuntimeError(
-            "Instagram API did not return "
-            "followers_count"
+            "Instagram Meta API did not "
+            "return followers_count"
         )
 
 
     return int(count)
 
 
-# =========================================================
 # GENERIC FOLLOWER COUNT
-# =========================================================
 
 def get_follower_count(
     platform
@@ -370,9 +436,7 @@ def get_follower_count(
     )
 
 
-# =========================================================
 # ADAFRUIT
-# =========================================================
 
 def send_to_adafruit(
     dispense_id
@@ -433,9 +497,7 @@ def send_to_adafruit(
     response.raise_for_status()
 
 
-# =========================================================
 # DISCORD
-# =========================================================
 
 def send_discord(
     dispense_id,
@@ -498,9 +560,7 @@ def send_discord(
         )
 
 
-# =========================================================
 # ROOT
-# =========================================================
 
 @app.get("/")
 def root():
@@ -515,9 +575,7 @@ def root():
     }
 
 
-# =========================================================
 # START SESSION
-# =========================================================
 
 @app.post(
     "/api/start-session",
@@ -543,9 +601,7 @@ def start_session():
             )
 
 
-        # ---------------------------------------------
-        # Get initial Facebook count
-        # ---------------------------------------------
+        # Initial Facebook count
 
         try:
 
@@ -567,9 +623,7 @@ def start_session():
             )
 
 
-        # ---------------------------------------------
-        # Get initial Instagram count
-        # ---------------------------------------------
+        # Initial Instagram count
 
         try:
 
@@ -591,9 +645,7 @@ def start_session():
             )
 
 
-        # ---------------------------------------------
         # Create session
-        # ---------------------------------------------
 
         session_id = (
             secrets.token_urlsafe(32)
@@ -613,6 +665,7 @@ def start_session():
 
 
             # FACEBOOK
+
             "facebook_initial":
                 facebook_initial,
 
@@ -621,6 +674,7 @@ def start_session():
 
 
             # INSTAGRAM
+
             "instagram_initial":
                 instagram_initial,
 
@@ -639,9 +693,7 @@ def start_session():
     }
 
 
-# =========================================================
 # VERIFY
-# =========================================================
 
 @app.post(
     "/api/verify"
@@ -653,9 +705,7 @@ def verify(
     cleanup_sessions()
 
 
-    # =====================================================
-    # VALIDATE PLATFORM
-    # =====================================================
+    # Validate platform
 
     if req.platform not in [
         "facebook",
@@ -670,9 +720,7 @@ def verify(
         )
 
 
-    # =====================================================
-    # GET SESSION
-    # =====================================================
+    # Get session
 
     with state_lock:
 
@@ -708,9 +756,7 @@ def verify(
             )
 
 
-        # ---------------------------------------------
-        # Select requested platform
-        # ---------------------------------------------
+        # Select platform
 
         if (
             req.platform
@@ -761,9 +807,7 @@ def verify(
             )
 
 
-    # =====================================================
-    # CHECK FOLLOWER COUNT
-    # =====================================================
+    # Check follower count
 
     current_count = (
         initial_count
@@ -814,9 +858,7 @@ def verify(
             )
 
 
-    # =====================================================
-    # NOT VERIFIED
-    # =====================================================
+    # Not verified
 
     if (
         current_count
@@ -839,9 +881,7 @@ def verify(
         }
 
 
-    # =====================================================
-    # COOLDOWN
-    # =====================================================
+    # Cooldown
 
     global last_dispense_time
 
@@ -878,9 +918,7 @@ def verify(
             )
 
 
-        # ---------------------------------------------
         # Check again
-        # ---------------------------------------------
 
         if (
             req.platform
@@ -916,18 +954,14 @@ def verify(
                 )
 
 
-        # ---------------------------------------------
-        # Generate unique dispense ID
-        # ---------------------------------------------
+        # Unique dispense ID
 
         dispense_id = (
             secrets.token_urlsafe(24)
         )
 
 
-        # ---------------------------------------------
-        # Mark only selected platform
-        # ---------------------------------------------
+        # Mark selected platform
 
         if (
             req.platform
@@ -953,9 +987,7 @@ def verify(
         last_dispense_time = now
 
 
-    # =====================================================
-    # SEND TO ADAFRUIT
-    # =====================================================
+    # Send to Adafruit
 
     try:
 
@@ -965,9 +997,7 @@ def verify(
 
     except Exception as error:
 
-        # ---------------------------------------------
         # Rollback
-        # ---------------------------------------------
 
         with state_lock:
 
@@ -1011,9 +1041,7 @@ def verify(
         )
 
 
-    # =====================================================
-    # DISCORD
-    # =====================================================
+    # Discord
 
     send_discord(
 
@@ -1023,9 +1051,7 @@ def verify(
     )
 
 
-    # =====================================================
-    # DELETE SESSION IF BOTH CLAIMED
-    # =====================================================
+    # Delete session if both claimed
 
     with state_lock:
 
@@ -1058,9 +1084,7 @@ def verify(
                 )
 
 
-    # =====================================================
-    # RESPONSE
-    # =====================================================
+    # Response
 
     return {
 
@@ -1075,9 +1099,7 @@ def verify(
     }
 
 
-# =========================================================
 # MANUAL DISPENSE
-# =========================================================
 
 @app.post(
     "/api/admin/manual-dispense"
