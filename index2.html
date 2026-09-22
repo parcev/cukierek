@@ -886,18 +886,15 @@ async function startPlatform(platform) {
       !sessionIsValid()
     ) {
 
-      const response =
-        await fetch(
-          `${API_BASE}/api/start-session`,
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type":
-                "application/json"
-            }
-          }
-        );
+      const response = await fetch(`${API_BASE}/api/start-session`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    platform: platform
+  })
+});
 
 
       let data = null;
