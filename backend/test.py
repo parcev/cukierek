@@ -1,0 +1,1147 @@
+import os
+import time
+import secrets
+import threading
+
+import requests
+
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
+
+# =========================================================
+# CONFIG
+# =========================================================
+
+SESSION_DURATION = 8 * 60
+
+MAX_ACTIVE_SESSIONS = 3
+
+FOLLOWER_CHECKS = 5
+FOLLOWER_CHECK_INTERVAL = 2
+
+DISPENSE_COOLDOWN = 5
+
+
+# =========================================================
+# ENVIRONMENT VARIABLES
+# =========================================================
+
+# FACEBOOK
+FB_PAGE_ID = os.getenv("FB_PAGE_ID")
+FB_ACCESS_TOKEN = os.getenv("FB_ACCESS_TOKEN")
+
+
+# INSTAGRAM
+IG_USER_ID = os.getenv("IG_USER_ID")
+IG_ACCESS_TOKEN = os.getenv("IG_ACCESS_TOKEN")
+
+
+# ADAFRUIT
+ADAFRUIT_USERNAME = os.getenv("ADAFRUIT_USERNAME")
+ADAFRUIT_KEY = os.getenv("ADAFRUIT_KEY")
+
+
+# ADMIN
+ADMIN_KEY = os.getenv(
+    "ADMIN_KEY",
+    "super-secret-admin-key"
+)
+
+
+# DISCORD - OPTIONAL
+DISCORD_WEBHOOK_URL = os.getenv(
+    "DISCORD_WEBHOOK_URL"
+)
+
+
+# FRONTEND
+FRONTEND_ORIGIN = os.getenv(
+    "FRONTEND_ORIGIN",
+    "*"
+)
+
+
+# =========================================================
+# CHECK ENVIRONMENT
+# =========================================================
+
+required_vars = {
+    "FB_PAGE_ID": FB_PAGE_ID,
+    "FB_ACCESS_TOKEN": FB_ACCESS_TOKEN,
+
+    "IG_USER_ID": IG_USER_ID,
+    "IG_ACCESS_TOKEN": IG_ACCESS_TOKEN,
+
+    "ADAFRUIT_USERNAME": ADAFRUIT_USERNAME,
+    "ADAFRUIT_KEY": ADAFRUIT_KEY,
+}
+
+
+missing = [
+    name
+    for name, value in required_vars.items()
+    if not value
+]
+
+
+if missing:
+    print(
+        "WARNING: Missing environment variables:",
+        ", ".join(missing)
+    )
+
+
+# =========================================================
+# APP
+# =========================================================
+
+app = FastAPI(
+    title="Candy Dispenser API"
+)
+
+
+# =========================================================
+# CORS
+# =========================================================
+
+origins = []
+
+if (
+    FRONTEND_ORIGIN
+    and FRONTEND_ORIGIN != "*"
+):
+    origins = [
+        FRONTEND_ORIGIN
+    ]
+
+
+app.add_middleware(
+    CORSMiddleware,
+
+    allow_origins=(
+        origins
+        if origins
+        else ["*"]
+    ),
+
+    allow_credentials=False,
+
+    allow_methods=[
+        "GET",
+        "POST"
+    ],
+
+    allow_headers=[
+        "Content-Type",
+        "X-Admin-Key"
+    ],
+)
+
+
+# =========================================================
+# MEMORY
+# =========================================================
+
+sessions = {}
+
+state_lock = threading.Lock()
+
+last_dispense_time = 0
+
+
+# =========================================================
+# MODELS
+# =========================================================
+
+class StartSessionResponse(BaseModel):
+
+    session_id: str
+
+    expires_in: int
+
+
+class VerifyRequest(BaseModel):
+
+    session_id: str
+
+    platform: str
+
+
+class ManualDispenseRequest(BaseModel):
+
+    admin_key: str
+
+
+# =========================================================
+# SESSION CLEANUP
+# =========================================================
+
+def cleanup_sessions():
+
+    now = time.time()
+
+    expired = []
+
+    with state_lock:
+
+        for (
+            session_id,
+            data
+        ) in sessions.items():
+
+            if (
+                data["expires_at"]
+                <= now
+            ):
+
+                expired.append(
+                    session_id
+                )
+
+        for session_id in expired:
+
+            del sessions[
+                session_id
+            ]
+
+
+# =========================================================
+# FACEBOOK FOLLOWERS
+# =========================================================
+
+def get_facebook_follower_count():
+
+    if not FB_PAGE_ID:
+
+        raise RuntimeError(
+            "FB_PAGE_ID is not configured"
+        )
+
+
+    if not FB_ACCESS_TOKEN:
+
+        raise RuntimeError(
+            "FB_ACCESS_TOKEN is not configured"
+        )
+
+
+    url = (
+        "https://graph.facebook.com/"
+        f"{FB_PAGE_ID}"
+    )
+
+
+    params = {
+
+        "fields":
+            "followers_count",
+
+        "access_token":
+            FB_ACCESS_TOKEN
+    }
+
+
+    response = requests.get(
+
+        url,
+
+        params=params,
+
+        timeout=5
+    )
+
+
+    response.raise_for_status()
+
+
+    data = response.json()
+
+
+    count = data.get(
+        "followers_count"
+    )
+
+
+    if count is None:
+
+        raise RuntimeError(
+            "Meta API did not return "
+            "followers_count"
+        )
+
+
+    return int(count)
+
+
+# =========================================================
+# INSTAGRAM FOLLOWERS
+# =========================================================
+
+def get_instagram_follower_count():
+
+    if not IG_USER_ID:
+
+        raise RuntimeError(
+            "IG_USER_ID is not configured"
+        )
+
+
+    if not IG_ACCESS_TOKEN:
+
+        raise RuntimeError(
+            "IG_ACCESS_TOKEN is not configured"
+        )
+
+
+    url = (
+        "https://graph.instagram.com/"
+        f"{IG_USER_ID}"
+    )
+
+
+    params = {
+
+        "fields":
+            "followers_count",
+
+        "access_token":
+            IG_ACCESS_TOKEN
+    }
+
+
+    response = requests.get(
+
+        url,
+
+        params=params,
+
+        timeout=5
+    )
+
+
+    response.raise_for_status()
+
+
+    data = response.json()
+
+
+    count = data.get(
+        "followers_count"
+    )
+
+
+    if count is None:
+
+        raise RuntimeError(
+            "Instagram API did not return "
+            "followers_count"
+        )
+
+
+    return int(count)
+
+
+# =========================================================
+# GENERIC FOLLOWER COUNT
+# =========================================================
+
+def get_follower_count(
+    platform
+):
+
+    if platform == "facebook":
+
+        return (
+            get_facebook_follower_count()
+        )
+
+
+    if platform == "instagram":
+
+        return (
+            get_instagram_follower_count()
+        )
+
+
+    raise ValueError(
+        "Unsupported platform"
+    )
+
+
+# =========================================================
+# ADAFRUIT
+# =========================================================
+
+def send_to_adafruit(
+    dispense_id
+):
+
+    if not ADAFRUIT_USERNAME:
+
+        raise RuntimeError(
+            "ADAFRUIT_USERNAME "
+            "is not configured"
+        )
+
+
+    if not ADAFRUIT_KEY:
+
+        raise RuntimeError(
+            "ADAFRUIT_KEY "
+            "is not configured"
+        )
+
+
+    url = (
+        "https://io.adafruit.com/api/v2/"
+        f"{ADAFRUIT_USERNAME}/feeds/"
+        "cukierki/data"
+    )
+
+
+    headers = {
+
+        "X-AIO-Key":
+            ADAFRUIT_KEY,
+
+        "Content-Type":
+            "application/json"
+    }
+
+
+    payload = {
+
+        "value":
+            f"DROP:{dispense_id}"
+    }
+
+
+    response = requests.post(
+
+        url,
+
+        json=payload,
+
+        headers=headers,
+
+        timeout=5
+    )
+
+
+    response.raise_for_status()
+
+
+# =========================================================
+# DISCORD
+# =========================================================
+
+def send_discord(
+    dispense_id,
+    platform=None,
+    manual=False
+):
+
+    if not DISCORD_WEBHOOK_URL:
+
+        return
+
+
+    if manual:
+
+        tag = "🔴 **[MANUAL]**"
+
+    else:
+
+        tag = "🍬"
+
+
+    platform_text = ""
+
+    if platform:
+
+        platform_text = (
+            f"\nPlatforma: `{platform}`"
+        )
+
+
+    payload = {
+
+        "content":
+            (
+                f"{tag} **Cukierko-Bot:** "
+                "wysłano polecenie "
+                "wydania cukierka."
+                f"{platform_text}\n"
+                f"ID: `{dispense_id}`"
+            )
+    }
+
+
+    try:
+
+        requests.post(
+
+            DISCORD_WEBHOOK_URL,
+
+            json=payload,
+
+            timeout=3
+        )
+
+    except Exception as error:
+
+        print(
+            "Discord error:",
+            error
+        )
+
+
+# =========================================================
+# ROOT
+# =========================================================
+
+@app.get("/")
+def root():
+
+    return {
+
+        "status":
+            "online",
+
+        "system":
+            "Candy Dispenser Backend"
+    }
+
+
+# =========================================================
+# START SESSION
+# =========================================================
+
+@app.post(
+    "/api/start-session",
+    response_model=StartSessionResponse
+)
+def start_session():
+
+    cleanup_sessions()
+
+
+    with state_lock:
+
+        if (
+            len(sessions)
+            >= MAX_ACTIVE_SESSIONS
+        ):
+
+            raise HTTPException(
+
+                status_code=429,
+
+                detail="FULL"
+            )
+
+
+        # ---------------------------------------------
+        # Get initial Facebook count
+        # ---------------------------------------------
+
+        try:
+
+            facebook_initial = (
+                get_facebook_follower_count()
+            )
+
+        except Exception as error:
+
+            raise HTTPException(
+
+                status_code=502,
+
+                detail=(
+                    "Nie można pobrać "
+                    "stanu Facebook: "
+                    f"{error}"
+                )
+            )
+
+
+        # ---------------------------------------------
+        # Get initial Instagram count
+        # ---------------------------------------------
+
+        try:
+
+            instagram_initial = (
+                get_instagram_follower_count()
+            )
+
+        except Exception as error:
+
+            raise HTTPException(
+
+                status_code=502,
+
+                detail=(
+                    "Nie można pobrać "
+                    "stanu Instagram: "
+                    f"{error}"
+                )
+            )
+
+
+        # ---------------------------------------------
+        # Create session
+        # ---------------------------------------------
+
+        session_id = (
+            secrets.token_urlsafe(32)
+        )
+
+
+        now = time.time()
+
+
+        sessions[session_id] = {
+
+            "created_at":
+                now,
+
+            "expires_at":
+                now + SESSION_DURATION,
+
+
+            # FACEBOOK
+            "facebook_initial":
+                facebook_initial,
+
+            "facebook_dispensed":
+                False,
+
+
+            # INSTAGRAM
+            "instagram_initial":
+                instagram_initial,
+
+            "instagram_dispensed":
+                False
+        }
+
+
+    return {
+
+        "session_id":
+            session_id,
+
+        "expires_in":
+            SESSION_DURATION
+    }
+
+
+# =========================================================
+# VERIFY
+# =========================================================
+
+@app.post(
+    "/api/verify"
+)
+def verify(
+    req: VerifyRequest
+):
+
+    cleanup_sessions()
+
+
+    # =====================================================
+    # VALIDATE PLATFORM
+    # =====================================================
+
+    if req.platform not in [
+        "facebook",
+        "instagram"
+    ]:
+
+        raise HTTPException(
+
+            status_code=400,
+
+            detail="INVALID_PLATFORM"
+        )
+
+
+    # =====================================================
+    # GET SESSION
+    # =====================================================
+
+    with state_lock:
+
+        session = sessions.get(
+            req.session_id
+        )
+
+
+        if not session:
+
+            raise HTTPException(
+
+                status_code=404,
+
+                detail="SESSION_EXPIRED"
+            )
+
+
+        if (
+            session["expires_at"]
+            <= time.time()
+        ):
+
+            del sessions[
+                req.session_id
+            ]
+
+            raise HTTPException(
+
+                status_code=410,
+
+                detail="SESSION_EXPIRED"
+            )
+
+
+        # ---------------------------------------------
+        # Select requested platform
+        # ---------------------------------------------
+
+        if (
+            req.platform
+            == "facebook"
+        ):
+
+            if (
+                session[
+                    "facebook_dispensed"
+                ]
+            ):
+
+                raise HTTPException(
+
+                    status_code=409,
+
+                    detail="ALREADY_USED"
+                )
+
+
+            initial_count = (
+                session[
+                    "facebook_initial"
+                ]
+            )
+
+
+        else:
+
+            if (
+                session[
+                    "instagram_dispensed"
+                ]
+            ):
+
+                raise HTTPException(
+
+                    status_code=409,
+
+                    detail="ALREADY_USED"
+                )
+
+
+            initial_count = (
+                session[
+                    "instagram_initial"
+                ]
+            )
+
+
+    # =====================================================
+    # CHECK FOLLOWER COUNT
+    # =====================================================
+
+    current_count = (
+        initial_count
+    )
+
+
+    for attempt in range(
+        FOLLOWER_CHECKS
+    ):
+
+        try:
+
+            current_count = (
+                get_follower_count(
+                    req.platform
+                )
+            )
+
+        except Exception as error:
+
+            raise HTTPException(
+
+                status_code=502,
+
+                detail=(
+                    "Błąd sprawdzania "
+                    f"{req.platform}: "
+                    f"{error}"
+                )
+            )
+
+
+        if (
+            current_count
+            > initial_count
+        ):
+
+            break
+
+
+        if (
+            attempt
+            < FOLLOWER_CHECKS - 1
+        ):
+
+            time.sleep(
+                FOLLOWER_CHECK_INTERVAL
+            )
+
+
+    # =====================================================
+    # NOT VERIFIED
+    # =====================================================
+
+    if (
+        current_count
+        <= initial_count
+    ):
+
+        return {
+
+            "status":
+                "not_verified",
+
+            "platform":
+                req.platform,
+
+            "initial_count":
+                initial_count,
+
+            "current_count":
+                current_count
+        }
+
+
+    # =====================================================
+    # COOLDOWN
+    # =====================================================
+
+    global last_dispense_time
+
+    now = time.time()
+
+
+    with state_lock:
+
+        if (
+            now - last_dispense_time
+            < DISPENSE_COOLDOWN
+        ):
+
+            raise HTTPException(
+
+                status_code=429,
+
+                detail="TRY_AGAIN"
+            )
+
+
+        session = sessions.get(
+            req.session_id
+        )
+
+
+        if not session:
+
+            raise HTTPException(
+
+                status_code=404,
+
+                detail="SESSION_EXPIRED"
+            )
+
+
+        # ---------------------------------------------
+        # Check again
+        # ---------------------------------------------
+
+        if (
+            req.platform
+            == "facebook"
+        ):
+
+            if (
+                session[
+                    "facebook_dispensed"
+                ]
+            ):
+
+                raise HTTPException(
+
+                    status_code=409,
+
+                    detail="ALREADY_USED"
+                )
+
+        else:
+
+            if (
+                session[
+                    "instagram_dispensed"
+                ]
+            ):
+
+                raise HTTPException(
+
+                    status_code=409,
+
+                    detail="ALREADY_USED"
+                )
+
+
+        # ---------------------------------------------
+        # Generate unique dispense ID
+        # ---------------------------------------------
+
+        dispense_id = (
+            secrets.token_urlsafe(24)
+        )
+
+
+        # ---------------------------------------------
+        # Mark only selected platform
+        # ---------------------------------------------
+
+        if (
+            req.platform
+            == "facebook"
+        ):
+
+            session[
+                "facebook_dispensed"
+            ] = True
+
+        else:
+
+            session[
+                "instagram_dispensed"
+            ] = True
+
+
+        session[
+            f"{req.platform}_dispense_id"
+        ] = dispense_id
+
+
+        last_dispense_time = now
+
+
+    # =====================================================
+    # SEND TO ADAFRUIT
+    # =====================================================
+
+    try:
+
+        send_to_adafruit(
+            dispense_id
+        )
+
+    except Exception as error:
+
+        # ---------------------------------------------
+        # Rollback
+        # ---------------------------------------------
+
+        with state_lock:
+
+            session = sessions.get(
+                req.session_id
+            )
+
+
+            if session:
+
+                if (
+                    req.platform
+                    == "facebook"
+                ):
+
+                    session[
+                        "facebook_dispensed"
+                    ] = False
+
+                else:
+
+                    session[
+                        "instagram_dispensed"
+                    ] = False
+
+
+                session.pop(
+                    f"{req.platform}_dispense_id",
+                    None
+                )
+
+
+        raise HTTPException(
+
+            status_code=502,
+
+            detail=(
+                "Błąd Adafruit IO: "
+                f"{error}"
+            )
+        )
+
+
+    # =====================================================
+    # DISCORD
+    # =====================================================
+
+    send_discord(
+
+        dispense_id,
+
+        platform=req.platform
+    )
+
+
+    # =====================================================
+    # DELETE SESSION IF BOTH CLAIMED
+    # =====================================================
+
+    with state_lock:
+
+        session = sessions.get(
+            req.session_id
+        )
+
+
+        if session:
+
+            both_done = (
+
+                session[
+                    "facebook_dispensed"
+                ]
+
+                and
+
+                session[
+                    "instagram_dispensed"
+                ]
+            )
+
+
+            if both_done:
+
+                sessions.pop(
+                    req.session_id,
+                    None
+                )
+
+
+    # =====================================================
+    # RESPONSE
+    # =====================================================
+
+    return {
+
+        "status":
+            "success",
+
+        "platform":
+            req.platform,
+
+        "message":
+            "Polecenie wydania wysłane."
+    }
+
+
+# =========================================================
+# MANUAL DISPENSE
+# =========================================================
+
+@app.post(
+    "/api/admin/manual-dispense"
+)
+def manual_dispense(
+    req: ManualDispenseRequest
+):
+
+    if (
+        req.admin_key
+        != ADMIN_KEY
+    ):
+
+        raise HTTPException(
+
+            status_code=401,
+
+            detail="UNAUTHORIZED"
+        )
+
+
+    dispense_id = (
+        "MANUAL_"
+        + secrets.token_urlsafe(16)
+    )
+
+
+    try:
+
+        send_to_adafruit(
+            dispense_id
+        )
+
+    except Exception as error:
+
+        raise HTTPException(
+
+            status_code=502,
+
+            detail=(
+                "Błąd Adafruit IO: "
+                f"{error}"
+            )
+        )
+
+
+    send_discord(
+
+        dispense_id,
+
+        manual=True
+    )
+
+
+    return {
+
+        "status":
+            "success",
+
+        "message":
+            "Manualny sygnał został "
+            "pomyślnie wysłany do "
+            "Adafruit IO.",
+
+        "dispense_id":
+            dispense_id
+    }
