@@ -1,0 +1,1990 @@
+<!DOCTYPE html><html lang="pl"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Darmowy Cukierek!</title>  <style>
+
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: #f4f4f9;
+    }
+
+    .card-logo {
+      max-width: 150px;
+      height: auto;
+      margin: 0 auto 15px auto;
+      display: block;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      max-width: 420px;
+      margin: 0 auto;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .platform {
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+    }
+
+    .platform:first-of-type {
+      border-top: none;
+      margin-top: 10px;
+      padding-top: 0;
+    }
+
+    h3 {
+      margin-bottom: 8px;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin: 8px 0;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:disabled {
+      background: #ccc !important;
+      color: #666 !important;
+      cursor: not-allowed;
+    }
+
+    .btn-fb {
+      background: #1877F2;
+      color: white;
+    }
+
+    .btn-ig {
+      background: #d62976;
+      color: white;
+    }
+
+    .btn-candy {
+      background: #28a745;
+      color: white;
+    }
+
+    .status {
+      margin-top: 20px;
+      font-weight: bold;
+      min-height: 48px;
+    }
+
+    .session {
+      font-size: 13px;
+      color: #666;
+      margin-top: 10px;
+    }
+
+  </style></head><body>  <div class="card"><img
+  src="image.png"
+  alt="Logo"
+  class="card-logo"
+>
+
+<h2>
+  🍬 Odbierz darmowego cukierka!
+</h2>
+
+<p>
+  Możesz wybrać Facebook,
+  Instagram albo oba.
+</p>
+
+
+<!-- FACEBOOK -->
+
+<div class="platform">
+
+  <h3>
+    🔵 Facebook
+  </h3>
+
+  <button
+    id="facebookStartBtn"
+    class="btn-fb"
+    onclick="startPlatform('facebook')"
+  >
+    1. Zaobserwuj nas na Facebooku
+  </button>
+
+  <button
+    id="facebookVerifyBtn"
+    class="btn-candy"
+    onclick="verifyPlatform('facebook')"
+    disabled
+  >
+    2. Sprawdź Facebook i odbierz cukierka
+  </button>
+
+</div>
+
+
+<!-- INSTAGRAM -->
+
+<div class="platform">
+
+  <h3>
+    📸 Instagram
+  </h3>
+
+  <button
+    id="instagramStartBtn"
+    class="btn-ig"
+    onclick="startPlatform('instagram')"
+  >
+    1. Zaobserwuj nas na Instagramie
+  </button>
+
+  <button
+    id="instagramVerifyBtn"
+    class="btn-candy"
+    onclick="verifyPlatform('instagram')"
+    disabled
+  >
+    2. Sprawdź Instagram i odbierz cukierka
+  </button>
+
+</div>
+
+
+<p
+  id="status"
+  class="status"
+></p>
+
+<p
+  id="sessionInfo"
+  class="session"
+></p>
+
+  </div><script>
+
+/*
+==================================================
+KONFIGURACJA
+==================================================
+*/
+
+const API_BASE =
+  "https://cukierek-4p2a.onrender.com";
+
+const FACEBOOK_PAGE_URL =
+  "https://www.facebook.com/TwojProfil";
+
+const INSTAGRAM_PROFILE_URL =
+  "https://www.instagram.com/TwojProfil";
+
+
+/*
+==================================================
+LOCAL STORAGE
+==================================================
+*/
+
+const SESSION_KEY =
+  "candy_session_id";
+
+const SESSION_EXPIRES_KEY =
+  "candy_session_expires_at";
+
+const FACEBOOK_CLAIMED_KEY =
+  "candy_facebook_claimed";
+
+const INSTAGRAM_CLAIMED_KEY =
+  "candy_instagram_claimed";
+
+
+/*
+==================================================
+STAN
+==================================================
+*/
+
+let sessionId = null;
+
+let sessionExpiresAt = null;
+
+/*
+ * Czy dana platforma została rozpoczęta
+ * w aktualnej sesji.
+ */
+let facebookStarted = false;
+
+let instagramStarted = false;
+
+/*
+ * Czy właśnie trwa verify.
+ *
+ * Podczas verify wszystkie 4 przyciski
+ * są zablokowane.
+ */
+let verificationInProgress = false;
+
+
+/*
+==================================================
+ELEMENTY
+==================================================
+*/
+
+const facebookStartBtn =
+  document.getElementById(
+    "facebookStartBtn"
+  );
+
+const facebookVerifyBtn =
+  document.getElementById(
+    "facebookVerifyBtn"
+  );
+
+const instagramStartBtn =
+  document.getElementById(
+    "instagramStartBtn"
+  );
+
+const instagramVerifyBtn =
+  document.getElementById(
+    "instagramVerifyBtn"
+  );
+
+const status =
+  document.getElementById(
+    "status"
+  );
+
+const sessionInfo =
+  document.getElementById(
+    "sessionInfo"
+  );
+
+
+/*
+==================================================
+STATUS
+==================================================
+*/
+
+function setStatus(message) {
+
+  status.innerText = message;
+
+}
+
+
+/*
+==================================================
+CLAIMED
+==================================================
+*/
+
+function isClaimed(platform) {
+
+  const key =
+    platform === "facebook"
+      ? FACEBOOK_CLAIMED_KEY
+      : INSTAGRAM_CLAIMED_KEY;
+
+  return (
+    localStorage.getItem(key)
+    === "true"
+  );
+
+}
+
+
+function markClaimed(platform) {
+
+  const key =
+    platform === "facebook"
+      ? FACEBOOK_CLAIMED_KEY
+      : INSTAGRAM_CLAIMED_KEY;
+
+  localStorage.setItem(
+    key,
+    "true"
+  );
+
+}
+
+
+/*
+==================================================
+SESSION LOCAL STORAGE
+==================================================
+*/
+
+function saveSession() {
+
+  if (
+    !sessionId ||
+    !sessionExpiresAt
+  ) {
+    return;
+  }
+
+  localStorage.setItem(
+    SESSION_KEY,
+    sessionId
+  );
+
+  localStorage.setItem(
+    SESSION_EXPIRES_KEY,
+    String(sessionExpiresAt)
+  );
+
+}
+
+
+function loadSession() {
+
+  const savedSession =
+    localStorage.getItem(
+      SESSION_KEY
+    );
+
+  const savedExpires =
+    localStorage.getItem(
+      SESSION_EXPIRES_KEY
+    );
+
+  if (
+    !savedSession ||
+    !savedExpires
+  ) {
+    return false;
+  }
+
+  const expires =
+    Number(savedExpires);
+
+  if (
+    !Number.isFinite(expires) ||
+    Date.now() >= expires
+  ) {
+
+    clearSession();
+
+    return false;
+  }
+
+  sessionId =
+    savedSession;
+
+  sessionExpiresAt =
+    expires;
+
+  return true;
+
+}
+
+
+/*
+==================================================
+CLEAR SESSION
+==================================================
+*/
+
+function clearSession() {
+
+  sessionId = null;
+
+  sessionExpiresAt = null;
+
+  facebookStarted = false;
+
+  instagramStarted = false;
+
+  verificationInProgress = false;
+
+
+  localStorage.removeItem(
+    SESSION_KEY
+  );
+
+  localStorage.removeItem(
+    SESSION_EXPIRES_KEY
+  );
+
+
+  updateSessionInfo();
+
+  updateButtons();
+
+}
+
+
+/*
+==================================================
+SESSION VALID
+==================================================
+*/
+
+function sessionIsValid() {
+
+  if (
+    !sessionId ||
+    !sessionExpiresAt
+  ) {
+    return false;
+  }
+
+  if (
+    Date.now() >= sessionExpiresAt
+  ) {
+
+    clearSession();
+
+    return false;
+  }
+
+  return true;
+
+}
+
+
+/*
+==================================================
+GET SESSION STATE FROM BACKEND
+==================================================
+*/
+
+async function restoreSessionState() {
+
+  if (
+    !sessionIsValid()
+  ) {
+    return false;
+  }
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_BASE}/api/session/${encodeURIComponent(sessionId)}`
+      );
+
+
+    let data = null;
+
+    try {
+
+      data =
+        await response.json();
+
+    } catch (_) {}
+
+
+    /*
+     * Sesja wygasła / nie istnieje.
+     */
+    if (
+      response.status === 404 ||
+      response.status === 410
+    ) {
+
+      clearSession();
+
+      return false;
+    }
+
+
+    if (
+      !response.ok ||
+      !data
+    ) {
+
+      return false;
+    }
+
+
+    /*
+     * Odtwarzamy stan platform.
+     */
+    facebookStarted =
+      Boolean(
+        data.facebook_started
+      );
+
+    instagramStarted =
+      Boolean(
+        data.instagram_started
+      );
+
+
+    /*
+     * Jeżeli backend mówi, że cukierek
+     * został już wydany, zachowujemy to
+     * również lokalnie.
+     */
+    if (
+      data.facebook_dispensed
+    ) {
+
+      markClaimed(
+        "facebook"
+      );
+
+    }
+
+    if (
+      data.instagram_dispensed
+    ) {
+
+      markClaimed(
+        "instagram"
+      );
+
+    }
+
+
+    /*
+     * Backend zwraca expires_at jako
+     * timestamp UNIX w sekundach.
+     *
+     * Frontend używa milisekund.
+     */
+    if (
+      data.expires_at
+    ) {
+
+      const backendExpires =
+        Number(data.expires_at) * 1000;
+
+      if (
+        Number.isFinite(
+          backendExpires
+        )
+      ) {
+
+        sessionExpiresAt =
+          backendExpires;
+
+        saveSession();
+
+      }
+
+    }
+
+
+    return true;
+
+  } catch (error) {
+
+    console.error(
+      "restoreSessionState error:",
+      error
+    );
+
+    return false;
+  }
+
+}
+
+
+/*
+==================================================
+SESSION INFO
+==================================================
+*/
+
+function updateSessionInfo() {
+
+  if (
+    !sessionId ||
+    !sessionExpiresAt
+  ) {
+
+    sessionInfo.innerText = "";
+
+    return;
+  }
+
+
+  const remaining =
+    sessionExpiresAt -
+    Date.now();
+
+
+  if (
+    remaining <= 0
+  ) {
+
+    clearSession();
+
+    setStatus(
+      "⌛ Sesja wygasła. Możesz rozpocząć nową."
+    );
+
+    return;
+  }
+
+
+  const seconds =
+    Math.ceil(
+      remaining / 1000
+    );
+
+  const minutes =
+    Math.floor(
+      seconds / 60
+    );
+
+  const rest =
+    seconds % 60;
+
+
+  let startedText = "";
+
+
+  if (
+    facebookStarted &&
+    instagramStarted
+  ) {
+
+    startedText =
+      " — Facebook + Instagram";
+
+  } else if (
+    facebookStarted
+  ) {
+
+    startedText =
+      " — Facebook";
+
+  } else if (
+    instagramStarted
+  ) {
+
+    startedText =
+      " — Instagram";
+
+  }
+
+
+  sessionInfo.innerText =
+    `⏱️ Sesja aktywna${startedText}: ${minutes}:${String(rest).padStart(2, "0")}`;
+
+}
+
+
+/*
+==================================================
+BUTTON HELPERS
+==================================================
+*/
+
+function getStartButton(platform) {
+
+  return platform === "facebook"
+    ? facebookStartBtn
+    : instagramStartBtn;
+
+}
+
+
+function getVerifyButton(platform) {
+
+  return platform === "facebook"
+    ? facebookVerifyBtn
+    : instagramVerifyBtn;
+
+}
+
+
+function getPlatformUrl(platform) {
+
+  return platform === "facebook"
+    ? FACEBOOK_PAGE_URL
+    : INSTAGRAM_PROFILE_URL;
+
+}
+
+
+/*
+==================================================
+DISABLE ALL
+==================================================
+*/
+
+function disableAllButtons() {
+
+  facebookStartBtn.disabled =
+    true;
+
+  facebookVerifyBtn.disabled =
+    true;
+
+  instagramStartBtn.disabled =
+    true;
+
+  instagramVerifyBtn.disabled =
+    true;
+
+}
+
+
+/*
+==================================================
+UPDATE BUTTONS
+==================================================
+
+Zasady:
+
+1. Podczas verify:
+   wszystkie 4 disabled.
+
+2. Poza verify:
+   START Facebook aktywny, jeśli:
+   - Facebook nie został odebrany
+   - Facebook nie został jeszcze rozpoczęty.
+
+3. Jeżeli Facebook został rozpoczęty:
+   START Facebook pozostaje szary.
+
+4. START Instagram działa niezależnie
+   od Facebooka.
+
+5. VERIFY jest aktywny tylko dla
+   rozpoczętej i nieodebranej platformy.
+==================================================
+*/
+
+function updateButtons() {
+
+  /*
+   * VERIFY W TOKU
+   */
+  if (
+    verificationInProgress
+  ) {
+
+    disableAllButtons();
+
+    return;
+  }
+
+
+  /*
+   * ==========================================
+   * FACEBOOK START
+   * ==========================================
+   */
+
+  if (
+    isClaimed("facebook")
+  ) {
+
+    facebookStartBtn.disabled =
+      true;
+
+    facebookStartBtn.innerText =
+      "✅ Facebook — cukierek odebrany";
+
+  }
+
+  else if (
+    facebookStarted
+  ) {
+
+    facebookStartBtn.disabled =
+      true;
+
+    facebookStartBtn.innerText =
+      "✅ Przejdź na Facebooka";
+
+  }
+
+  else {
+
+    facebookStartBtn.disabled =
+      false;
+
+    facebookStartBtn.innerText =
+      "1. Zaobserwuj nas na Facebooku";
+
+  }
+
+
+  /*
+   * ==========================================
+   * INSTAGRAM START
+   * ==========================================
+   */
+
+  if (
+    isClaimed("instagram")
+  ) {
+
+    instagramStartBtn.disabled =
+      true;
+
+    instagramStartBtn.innerText =
+      "✅ Instagram — cukierek odebrany";
+
+  }
+
+  else if (
+    instagramStarted
+  ) {
+
+    instagramStartBtn.disabled =
+      true;
+
+    instagramStartBtn.innerText =
+      "✅ Przejdź na Instagram";
+
+  }
+
+  else {
+
+    instagramStartBtn.disabled =
+      false;
+
+    instagramStartBtn.innerText =
+      "1. Zaobserwuj nas na Instagramie";
+
+  }
+
+
+  /*
+   * ==========================================
+   * VERIFY — DOMYŚLNIE WYŁĄCZONE
+   * ==========================================
+   */
+
+  facebookVerifyBtn.disabled =
+    true;
+
+  instagramVerifyBtn.disabled =
+    true;
+
+
+  /*
+   * ==========================================
+   * BRAK SESJI
+   * ==========================================
+   */
+
+  if (
+    !sessionIsValid()
+  ) {
+
+    return;
+  }
+
+
+  /*
+   * ==========================================
+   * FACEBOOK VERIFY
+   * ==========================================
+   */
+
+  if (
+    facebookStarted &&
+    !isClaimed("facebook")
+  ) {
+
+    facebookVerifyBtn.disabled =
+      false;
+
+  }
+
+
+  /*
+   * ==========================================
+   * INSTAGRAM VERIFY
+   * ==========================================
+   */
+
+  if (
+    instagramStarted &&
+    !isClaimed("instagram")
+  ) {
+
+    instagramVerifyBtn.disabled =
+      false;
+
+  }
+
+}
+
+
+/*
+==================================================
+START PLATFORM
+==================================================
+
+Pierwsze kliknięcie:
+    /api/start-session
+
+Drugie kliknięcie:
+    /api/start-platform
+
+Obie platformy korzystają z tej samej sesji.
+==================================================
+*/
+
+async function startPlatform(platform) {
+
+  /*
+   * Nie pozwalamy rozpocząć ponownie
+   * odebranej platformy.
+   */
+
+  if (
+    isClaimed(platform)
+  ) {
+
+    setStatus(
+      platform === "facebook"
+        ? "🍬 Cukierek Facebook został już odebrany."
+        : "🍬 Cukierek Instagram został już odebrany."
+    );
+
+    return;
+  }
+
+
+  /*
+   * Nie powinno się dać kliknąć drugiego
+   * START podczas verify.
+   */
+
+  if (
+    verificationInProgress
+  ) {
+
+    return;
+  }
+
+
+  /*
+   * Otwieramy platformę natychmiast
+   * w wyniku kliknięcia użytkownika.
+   */
+
+  const platformWindow =
+    window.open(
+      getPlatformUrl(platform),
+      "_blank"
+    );
+
+
+  if (
+    !platformWindow
+  ) {
+
+    setStatus(
+      platform === "facebook"
+        ? "⚠️ Przeglądarka zablokowała Facebooka. Zezwól na wyskakujące okna i spróbuj ponownie."
+        : "⚠️ Przeglądarka zablokowała Instagram. Zezwól na wyskakujące okna i spróbuj ponownie."
+    );
+
+    return;
+  }
+
+
+  /*
+   * Tymczasowo blokujemy kliknięty przycisk.
+   */
+
+  const startButton =
+    getStartButton(platform);
+
+  startButton.disabled =
+    true;
+
+
+  setStatus(
+    "⏳ Przygotowywanie sesji..."
+  );
+
+
+  try {
+
+    /*
+     * ==========================================
+     * NIE MA SESJI
+     * ==========================================
+     */
+
+    if (
+      !sessionIsValid()
+    ) {
+
+      const response =
+        await fetch(
+          `${API_BASE}/api/start-session`,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+              platform: platform
+            })
+          }
+        );
+
+
+      let data = null;
+
+      try {
+
+        data =
+          await response.json();
+
+      } catch (_) {}
+
+
+      /*
+       * Automat zajęty.
+       */
+
+      if (
+        response.status === 429 &&
+        data &&
+        data.detail === "FULL"
+      ) {
+
+        throw new Error(
+          "Automat jest obecnie zajęty. Spróbuj ponownie za chwilę."
+        );
+
+      }
+
+
+      /*
+       * Inny błąd.
+       */
+
+      if (
+        !response.ok
+      ) {
+
+        throw new Error(
+          data && data.detail
+            ? data.detail
+            : "Nie udało się rozpocząć sesji."
+        );
+
+      }
+
+
+      /*
+       * Sprawdzenie odpowiedzi.
+       */
+
+      if (
+        !data ||
+        !data.session_id ||
+        !data.expires_in
+      ) {
+
+        throw new Error(
+          "Backend nie zwrócił poprawnej sesji."
+        );
+
+      }
+
+
+      /*
+       * Zapis sesji.
+       */
+
+      sessionId =
+        data.session_id;
+
+      sessionExpiresAt =
+        Date.now() +
+        data.expires_in * 1000;
+
+
+      saveSession();
+
+
+      /*
+       * Pierwsza platforma.
+       */
+
+      if (
+        platform === "facebook"
+      ) {
+
+        facebookStarted =
+          true;
+
+      } else {
+
+        instagramStarted =
+          true;
+
+      }
+
+    }
+
+
+    /*
+     * ==========================================
+     * SESJA JUŻ ISTNIEJE
+     * ==========================================
+     *
+     * Używamy istniejącego endpointu:
+     *
+     * POST /api/start-platform
+     *
+     * Backend doda drugą platformę
+     * do tej samej sesji.
+     * ==========================================
+     */
+
+    else {
+
+      const response =
+        await fetch(
+          `${API_BASE}/api/start-platform`,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+              session_id:
+                sessionId,
+
+              platform:
+                platform
+            })
+          }
+        );
+
+
+      let data = null;
+
+      try {
+
+        data =
+          await response.json();
+
+      } catch (_) {}
+
+
+      /*
+       * Sesja wygasła.
+       */
+
+      if (
+        response.status === 404 ||
+        response.status === 410
+      ) {
+
+        clearSession();
+
+        throw new Error(
+          "Sesja wygasła. Rozpocznij ponownie."
+        );
+
+      }
+
+
+      /*
+       * Cukierek już odebrany.
+       */
+
+      if (
+        response.status === 409 &&
+        data &&
+        data.detail === "ALREADY_USED"
+      ) {
+
+        markClaimed(
+          platform
+        );
+
+        updateButtons();
+
+        setStatus(
+          "🍬 Ten cukierek został już odebrany."
+        );
+
+        return;
+
+      }
+
+
+      /*
+       * Inny błąd.
+       */
+
+      if (
+        !response.ok
+      ) {
+
+        throw new Error(
+          data && data.detail
+            ? data.detail
+            : "Nie udało się rozpocząć platformy."
+        );
+
+      }
+
+
+      /*
+       * Backend zwraca pełny stan sesji.
+       */
+
+      facebookStarted =
+        Boolean(
+          data.facebook_started
+        );
+
+      instagramStarted =
+        Boolean(
+          data.instagram_started
+        );
+
+    }
+
+
+    /*
+     * ==========================================
+     * UI PO SUKCESIE
+     * ==========================================
+     */
+
+    updateButtons();
+
+    updateSessionInfo();
+
+
+    if (
+      platform === "facebook"
+    ) {
+
+      setStatus(
+        "👆 Przejdź na Facebooka, zaobserwuj nas, wróć tutaj i kliknij „Sprawdź Facebook”."
+      );
+
+    } else {
+
+      setStatus(
+        "👆 Przejdź na Instagram, zaobserwuj nas, wróć tutaj i kliknij „Sprawdź Instagram”."
+      );
+
+    }
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "startPlatform error:",
+      error
+    );
+
+
+    /*
+     * Nie zostawiamy przycisku
+     * przypadkowo zablokowanego.
+     */
+
+    updateButtons();
+
+
+    setStatus(
+      "⚠️ " + error.message
+    );
+
+  }
+
+}
+
+
+/*
+==================================================
+VERIFY PLATFORM
+==================================================
+*/
+
+async function verifyPlatform(platform) {
+
+  /*
+   * Czy cukierek został już odebrany?
+   */
+
+  if (
+    isClaimed(platform)
+  ) {
+
+    setStatus(
+      platform === "facebook"
+        ? "🍬 Cukierek Facebook został już odebrany."
+        : "🍬 Cukierek Instagram został już odebrany."
+    );
+
+    return;
+  }
+
+
+  /*
+   * Czy platforma została rozpoczęta?
+   */
+
+  if (
+    platform === "facebook" &&
+    !facebookStarted
+  ) {
+
+    setStatus(
+      "⚠️ Najpierw kliknij „Zaobserwuj nas na Facebooku”."
+    );
+
+    return;
+  }
+
+
+  if (
+    platform === "instagram" &&
+    !instagramStarted
+  ) {
+
+    setStatus(
+      "⚠️ Najpierw kliknij „Zaobserwuj nas na Instagramie”."
+    );
+
+    return;
+  }
+
+
+  /*
+   * Czy sesja nadal trwa?
+   */
+
+  if (
+    !sessionIsValid()
+  ) {
+
+    setStatus(
+      "⌛ Sesja wygasła. Rozpocznij ponownie."
+    );
+
+    updateButtons();
+
+    return;
+  }
+
+
+  /*
+   * Ochrona przed wielokrotnym kliknięciem.
+   */
+
+  if (
+    verificationInProgress
+  ) {
+
+    return;
+  }
+
+
+  /*
+   * VERIFY START
+   */
+
+  verificationInProgress =
+    true;
+
+
+  /*
+   * Wszystkie cztery przyciski
+   * zostają zablokowane.
+   */
+
+  disableAllButtons();
+
+
+  setStatus(
+    platform === "facebook"
+      ? "🔎 Sprawdzam Facebook..."
+      : "🔎 Sprawdzam Instagram..."
+  );
+
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_BASE}/api/verify`,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+
+            session_id:
+              sessionId,
+
+            platform:
+              platform
+
+          })
+        }
+      );
+
+
+    let data = null;
+
+    try {
+
+      data =
+        await response.json();
+
+    } catch (_) {}
+
+
+    /*
+     * ==========================================
+     * SUCCESS
+     * ==========================================
+     */
+
+    if (
+      response.ok &&
+      data &&
+      data.status === "success"
+    ) {
+
+      markClaimed(
+        platform
+      );
+
+
+      verificationInProgress =
+        false;
+
+
+      /*
+       * Ta platforma jest już odebrana.
+       *
+       * Nie czyścimy całej sesji!
+       *
+       * Druga platforma może nadal działać.
+       */
+
+      if (
+        platform === "facebook"
+      ) {
+
+        facebookStarted =
+          true;
+
+      } else {
+
+        instagramStarted =
+          true;
+
+      }
+
+
+      updateButtons();
+
+      updateSessionInfo();
+
+
+      setStatus(
+        platform === "facebook"
+          ? "🎉 Facebook zweryfikowany! Zabierz cukierka z podajnika."
+          : "🎉 Instagram zweryfikowany! Zabierz cukierka z podajnika."
+      );
+
+      return;
+    }
+
+
+    /*
+     * ==========================================
+     * NOT VERIFIED
+     * ==========================================
+     */
+
+    if (
+      response.ok &&
+      data &&
+      data.status === "not_verified"
+    ) {
+
+      verificationInProgress =
+        false;
+
+
+      /*
+       * Sesja nadal trwa.
+       *
+       * Obie platformy zachowują swój
+       * stan rozpoczęcia.
+       */
+
+      updateButtons();
+
+      updateSessionInfo();
+
+
+      setStatus(
+        platform === "facebook"
+          ? "❌ Nie wykryto jeszcze nowego obserwującego na Facebooku. Upewnij się, że zaobserwowałeś stronę i spróbuj ponownie."
+          : "❌ Nie wykryto jeszcze nowego obserwującego na Instagramie. Upewnij się, że zaobserwowałeś profil i spróbuj ponownie."
+      );
+
+      return;
+    }
+/*
+     * ==========================================
+     * SESSION EXPIRED
+     * ==========================================
+     */
+
+    if (
+      response.status === 404 ||
+      response.status === 410
+    ) {
+
+      verificationInProgress =
+        false;
+
+      clearSession();
+
+      updateButtons();
+
+      setStatus(
+        "⌛ Sesja wygasła. Rozpocznij ponownie."
+      );
+
+      return;
+    }
+
+
+    /*
+     * ==========================================
+     * PLATFORM NOT STARTED
+     * ==========================================
+     */
+
+    if (
+      response.status === 409 &&
+      data &&
+      data.detail === "PLATFORM_NOT_STARTED"
+    ) {
+
+      verificationInProgress =
+        false;
+
+      if (
+        platform === "facebook"
+      ) {
+
+        facebookStarted =
+          false;
+
+      } else {
+
+        instagramStarted =
+          false;
+
+      }
+
+      updateButtons();
+
+      setStatus(
+        "⚠️ Najpierw rozpocznij tę platformę."
+      );
+
+      return;
+    }
+
+
+    /*
+     * ==========================================
+     * ALREADY USED
+     * ==========================================
+     */
+
+    if (
+      response.status === 409 &&
+      data &&
+      data.detail === "ALREADY_USED"
+    ) {
+
+      markClaimed(
+        platform
+      );
+
+
+      verificationInProgress =
+        false;
+
+
+      updateButtons();
+
+
+      setStatus(
+        "🍬 Ten cukierek został już odebrany."
+      );
+
+      return;
+    }
+
+
+    /*
+     * ==========================================
+     * COOLDOWN
+     * ==========================================
+     */
+
+    if (
+      response.status === 429 &&
+      data &&
+      data.detail === "TRY_AGAIN"
+    ) {
+
+      verificationInProgress =
+        false;
+
+
+      updateButtons();
+
+
+      setStatus(
+        "⏳ Automat jest właśnie używany. Spróbuj ponownie za chwilę."
+      );
+
+      return;
+    }
+
+
+    /*
+     * ==========================================
+     * BACKEND / META / ADAFRUIT
+     * ==========================================
+     */
+
+    if (
+      response.status === 502
+    ) {
+
+      verificationInProgress =
+        false;
+
+
+      updateButtons();
+
+
+      setStatus(
+        "⚠️ Wystąpił problem z systemem. Spróbuj ponownie."
+      );
+
+      return;
+    }
+
+
+    /*
+     * ==========================================
+     * INNY BŁĄD
+     * ==========================================
+     */
+
+    verificationInProgress =
+      false;
+
+
+    updateButtons();
+
+
+    setStatus(
+      "⚠️ Wystąpił nieoczekiwany błąd."
+    );
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "verifyPlatform error:",
+      error
+    );
+
+
+    verificationInProgress =
+      false;
+
+
+    updateButtons();
+
+
+    setStatus(
+      "⚠️ Brak połączenia z serwerem."
+    );
+
+  }
+
+}
+
+
+/*
+==================================================
+START STRONY
+==================================================
+*/
+
+window.addEventListener(
+  "load",
+  async () => {
+
+    /*
+     * Najpierw próbujemy przywrócić
+     * lokalną sesję.
+     */
+
+    const hasSession =
+      loadSession();
+
+
+    /*
+     * Domyślny stan.
+     */
+
+    facebookStarted =
+      false;
+
+    instagramStarted =
+      false;
+
+
+    /*
+     * Jeżeli mamy sesję,
+     * pobieramy prawdziwy stan z backendu.
+     */
+
+    if (
+      hasSession
+    ) {
+
+      await restoreSessionState();
+
+    }
+
+
+    /*
+     * Aktualizacja przycisków.
+     */
+
+    updateButtons();
+
+    updateSessionInfo();
+
+
+    /*
+     * STATUS POCZĄTKOWY
+     */
+
+    const facebookClaimed =
+      isClaimed("facebook");
+
+    const instagramClaimed =
+      isClaimed("instagram");
+
+
+    /*
+     * Oba odebrane.
+     */
+
+    if (
+      facebookClaimed &&
+      instagramClaimed
+    ) {
+
+      setStatus(
+        "🍬 Odebrałeś już oba cukierki."
+      );
+
+    }
+
+
+    /*
+     * Tylko Facebook odebrany.
+     */
+
+    else if (
+      facebookClaimed
+    ) {
+
+      if (
+        sessionIsValid() &&
+        instagramStarted
+      ) {
+
+        setStatus(
+          "👆 Sesja Instagram została przywrócona. Możesz kontynuować."
+        );
+
+      } else {
+
+        setStatus(
+          "✅ Facebook odebrany. Możesz również odebrać cukierka za Instagram."
+        );
+
+      }
+
+    }
+
+
+    /*
+     * Tylko Instagram odebrany.
+     */
+
+    else if (
+      instagramClaimed
+    ) {
+
+      if (
+        sessionIsValid() &&
+        facebookStarted
+      ) {
+
+        setStatus(
+          "👆 Sesja Facebook została przywrócona. Możesz kontynuować."
+        );
+
+      } else {
+
+        setStatus(
+          "✅ Instagram odebrany. Możesz również odebrać cukierka za Facebook."
+        );
+
+      }
+
+    }
+
+
+    /*
+     * Obie platformy rozpoczęte.
+     */
+
+    else if (
+      sessionIsValid() &&
+      facebookStarted &&
+      instagramStarted
+    ) {
+
+      setStatus(
+        "👆 Facebook i Instagram zostały rozpoczęte. Możesz teraz sprawdzić wybraną platformę."
+      );
+
+    }
+
+
+    /*
+     * Tylko Facebook rozpoczęty.
+     */
+
+    else if (
+      sessionIsValid() &&
+      facebookStarted
+    ) {
+
+      setStatus(
+        "👆 Facebook został rozpoczęty. Możesz sprawdzić Facebook lub rozpocząć Instagram."
+      );
+
+    }
+
+
+    /*
+     * Tylko Instagram rozpoczęty.
+     */
+
+    else if (
+      sessionIsValid() &&
+      instagramStarted
+    ) {
+
+      setStatus(
+        "👆 Instagram został rozpoczęty. Możesz sprawdzić Instagram lub rozpocząć Facebook."
+      );
+
+    }
+
+
+    /*
+     * Brak sesji.
+     */
+
+    else {
+
+      setStatus(
+        "👆 Wybierz Facebook lub Instagram."
+      );
+
+    }
+
+  }
+);
+
+
+/*
+==================================================
+LICZNIK SESJI
+==================================================
+*/
+
+setInterval(
+  () => {
+
+    if (
+      sessionIsValid()
+    ) {
+
+      updateSessionInfo();
+
+    }
+
+  },
+  1000
+);
+
+
+/*
+==================================================
+ODŚWIEŻANIE STANU SESJI
+==================================================
+
+Co jakiś czas możemy sprawdzić backend,
+ale NIE zmieniamy tego na agresywne odpytywanie.
+
+Najważniejsze odtworzenie następuje przy
+załadowaniu strony.
+==================================================
+*/
+
+</script>
+
+</body>
+</html>
