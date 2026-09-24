@@ -484,8 +484,7 @@ def start_session(
     req: StartSessionRequest
 ):
   
-    print("[START-SESSION] Frontend wysłał:", req.model_dump())
-
+    
     if not is_valid_platform(req.platform):
 
         raise HTTPException(
