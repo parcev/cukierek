@@ -12,7 +12,7 @@ from pydantic import BaseModel
 
 # CONFIG
 
-SESSION_DURATION = 8 * 60
+SESSION_DURATION = 4 * 60
 
 MAX_ACTIVE_SESSIONS = 3
 
@@ -25,7 +25,7 @@ DISPENSE_COOLDOWN = 5
 # META GRAPH API
 
 # Wersja API jest ustawiona bezpośrednio w kodzie.
-META_API_VERSION = "v24.0"
+META_API_VERSION = "v26.0"
 
 
 # ENVIRONMENT VARIABLES
@@ -78,6 +78,11 @@ DISCORD_WEBHOOK_URL = os.getenv(
     "DISCORD_WEBHOOK_URL"
 )
 
+# DISCORD - USER ACTIVITY LOG
+
+DISCORD_ACTIVITY_WEBHOOK_URL = os.getenv(
+    "DISCORD_ACTIVITY_WEBHOOK_URL"
+)
 
 # FRONTEND
 
@@ -146,6 +151,89 @@ app.add_middleware(
     ],
 )
 
+@app.middleware("http")
+async def activity_logging_middleware(
+    request,
+    call_next
+):
+
+    session_id = None
+    platform = None
+
+    # Session ID może być w query/path/body.
+    # Najpierw sprawdzamy URL.
+    if request.path_params:
+        session_id = request.path_params.get(
+            "session_id"
+        )
+
+    # Dla POST-ów odczytujemy body,
+    # ale zachowujemy je dla endpointu.
+    body = await request.body()
+
+    if body:
+        try:
+
+            import json
+
+            data = json.loads(
+                body.decode("utf-8")
+            )
+
+            if isinstance(data, dict):
+
+                session_id = (
+                    data.get("session_id")
+                    or session_id
+                )
+
+                platform = data.get(
+                    "platform"
+                )
+
+        except Exception:
+            pass
+
+    # Odtworzenie body dla FastAPI.
+    async def receive():
+
+        return {
+            "type": "http.request",
+            "body": body,
+            "more_body": False
+        }
+
+    request._receive = receive
+
+    status_code = 500
+    details = None
+
+    try:
+
+        response = await call_next(
+            request
+        )
+
+        status_code = response.status_code
+
+        return response
+
+    except Exception as error:
+
+        details = str(error)
+
+        raise
+
+    finally:
+
+        send_discord_activity(
+            method=request.method,
+            path=request.url.path,
+            status_code=status_code,
+            session_id=session_id,
+            platform=platform,
+            details=details
+        )
 
 # MEMORY
 
@@ -462,7 +550,58 @@ def send_discord(
             error
         )
 
+def send_discord_activity(
+    method,
+    path,
+    status_code,
+    session_id=None,
+    platform=None,
+    details=None
+):
 
+    if not DISCORD_ACTIVITY_WEBHOOK_URL:
+        return
+
+    content = (
+        "📋 **Cukierko-Bot — aktywność użytkownika**\n"
+        f"Metoda: `{method}`\n"
+        f"Endpoint: `{path}`\n"
+        f"Status HTTP: `{status_code}`"
+    )
+
+    if session_id:
+        content += (
+            f"\nSession ID: `{session_id}`"
+        )
+
+    if platform:
+        content += (
+            f"\nPlatforma: `{platform}`"
+        )
+
+    if details:
+        content += (
+            f"\nSzczegóły: `{details}`"
+        )
+
+    payload = {
+        "content": content
+    }
+
+    try:
+
+        requests.post(
+            DISCORD_ACTIVITY_WEBHOOK_URL,
+            json=payload,
+            timeout=3
+        )
+
+    except Exception as error:
+
+        print(
+            "Discord activity webhook error:",
+            error
+        )
 # ROOT
 
 @app.get("/")
