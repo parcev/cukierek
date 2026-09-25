@@ -1,255 +1,248 @@
 <!DOCTYPE html5>
 <html>
 <lang="pl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nemenčinės Kūrėjai</title>
-  
-  <!-- Import nowoczesnej czcionki Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,600;0,700;1,700;1,800&display=swap" rel="stylesheet">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nemenčinės Kūrėjai</title>
 
-    body {
-      font-family: 'Poppins', Arial, sans-serif;
-      text-align: center;
-      padding: 16px 16px 20px 16px;
-      margin: 0;
-      background: #f4f4f9;
-      height: 100vh;
-      height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between; /* Rozciąga górną sekcję i kartę na pełną wysokość */
-      align-items: center;
-      overflow: hidden; /* Brak paska przewijania */
-    }
+    <!-- Import nowoczesnej czcionki Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,600;0,700;1,700;1,800&display=swap"
+      rel="stylesheet">
 
-    /* Górna sekcja z logo i napisem */
-    .header-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-top: 8px;
-    }
+    <style>
+      * {
+        box-sizing: border-box;
+      }
 
-    .card-logo {
-      max-height: 11vh;
-      width: auto;
-      margin-bottom: 6px;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.12));
-    }
+      body {
+        font-family: 'Poppins', Arial, sans-serif;
+        text-align: center;
+        padding: 16px 16px 20px 16px;
+        margin: 0;
+        background: #f4f4f9;
+        height: 100vh;
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        /* Rozciąga górną sekcję i kartę na pełną wysokość */
+        align-items: center;
+        overflow: hidden;
+        /* Brak paska przewijania */
+      }
 
-    /* Animowany, kolorowy tekst logo */
-    .logo-title {
-      font-style: italic;
-      font-weight: 800;
-      font-size: clamp(1.5rem, 4vh, 2.2rem);
-      margin: 0;
-      letter-spacing: 0.5px;
-      
-      /* Animowany gradient w barwach akcentowych logo (turkus / zieleń) */
-      background: linear-gradient(120deg, #00b4db, #00d2ff, #20e2d7, #38ef7d, #00b4db);
-      background-size: 300% 300%;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      
-      /* Animacja przesunięcia koloru */
-      animation: gradientFlow 5s ease infinite;
-      
-      /* Delikatny efekt poświaty */
-      filter: drop-shadow(0px 3px 6px rgba(0, 180, 219, 0.25));
-    }
+      /* Górna sekcja z logo i napisem */
+      .header-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 8px;
+      }
 
-    @keyframes gradientFlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+      .card-logo {
+        max-height: 11vh;
+        width: auto;
+        margin-bottom: 6px;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.12));
+      }
 
-    /* Główna karta rozciągnięta w pionie */
-    .card {
-      background: white;
-      padding: 20px 18px;
-      border-radius: 20px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-      flex: 1; /* Wypełnia wolną przestrzeń na ekranie */
-      max-height: 72vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around; /* Równomiernie rozkłada zawartość od góry do dołu */
-      margin-top: 10px;
-    }
+      /* Animowany, kolorowy tekst logo */
+      .logo-title {
+        font-style: italic;
+        font-weight: 800;
+        font-size: clamp(1.5rem, 4vh, 2.2rem);
+        margin: 0;
+        letter-spacing: 0.5px;
 
-    .card-header h2 {
-      font-size: clamp(1.15rem, 2.6vh, 1.4rem);
-      margin: 0 0 4px 0;
-      color: #1a1a1a;
-      font-weight: 700;
-    }
+        /* Animowany gradient w barwach akcentowych logo (turkus / zieleń) */
+        background: linear-gradient(120deg, #00b4db, #00d2ff, #20e2d7, #38ef7d, #00b4db);
+        background-size: 300% 300%;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
 
-    .card-header {
-      margin-bottom: 1.1vh;
-    }
-    
-    .card-header p {
-      font-size: clamp(0.82rem, 1.8vh, 0.95rem);
-      margin: 0;
-      color: #666;
-    }
+        /* Animacja przesunięcia koloru */
+        animation: gradientFlow 5s ease infinite;
 
-    .red {
-      color: red;
-    }
-    
-    .platform {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      padding-top: 10px;
-      border-top: 1px solid #f0f0f0;
-    }
+        /* Delikatny efekt poświaty */
+        filter: drop-shadow(0px 3px 6px rgba(0, 180, 219, 0.25));
+      }
 
-    .platform:first-of-type {
-      border-top: none;
-      padding-top: 0;
-    }
+      @keyframes gradientFlow {
+        0% {
+          background-position: 0% 50%;
+        }
 
-    h3 {
-      font-size: clamp(1.15rem, 2.6vh, 1.4rem);
-      margin: 0 0 2px 0;
-      color: #222;
-    }
+        50% {
+          background-position: 100% 50%;
+        }
 
-    button {
-      width: 100%;
-      padding: clamp(10px, 1.8vh, 14px);
-      font-size: clamp(0.95rem, 2.1vh, 1.05rem);
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: transform 0.1s ease, background 0.2s ease;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-    }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
 
-    button:active {
-      transform: scale(0.98);
-    }
+      /* Główna karta rozciągnięta w pionie */
+      .card {
+        background: white;
+        padding: 20px 18px;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        flex: 1;
+        /* Wypełnia wolną przestrzeń na ekranie */
+        max-height: 72vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        /* Równomiernie rozkłada zawartość od góry do dołu */
+        margin-top: 10px;
+      }
 
-    button:disabled {
-      background: #e0e0e0 !important;
-      color: #888 !important;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
+      .card-header h2 {
+        font-size: clamp(1.15rem, 2.6vh, 1.4rem);
+        margin: 0 0 4px 0;
+        color: #1a1a1a;
+        font-weight: 700;
+      }
 
-    .btn-fb {
-      background: #1877f2;
-      color: white;
-    }
+      .card-header {
+        margin-bottom: 1.1vh;
+      }
 
-    .btn-ig {
-      background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-      color: white;
-    }
+      .card-header p {
+        font-size: clamp(0.82rem, 1.8vh, 0.95rem);
+        margin: 0;
+        color: #666;
+      }
 
-    .btn-candy {
-      background: #28a745;
-      color: white;
-    }
+      .red {
+        color: red;
+      }
 
-    .status {
-      font-weight: 600;
-      min-height: 24px;
-      font-size: clamp(0.8rem, 1.7vh, 0.9rem);
-      margin: 1.1vh 0 0 0;
-      margin: 1.1dvh 0 0 0;
-      color: #333;
-    }
+      .platform {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding-top: 10px;
+        border-top: 1px solid #f0f0f0;
+      }
 
-    .session {
-      font-size: clamp(0.7rem, 1.4vh, 0.8rem);
-      color: #888;
-      margin: 0;
-    }
+      .platform:first-of-type {
+        border-top: none;
+        padding-top: 0;
+      }
 
-  </style>
-</head>
-<body>
-  <!-- Górna sekcja -->
-  <div class="header-section">
-    <img
-      src="/cukierek/images/LogoNKkolo.png"
-      alt="Logo"
-      class="card-logo"
-    >
-    <div class="logo-title">Nemenčinės Kūrėjai</div>
-  </div>
+      h3 {
+        font-size: clamp(1.15rem, 2.6vh, 1.4rem);
+        margin: 0 0 2px 0;
+        color: #222;
+      }
 
-  <!-- Karta ze stałym wyważeniem pionowym -->
-  <div class="card">
-    <div class="card-header">
-      <h2>🍬 Otrzymaj cukierek!</h2>
-      <p><span class="red">Zaobserwuj</span> nasz profil, a następnie <span class="red">wróć</span> tutaj i <span class="red">odbierz cukierek</span> za każde media społecznościowe.</p>
+      button {
+        width: 100%;
+        padding: clamp(10px, 1.8vh, 14px);
+        font-size: clamp(0.95rem, 2.1vh, 1.05rem);
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: transform 0.1s ease, background 0.2s ease;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      button:active {
+        transform: scale(0.98);
+      }
+
+      button:disabled {
+        background: #e0e0e0 !important;
+        color: #888 !important;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+
+      .btn-fb {
+        background: #1877f2;
+        color: white;
+      }
+
+      .btn-ig {
+        background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+        color: white;
+      }
+
+      .btn-candy {
+        background: #28a745;
+        color: white;
+      }
+
+      .status {
+        font-weight: 600;
+        min-height: 24px;
+        font-size: clamp(0.8rem, 1.7vh, 0.9rem);
+        margin: 1.1vh 0 0 0;
+        margin: 1.1dvh 0 0 0;
+        color: #333;
+      }
+
+      .session {
+        font-size: clamp(0.7rem, 1.4vh, 0.8rem);
+        color: #888;
+        margin: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Górna sekcja -->
+    <div class="header-section">
+      <img src="/cukierek/images/LogoNKkolo.png" alt="Logo" class="card-logo">
+      <div class="logo-title">Nemenčinės Kūrėjai</div>
     </div>
 
-    <!-- FACEBOOK -->
-    <div class="platform">
-      <h3>🔵 Facebook</h3>
-      <button
-        id="facebookStartBtn"
-        class="btn-fb"
-        onclick="startPlatform('facebook')"
-      >
-        1. Zaobserwuj nas na Facebooku
-      </button>
+    <!-- Karta ze stałym wyważeniem pionowym -->
+    <div class="card">
+      <div class="card-header">
+        <h2>🍬 Otrzymaj cukierek!</h2>
+        <p><span class="red">Zaobserwuj</span> nasz profil, a następnie <span class="red">wróć</span> tutaj i <span
+            class="red">odbierz cukierek</span> za każde media społecznościowe.</p>
+      </div>
 
-      <button
-        id="facebookVerifyBtn"
-        class="btn-candy"
-        onclick="verifyPlatform('facebook')"
-        disabled
-      >
-        2. Sprawdź Facebook i otrzymaj cukierek
-      </button>
+      <!-- FACEBOOK -->
+      <div class="platform">
+        <h3>🔵 Facebook</h3>
+        <button id="facebookStartBtn" class="btn-fb" onclick="startPlatform('facebook')">
+          1. Zaobserwuj nas na Facebooku
+        </button>
+
+        <button id="facebookVerifyBtn" class="btn-candy" onclick="verifyPlatform('facebook')" disabled>
+          2. Sprawdź Facebook i otrzymaj cukierek
+        </button>
+      </div>
+
+      <!-- INSTAGRAM -->
+      <div class="platform" style="margin-top: 2.2dvh;">
+        <h3>📸 Instagram</h3>
+        <button id="instagramStartBtn" class="btn-ig" onclick="startPlatform('instagram')">
+          1. Zaobserwuj nas na Instagramie
+        </button>
+
+        <button id="instagramVerifyBtn" class="btn-candy" onclick="verifyPlatform('instagram')" disabled>
+          2. Sprawdź Instagram i otrzymaj cukierek
+        </button>
+      </div>
+
+      <div>
+        <p id="status" class="status"></p>
+        <p id="sessionInfo" class="session"></p>
+      </div>
     </div>
-
-    <!-- INSTAGRAM -->
-    <div class="platform" style="margin-top: 2.2dvh;">
-      <h3>📸 Instagram</h3>
-      <button
-        id="instagramStartBtn"
-        class="btn-ig"
-        onclick="startPlatform('instagram')"
-      >
-        1. Zaobserwuj nas na Instagramie
-      </button>
-
-      <button
-        id="instagramVerifyBtn"
-        class="btn-candy"
-        onclick="verifyPlatform('instagram')"
-        disabled
-      >
-        2. Sprawdź Instagram i otrzymaj cukierek
-      </button>
-    </div>
-
-    <div>
-      <p id="status" class="status"></p>
-      <p id="sessionInfo" class="session"></p>
-    </div>
-  </div>
-<script>
+    <script>
 
 /*
 ==================================================
@@ -1588,7 +1581,7 @@ async function verifyPlatform(platform) {
       updateButtons();
 
       setStatus(
-        "⌛ Sesja wygasła. Rozpocznij ponownie."
+        "⌛ Czas skończył się. Spróbuj ponownie."
       );
 
       return;
@@ -1861,7 +1854,7 @@ window.addEventListener(
       } else {
 
         setStatus(
-          "✅ Facebook odebrany. Możesz również odebrać cukierka za Instagram."
+          "✅ Facebook odebrany. Możesz również odebrać cukierek za Instagram."
         );
 
       }
@@ -1889,7 +1882,7 @@ window.addEventListener(
       } else {
 
         setStatus(
-          "✅ Instagram odebrany. Możesz również odebrać cukierka za Facebook."
+          "✅ Instagram odebrany. Możesz również odebrać cukierek za Facebook."
         );
 
       }
@@ -1998,5 +1991,6 @@ załadowaniu strony.
 */
 
 </script>
-</body>
+  </body>
+
 </html>
