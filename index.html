@@ -476,34 +476,23 @@ CLEAR SESSION
 ==================================================
 */
 
-function clearSession() {
-
+function clearSession(wasExpired = false) {
   sessionId = null;
-
   sessionExpiresAt = null;
-
   facebookStarted = false;
-
   instagramStarted = false;
-
   verificationInProgress = false;
 
-
-  localStorage.removeItem(
-    SESSION_KEY
-  );
-
-  localStorage.removeItem(
-    SESSION_EXPIRES_KEY
-  );
-
+  localStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(SESSION_EXPIRES_KEY);
 
   updateSessionInfo();
-
   updateButtons();
 
+  if (wasExpired) {
+    setStatus("⌛ Sesja wygasła. Możesz rozpocząć nową.");
+  }
 }
-
 
 /*
 ==================================================
@@ -512,25 +501,16 @@ SESSION VALID
 */
 
 function sessionIsValid() {
-
-  if (
-    !sessionId ||
-    !sessionExpiresAt
-  ) {
+  if (!sessionId || !sessionExpiresAt) {
     return false;
   }
 
-  if (
-    Date.now() >= sessionExpiresAt
-  ) {
-
-    clearSession();
-
+  if (Date.now() >= sessionExpiresAt) {
+    clearSession(true); // Przekazujemy flagę wygaśnięcia
     return false;
   }
 
   return true;
-
 }
 
 
@@ -680,82 +660,33 @@ SESSION INFO
 */
 
 function updateSessionInfo() {
-
-  if (
-    !sessionId ||
-    !sessionExpiresAt
-  ) {
-
+  if (!sessionId || !sessionExpiresAt) {
     sessionInfo.innerText = "";
-
     return;
   }
 
+  const remaining = sessionExpiresAt - Date.now();
 
-  const remaining =
-    sessionExpiresAt -
-    Date.now();
-
-
-  if (
-    remaining <= 0
-  ) {
-
-    clearSession();
-
-    setStatus(
-      "⌛ Sesja wygasła. Możesz rozpocząć nową."
-    );
-
+  if (remaining <= 0) {
+    clearSession(true);
     return;
   }
 
-
-  const seconds =
-    Math.ceil(
-      remaining / 1000
-    );
-
-  const minutes =
-    Math.floor(
-      seconds / 60
-    );
-
-  const rest =
-    seconds % 60;
-
+  const seconds = Math.ceil(remaining / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const rest = seconds % 60;
 
   let startedText = "";
 
-
-  if (
-    facebookStarted &&
-    instagramStarted
-  ) {
-
-    startedText =
-      " — Facebook + Instagram";
-
-  } else if (
-    facebookStarted
-  ) {
-
-    startedText =
-      " — Facebook";
-
-  } else if (
-    instagramStarted
-  ) {
-
-    startedText =
-      " — Instagram";
-
+  if (facebookStarted && instagramStarted) {
+    startedText = " — Facebook + Instagram";
+  } else if (facebookStarted) {
+    startedText = " — Facebook";
+  } else if (instagramStarted) {
+    startedText = " — Instagram";
   }
 
-
-  sessionInfo.innerText =
-    `⏱️ Sesja aktywna${startedText}: ${minutes}:${String(rest).padStart(2, "0")}`;
-
+  sessionInfo.innerText = `⏱️ Sesja aktywna${startedText}: ${minutes}:${String(rest).padStart(2, "0")}`;
 }
 
 
