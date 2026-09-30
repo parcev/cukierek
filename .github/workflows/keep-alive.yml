@@ -1,0 +1,15 @@
+name: Morning Wake Up
+
+on:
+  schedule:
+    # Runs once daily at 04:25 UTC (07:25 AM Vilnius time)
+    - cron: '00 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  wake-up:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Warm up Render Server
+        run: |
+          curl -s --max-time 120 https://mesenger-excel-1.onrender.com/health || true
