@@ -209,7 +209,7 @@
         align-items: center;
         gap: 6px;
         width: auto !important;
-        padding: 6px 12px !important;
+        padding: 6px 10px !important;
         font-size: 0.8rem !important;
         font-weight: 600 !important;
         background: rgba(255, 255, 255, 0.95) !important;
@@ -232,7 +232,7 @@
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
         border: 1px solid rgba(0, 0, 0, 0.08);
         overflow: hidden;
-        min-width: 85px;
+        min-width: 90px;
       }
 
       .lang-dropdown-menu.show {
@@ -261,13 +261,17 @@
         background: #f0f4f8 !important;
       }
 
+      /* Prostokątne flagi SVG */
       .flag-icon {
-        width: 18px !important;
-        height: 18px !important;
+        width: 20px !important;
+        height: 14px !important;
+        object-fit: cover;
+        border-radius: 2px;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        /* Obramowanie widoczne na białym tle */
         flex-shrink: 0;
         display: block;
       }
-
 
       .arrow {
         font-size: 0.6rem;
@@ -279,28 +283,25 @@
   <body>
     <!-- język wybierac -->
     <div class="lang-dropdown" id="langDropdown">
-      <button class="lang-dropbtn" onclick="toggleLangDropdown(event)">
-        <img src="https://hatscripts.github.io/circle-flags/flags/pl.svg" id="selected-flag" alt="PL" class="flag-icon"
-          width="18" height="18">
+      <button type="button" class="lang-dropbtn" onclick="toggleLangDropdown(event)">
+        <img src="https://flagcdn.com/pl.svg" id="selected-flag" alt="PL" class="flag-icon">
         <span id="selected-lang">PL</span>
         <span class="arrow">▼</span>
       </button>
 
       <div class="lang-dropdown-menu" id="langMenu">
-        <button onclick="selectLang('pl', 'PL', 'https://hatscripts.github.io/circle-flags/flags/pl.svg')">
-          <img src="https://hatscripts.github.io/circle-flags/flags/pl.svg" alt="PL" class="flag-icon" width="18"
-            height="18"> PL
+        <button type="button" onclick="selectLang('pl', 'PL', 'https://flagcdn.com/pl.svg')">
+          <img src="https://flagcdn.com/pl.svg" alt="PL" class="flag-icon"> PL
         </button>
-        <button onclick="selectLang('lt', 'LT', 'https://hatscripts.github.io/circle-flags/flags/lt.svg')">
-          <img src="https://hatscripts.github.io/circle-flags/flags/lt.svg" alt="LT" class="flag-icon" width="18"
-            height="18"> LT
+        <button type="button" onclick="selectLang('lt', 'LT', 'https://flagcdn.com/lt.svg')">
+          <img src="https://flagcdn.com/lt.svg" alt="LT" class="flag-icon"> LT
         </button>
-        <button onclick="selectLang('en', 'EN', 'https://hatscripts.github.io/circle-flags/flags/gb.svg')">
-          <img src="https://hatscripts.github.io/circle-flags/flags/gb.svg" alt="EN" class="flag-icon" width="18"
-            height="18"> EN
+        <button type="button" onclick="selectLang('en', 'EN', 'https://flagcdn.com/gb.svg')">
+          <img src="https://flagcdn.com/gb.svg" alt="EN" class="flag-icon"> EN
         </button>
       </div>
     </div>
+
 
 
 
