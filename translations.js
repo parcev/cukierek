@@ -1,8 +1,17 @@
+/*
+==================================================
+KONFIGURACJA I SŁOWNIK
+==================================================
+*/
+
 const DEFAULT_LANG = "pl";
 let currentLang = localStorage.getItem("user_lang") || DEFAULT_LANG;
 
 const translations = {
   pl: {
+    label: "PL",
+    flag: "/cukierek/images/flags/pl.png", // Dostosuj ścieżkę do swojej flagi
+
     // HTML Static Content
     card_title: "🍬 Otrzymaj cukierek!",
     card_desc: "<span class='red'>Zaobserwuj</span> nasz profil, a następnie <span class='red'>wróć</span> tutaj i <span class='red'>odbierz cukierek</span> za każde media społecznościowe.",
@@ -38,7 +47,11 @@ const translations = {
     status_error: "⚠️ Wystąpił błąd.",
     session_active: "⏱️ Sesja aktywna"
   },
+
   lt: {
+    label: "LT",
+    flag: "/cukierek/images/flags/lt.png", // Dostosuj ścieżkę do swojej flagi
+
     // HTML Static Content
     card_title: "🍬 Gaukite saldainį!",
     card_desc: "<span class='red'>Sekite</span> mūsų profilį, tuomet <span class='red'>grįžkite</span> čia ir <span class='red'>pasiimkite saldainį</span> už kiekvieną socialinį tinklą.",
@@ -74,7 +87,11 @@ const translations = {
     status_error: "⚠️ Įvyko klaida.",
     session_active: "⏱️ Aktyvi sesija"
   },
+
   en: {
+    label: "EN",
+    flag: "/cukierek/images/flags/en.png", // Dostosuj ścieżkę do swojej flagi
+
     // HTML Static Content
     card_title: "🍬 Get a candy!",
     card_desc: "<span class='red'>Follow</span> our profile, then <span class='red'>return</span> here and <span class='red'>claim your candy</span> for each social platform.",
@@ -112,33 +129,71 @@ const translations = {
   }
 };
 
-// Translation helper
+/*
+==================================================
+POMOCNIKI TŁUMACZEŃ
+==================================================
+*/
+
+// Pobieranie tekstu tłumaczenia na podstawie klucza
 function t(key) {
-  return (translations[ currentLang ] && translations[ currentLang ][ key ]) || translations[ DEFAULT_LANG ][ key ] || key;
+  return (translations[currentLang] && translations[currentLang][key]) || translations[DEFAULT_LANG][key] || key;
 }
 
-// Language switch function
+// Główna funkcja zmiany języka
 function setLanguage(lang) {
   currentLang = lang;
   localStorage.setItem("user_lang", lang);
 
-  // Auto-translate HTML elements with data-i18n
+  // 1. Aktualizacja flagi i napisu w wybranym języku na przycisku rozwijanym
+  const langData = translations[lang] || translations[DEFAULT_LANG];
+  const selectedLangEl = document.getElementById("selected-lang");
+  const selectedFlagEl = document.getElementById("selected-flag");
+
+  if (selectedLangEl) selectedLangEl.innerText = langData.label;
+  if (selectedFlagEl) selectedFlagEl.src = langData.flag;
+
+  // 2. Automatyczne tłumaczenie elementów z data-i18n
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.getAttribute("data-i18n");
-    if (translations[ lang ] && translations[ lang ][ key ]) {
-      el.innerHTML = translations[ lang ][ key ];
+    if (translations[lang] && translations[lang][key]) {
+      el.innerHTML = translations[lang][key];
     }
   });
 
-  // Highlight active button in corner
-  document.querySelectorAll(".lang-btn").forEach(btn => btn.classList.remove("active"));
-  const activeBtn = document.getElementById(`lang-${lang}`);
-  if (activeBtn) activeBtn.classList.add("active");
-
-  // Re-render UI text
+  // 3. Re-render dynamicznych elementów strony
   if (typeof updateButtons === "function") updateButtons();
   if (typeof updateSessionInfo === "function") updateSessionInfo();
 }
+
+/*
+==================================================
+OBSŁUGA MENU DROPDOWN
+==================================================
+*/
+
+function toggleLangDropdown(event) {
+  event.stopPropagation();
+  const menu = document.getElementById("langMenu");
+  if (menu) menu.classList.toggle("show");
+}
+
+function selectLang(langCode) {
+  const menu = document.getElementById("langMenu");
+  if (menu) menu.classList.remove("show");
+
+  if (typeof setLanguage === 'function') {
+    setLanguage(langCode);
+  }
+}
+
+// Zamknięcie menu po kliknięciu poza nim
+window.addEventListener('click', () => {
+  const menu = document.getElementById("langMenu");
+  if (menu) menu.classList.remove("show");
+});
+
+// Inicjalizacja języka po załadowaniu drzewa DOM
 document.addEventListener("DOMContentLoaded", () => {
   setLanguage(currentLang);
 });
