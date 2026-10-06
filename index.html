@@ -196,10 +196,76 @@
         color: #888;
         margin: 0;
       }
+
+      .lang-switcher {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        display: flex;
+        gap: 3px;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(6px);
+        padding: 4px;
+        border-radius: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.06);
+      }
+
+      .lang-btn {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        width: auto !important;
+        padding: 4px 8px !important;
+        font-size: 0.75rem !important;
+        font-weight: 600 !important;
+        border: none !important;
+        background: transparent !important;
+        color: #555 !important;
+        border-radius: 14px !important;
+        cursor: pointer;
+        box-shadow: none !important;
+        transition: all 0.2s ease;
+      }
+
+      .lang-btn:hover {
+        background: rgba(0, 0, 0, 0.05) !important;
+        color: #1a1a1a !important;
+      }
+
+      .lang-btn.active {
+        background: #00b4db !important;
+        color: #ffffff !important;
+      }
+
+      .flag-icon {
+        width: 16px;
+        height: 12px;
+        object-fit: cover;
+        border-radius: 2px;
+        display: block;
+      }
     </style>
   </head>
 
   <body>
+    <!-- język wybierac -->
+    <div class="lang-switcher">
+      <button onclick="setLanguage('pl')" class="lang-btn active" id="lang-pl">
+        <img src="https://flagcdn.com/w20/pl.png" alt="PL" class="flag-icon">
+        <span>PL</span>
+      </button>
+      <button onclick="setLanguage('lt')" class="lang-btn" id="lang-lt">
+        <img src="https://flagcdn.com/w20/lt.png" alt="LT" class="flag-icon">
+        <span>LT</span>
+      </button>
+      <button onclick="setLanguage('en')" class="lang-btn" id="lang-en">
+        <img src="https://flagcdn.com/w20/gb.png" alt="EN" class="flag-icon">
+        <span>EN</span>
+      </button>
+    </div>
+
     <!-- Górna sekcja -->
     <div class="header-section">
       <img src="/cukierek/images/LogoNKkolo.png" alt="Logo" class="card-logo">
