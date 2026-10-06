@@ -139,3 +139,6 @@ function setLanguage(lang) {
   if (typeof updateButtons === "function") updateButtons();
   if (typeof updateSessionInfo === "function") updateSessionInfo();
 }
+document.addEventListener("DOMContentLoaded", () => {
+  setLanguage(currentLang);
+});
