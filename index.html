@@ -871,162 +871,46 @@ Zasady:
 */
 
 function updateButtons() {
-
-  /*
-   * VERIFY W TOKU
-   */
-  if (
-    verificationInProgress
-  ) {
-
+  if (verificationInProgress) {
     disableAllButtons();
-
     return;
   }
 
-
-  /*
-   * ==========================================
-   * FACEBOOK START
-   * ==========================================
-   */
-
-  if (
-    isClaimed("facebook")
-  ) {
-
-    facebookStartBtn.disabled =
-      true;
-
-    facebookStartBtn.innerText =
-      "✅ Facebook — cukierek odebrany";
-
+  // FACEBOOK
+  if (isClaimed("facebook")) {
+    facebookStartBtn.disabled = true;
+    facebookStartBtn.innerText = t("btn_fb_claimed");
+  } else if (facebookStarted) {
+    facebookStartBtn.disabled = true;
+    facebookStartBtn.innerText = t("btn_fb_goto");
+  } else {
+    facebookStartBtn.disabled = false;
+    facebookStartBtn.innerText = t("btn_fb_start");
   }
 
-  else if (
-    facebookStarted
-  ) {
-
-    facebookStartBtn.disabled =
-      true;
-
-    facebookStartBtn.innerText =
-      "✅ Przejdź na Facebooka";
-
+  // INSTAGRAM
+  if (isClaimed("instagram")) {
+    instagramStartBtn.disabled = true;
+    instagramStartBtn.innerText = t("btn_ig_claimed");
+  } else if (instagramStarted) {
+    instagramStartBtn.disabled = true;
+    instagramStartBtn.innerText = t("btn_ig_goto");
+  } else {
+    instagramStartBtn.disabled = false;
+    instagramStartBtn.innerText = t("btn_ig_start");
   }
 
-  else {
-
-    facebookStartBtn.disabled =
-      false;
-
-    facebookStartBtn.innerText =
-      "1. Zaobserwuj nas na Facebooku";
-
+  // VERIFY BUTTON LABELS
+  if (!facebookStarted && !isClaimed("facebook")) {
+    facebookVerifyBtn.innerText = t("btn_fb_verify");
+  }
+  if (!instagramStarted && !isClaimed("instagram")) {
+    instagramVerifyBtn.innerText = t("btn_ig_verify");
   }
 
-
-  /*
-   * ==========================================
-   * INSTAGRAM START
-   * ==========================================
-   */
-
-  if (
-    isClaimed("instagram")
-  ) {
-
-    instagramStartBtn.disabled =
-      true;
-
-    instagramStartBtn.innerText =
-      "✅ Instagram — cukierek odebrany";
-
-  }
-
-  else if (
-    instagramStarted
-  ) {
-
-    instagramStartBtn.disabled =
-      true;
-
-    instagramStartBtn.innerText =
-      "✅ Przejdź na Instagram";
-
-  }
-
-  else {
-
-    instagramStartBtn.disabled =
-      false;
-
-    instagramStartBtn.innerText =
-      "1. Zaobserwuj nas na Instagramie";
-
-  }
-
-
-  /*
-   * ==========================================
-   * VERIFY — DOMYŚLNIE WYŁĄCZONE
-   * ==========================================
-   */
-
-  facebookVerifyBtn.disabled =
-    true;
-
-  instagramVerifyBtn.disabled =
-    true;
-
-
-  /*
-   * ==========================================
-   * BRAK SESJI
-   * ==========================================
-   */
-
-  if (
-    !sessionIsValid()
-  ) {
-
-    return;
-  }
-
-
-  /*
-   * ==========================================
-   * FACEBOOK VERIFY
-   * ==========================================
-   */
-
-  if (
-    facebookStarted &&
-    !isClaimed("facebook")
-  ) {
-
-    facebookVerifyBtn.disabled =
-      false;
-
-  }
-
-
-  /*
-   * ==========================================
-   * INSTAGRAM VERIFY
-   * ==========================================
-   */
-
-  if (
-    instagramStarted &&
-    !isClaimed("instagram")
-  ) {
-
-    instagramVerifyBtn.disabled =
-      false;
-
-  }
-
+  // DISABLE VERIFY IF NOT STARTED/CLAIMED
+  facebookVerifyBtn.disabled = !sessionIsValid() || !facebookStarted || isClaimed("facebook");
+  instagramVerifyBtn.disabled = !sessionIsValid() || !instagramStarted || isClaimed("instagram");
 }
 
 
