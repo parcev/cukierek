@@ -114,7 +114,7 @@ const translations = {
 
 // Translation helper
 function t(key) {
-  return (translations[currentLang] && translations[currentLang][key]) || translations[DEFAULT_LANG][key] || key;
+  return (translations[ currentLang ] && translations[ currentLang ][ key ]) || translations[ DEFAULT_LANG ][ key ] || key;
 }
 
 // Language switch function
@@ -125,8 +125,8 @@ function setLanguage(lang) {
   // Auto-translate HTML elements with data-i18n
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.getAttribute("data-i18n");
-    if (translations[lang] && translations[lang][key]) {
-      el.innerHTML = translations[lang][key];
+    if (translations[ lang ] && translations[ lang ][ key ]) {
+      el.innerHTML = translations[ lang ][ key ];
     }
   });
 
