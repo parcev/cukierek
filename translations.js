@@ -90,7 +90,7 @@ const translations = {
 
   en: {
     label: "EN",
-    flag: "https://flagcdn.com/en.svg", // Dostosuj ścieżkę do swojej flagi
+    flag: "https://flagcdn.com/gb.svg", // Dostosuj ścieżkę do swojej flagi
 
     // HTML Static Content
     card_title: "🍬 Get a candy!",
