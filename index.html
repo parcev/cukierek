@@ -262,12 +262,12 @@
       }
 
       .flag-icon {
-        width: 16px;
-        height: 12px;
-        object-fit: cover;
-        border-radius: 2px;
+        width: 18px !important;
+        height: 18px !important;
+        flex-shrink: 0;
         display: block;
       }
+
 
       .arrow {
         font-size: 0.6rem;
@@ -280,23 +280,28 @@
     <!-- język wybierac -->
     <div class="lang-dropdown" id="langDropdown">
       <button class="lang-dropbtn" onclick="toggleLangDropdown(event)">
-        <img src="https://flagcdn.com/w40/pl.png" id="selected-flag" alt="PL" class="flag-icon">
+        <img src="https://hatscripts.github.io/circle-flags/flags/pl.svg" id="selected-flag" alt="PL" class="flag-icon"
+          width="18" height="18">
         <span id="selected-lang">PL</span>
         <span class="arrow">▼</span>
       </button>
 
       <div class="lang-dropdown-menu" id="langMenu">
-        <button onclick="selectLang('pl', 'PL', 'https://flagcdn.com/w40/pl.png')">
-          <img src="https://flagcdn.com/w40/pl.png" alt="PL" class="flag-icon"> PL
+        <button onclick="selectLang('pl', 'PL', 'https://hatscripts.github.io/circle-flags/flags/pl.svg')">
+          <img src="https://hatscripts.github.io/circle-flags/flags/pl.svg" alt="PL" class="flag-icon" width="18"
+            height="18"> PL
         </button>
-        <button onclick="selectLang('lt', 'LT', 'https://flagcdn.com/w40/lt.png')">
-          <img src="https://flagcdn.com/w40/lt.png" alt="LT" class="flag-icon"> LT
+        <button onclick="selectLang('lt', 'LT', 'https://hatscripts.github.io/circle-flags/flags/lt.svg')">
+          <img src="https://hatscripts.github.io/circle-flags/flags/lt.svg" alt="LT" class="flag-icon" width="18"
+            height="18"> LT
         </button>
-        <button onclick="selectLang('en', 'EN', 'https://flagcdn.com/w40/gb.png')">
-          <img src="https://flagcdn.com/w40/gb.png" alt="EN" class="flag-icon"> EN
+        <button onclick="selectLang('en', 'EN', 'https://hatscripts.github.io/circle-flags/flags/gb.svg')">
+          <img src="https://hatscripts.github.io/circle-flags/flags/gb.svg" alt="EN" class="flag-icon" width="18"
+            height="18"> EN
         </button>
       </div>
     </div>
+
 
 
     <!-- Górna sekcja -->
