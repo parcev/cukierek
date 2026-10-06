@@ -50,7 +50,7 @@ const translations = {
 
   lt: {
     label: "LT",
-    flag: "https://flagcdn.com/lt.png", // Dostosuj ścieżkę do swojej flagi
+    flag: "https://flagcdn.com/lt.svg", // Dostosuj ścieżkę do swojej flagi
 
     // HTML Static Content
     card_title: "🍬 Gaukite saldainį!",
@@ -90,7 +90,7 @@ const translations = {
 
   en: {
     label: "EN",
-    flag: "https://flagcdn.com/en.png", // Dostosuj ścieżkę do swojej flagi
+    flag: "https://flagcdn.com/en.svg", // Dostosuj ścieżkę do swojej flagi
 
     // HTML Static Content
     card_title: "🍬 Get a candy!",
