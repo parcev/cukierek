@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nemenčinės Kūrėjai</title>
     <script src="translations.js"></script>
-    
+
     <!-- Import nowoczesnej czcionki Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,600;0,700;1,700;1,800&display=swap"
       rel="stylesheet">
@@ -209,31 +209,35 @@
     <!-- Karta ze stałym wyważeniem pionowym -->
     <div class="card">
       <div class="card-header">
-        <h2>🍬 Otrzymaj cukierek!</h2>
-        <p><span class="red">Zaobserwuj</span> nasz profil, a następnie <span class="red">wróć</span> tutaj i <span
-            class="red">odbierz cukierek</span> za każde media społecznościowe.</p>
+        <h2 data-i18n="card_title">🍬 Otrzymaj cukierek!</h2>
+        <p data-i18n="card_desc">
+          <span class="red">Zaobserwuj</span> nasz profil, a następnie <span class="red">wróć</span> tutaj i <span
+            class="red">odbierz cukierek</span> za każde media społecznościowe.
+        </p>
       </div>
 
       <!-- FACEBOOK -->
       <div class="platform">
-        <h3>🔵 Facebook</h3>
-        <button id="facebookStartBtn" class="btn-fb" onclick="startPlatform('facebook')">
+        <h3 data-i18n="header_fb">🔵 Facebook</h3>
+        <button id="facebookStartBtn" class="btn-fb" onclick="startPlatform('facebook')" data-i18n="btn_fb_start">
           1. Zaobserwuj nas na Facebooku
         </button>
 
-        <button id="facebookVerifyBtn" class="btn-candy" onclick="verifyPlatform('facebook')" disabled>
+        <button id="facebookVerifyBtn" class="btn-candy" onclick="verifyPlatform('facebook')" disabled
+          data-i18n="btn_fb_verify">
           2. Otrzymaj cukierek za zaobserwowanie na Facebooku
         </button>
       </div>
 
       <!-- INSTAGRAM -->
       <div class="platform" style="margin-top: 2.2dvh;">
-        <h3>📸 Instagram</h3>
-        <button id="instagramStartBtn" class="btn-ig" onclick="startPlatform('instagram')">
+        <h3 data-i18n="header_ig">📸 Instagram</h3>
+        <button id="instagramStartBtn" class="btn-ig" onclick="startPlatform('instagram')" data-i18n="btn_ig_start">
           1. Zaobserwuj nas na Instagramie
         </button>
 
-        <button id="instagramVerifyBtn" class="btn-candy" onclick="verifyPlatform('instagram')" disabled>
+        <button id="instagramVerifyBtn" class="btn-candy" onclick="verifyPlatform('instagram')" disabled
+          data-i18n="btn_ig_verify">
           2. Otrzymaj cukierek za zaobserwowanie na Instagramie
         </button>
       </div>
@@ -243,6 +247,7 @@
         <p id="sessionInfo" class="session"></p>
       </div>
     </div>
+
     <script>
 
 /*
@@ -1769,6 +1774,8 @@ window.addEventListener(
   "load",
   async () => {
 
+
+      setLanguage(currentLang);
     /*
      * Najpierw próbujemy przywrócić
      * lokalną sesję.
