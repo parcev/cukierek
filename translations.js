@@ -137,7 +137,7 @@ POMOCNIKI TŁUMACZEŃ
 
 // Pobieranie tekstu tłumaczenia na podstawie klucza
 function t(key) {
-  return (translations[currentLang] && translations[currentLang][key]) || translations[DEFAULT_LANG][key] || key;
+  return (translations[ currentLang ] && translations[ currentLang ][ key ]) || translations[ DEFAULT_LANG ][ key ] || key;
 }
 
 // Główna funkcja zmiany języka
@@ -146,7 +146,7 @@ function setLanguage(lang) {
   localStorage.setItem("user_lang", lang);
 
   // 1. Aktualizacja flagi i napisu w wybranym języku na przycisku rozwijanym
-  const langData = translations[lang] || translations[DEFAULT_LANG];
+  const langData = translations[ lang ] || translations[ DEFAULT_LANG ];
   const selectedLangEl = document.getElementById("selected-lang");
   const selectedFlagEl = document.getElementById("selected-flag");
 
@@ -156,8 +156,8 @@ function setLanguage(lang) {
   // 2. Automatyczne tłumaczenie elementów z data-i18n
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.getAttribute("data-i18n");
-    if (translations[lang] && translations[lang][key]) {
-      el.innerHTML = translations[lang][key];
+    if (translations[ lang ] && translations[ lang ][ key ]) {
+      el.innerHTML = translations[ lang ][ key ];
     }
   });
 
