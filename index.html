@@ -1282,9 +1282,7 @@ async function startPlatform(platform) {
 
     } else {
 
-      setStatus(
-        "👆 Kliknij przycisk \"Otrzymaj cukierek za Instagram\"”."
-      );
+      setStatus(t("status_ig_click_verify”));
 
     }
 
@@ -1419,8 +1417,8 @@ async function verifyPlatform(platform) {
 
   setStatus(
     platform === "facebook"
-      ? "status_checking_fb"
-      : "🔎 Sprawdzam Instagram..."
+      ? t("status_checking_fb")
+      : t("status_checking_ig")
   );
 
 
