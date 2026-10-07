@@ -1648,9 +1648,8 @@ async function verifyPlatform(platform) {
       updateButtons();
 
 
-      setStatus(
-        "🍬 Ten cukierek został już odebrany."
-      );
+      setStatus(platform === "facebook" ? "status_fb_claimed" : "status_ig_claimed");
+
 
       return;
     }
@@ -1676,7 +1675,7 @@ async function verifyPlatform(platform) {
 
 
       setStatus(
-        "⏳ Automat jest właśnie używany. Spróbuj ponownie za chwilę."
+        "status_busy"
       );
 
       return;
@@ -1701,7 +1700,7 @@ async function verifyPlatform(platform) {
 
 
       setStatus(
-        t("status_error")
+        "status_error"
       );
 
       return;
@@ -1722,7 +1721,7 @@ async function verifyPlatform(platform) {
 
 
     setStatus(
-      t("status_error")
+      "status_error"
     );
 
   }
@@ -1743,7 +1742,7 @@ async function verifyPlatform(platform) {
 
 
     setStatus(
-      "⚠️ Brak połączenia z serwerem."
+      "status_no_connection"
     );
 
   }
@@ -1827,7 +1826,7 @@ window.addEventListener(
     ) {
 
       setStatus(
-        t("status_claimed_both")
+        "status_claimed_both"
       );
 
     }
@@ -1852,9 +1851,8 @@ window.addEventListener(
 
       } else {
 
-        setStatus(
-          "✅ Facebook odebrany. Możesz również odebrać cukierek za Instagram."
-        );
+        setStatus("status_fb_claimed_can_ig");
+
 
       }
 
@@ -1880,9 +1878,8 @@ window.addEventListener(
 
       } else {
 
-        setStatus(
-          "✅ Instagram odebrany. Możesz również odebrać cukierek za Facebook."
-        );
+        setStatus("status_ig_claimed_can_fb");
+
 
       }
 
@@ -1935,9 +1932,8 @@ window.addEventListener(
         "👆 Instagram został rozpoczęty. Możesz sprawdzić Instagram lub rozpocząć Facebook."
       );*/
 
-      setStatus(
-        "👆 Kliknij przycisk \"Otrzymaj cukierek za Instagram\""
-      )
+      setStatus("status_ig_click_verify");
+
 
     }
 
