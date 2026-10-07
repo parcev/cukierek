@@ -10,7 +10,7 @@ let currentLang = localStorage.getItem("user_lang") || DEFAULT_LANG;
 const translations = {
   pl: {
     label: "PL",
-    flag: "https://flagcdn.com/pl.svg", 
+    flag: "https://flagcdn.com/pl.svg",
 
     // HTML Static Content
     card_title: "🍬 Otrzymaj cukierek!",
