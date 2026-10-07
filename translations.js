@@ -32,7 +32,7 @@ const translations = {
     // Status Messages & Errors
     status_prep_session: "⏳ Przygotowywanie sesji...",
     status_session_expired: "⌛ Sesja wygasła. Możesz rozpocząć nową.",
-    status_fb_click_verify: "Kliknij przycisk \"Otrzymaj cukierek za Facebook\"",
+    status_fb_click_verify: "👆 Kliknij przycisk \"Otrzymaj cukierek za Facebook\"",
     status_ig_click_verify: "👆 Kliknij przycisk \"Otrzymaj cukierek za Instagram\"",
     status_checking_fb: "🔎 Sprawdzam Facebook...",
     status_checking_ig: "🔎 Sprawdzam Instagram...",
@@ -72,7 +72,7 @@ const translations = {
     // Status Messages & Errors
     status_prep_session: "⏳ Ruošiama sesija...",
     status_session_expired: "⌛ Sesija pasibaigė. Galite pradėti naują.",
-    status_fb_click_verify: "Spustelėkite mygtuką \"Gaukite saldainį už Facebook\"",
+    status_fb_click_verify: "Spustelėkite mygtuką \"👆 Gaukite saldainį už Facebook\"",
     status_ig_click_verify: "👆 Spustelėkite mygtuką \"Gaukite saldainį už Instagram\"",
     status_checking_fb: "🔎 Tikrinamas Facebook...",
     status_checking_ig: "🔎 Tikrinamas Instagram...",
@@ -112,7 +112,7 @@ const translations = {
     // Status Messages & Errors
     status_prep_session: "⏳ Preparing session...",
     status_session_expired: "⌛ Session expired. You can start a new one.",
-    status_fb_click_verify: "Click \"Get candy for Facebook\"",
+    status_fb_click_verify: "👆 Click \"Get candy for Facebook\"",
     status_ig_click_verify: "👆 Click \"Get candy for Instagram\"",
     status_checking_fb: "🔎 Checking Facebook...",
     status_checking_ig: "🔎 Checking Instagram...",
