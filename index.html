@@ -1282,8 +1282,7 @@ async function startPlatform(platform) {
 
     } else {
 
-      setStatus(t("status_ig_click_verify”));
-
+      setStatus(t(status_ig_click_verify))
     }
 
   }
@@ -1509,8 +1508,8 @@ async function verifyPlatform(platform) {
 
       setStatus(
         platform === "facebook"
-          ? "🎉 Facebook zweryfikowany! Zabierz cukierka z podajnika."
-          : "🎉 Instagram zweryfikowany! Zabierz cukierka z podajnika."
+          ? t("status_success_fb")
+          : t("status_success_ig")
       );
 
       return;
@@ -1547,8 +1546,8 @@ async function verifyPlatform(platform) {
 
       setStatus(
         platform === "facebook"
-          ? "❌ Nie wykryto jeszcze nowego obserwującego na Facebooku. Upewnij się, że zaobserwowałeś stronę i spróbuj ponownie."
-          : "❌ Nie wykryto jeszcze nowego obserwującego na Instagramie. Upewnij się, że zaobserwowałeś profil i spróbuj ponownie."
+          ? t("status_not_verified_fb")
+          : t("status_not_verified_ig")
       );
 
       return;
