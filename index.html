@@ -1056,7 +1056,7 @@ async function startPlatform(platform) {
       ) {
 
         throw new Error(
-          "Automat jest obecnie zajęty. Spróbuj ponownie za chwilę."
+          t("status_busy")
         );
 
       }
@@ -1377,7 +1377,7 @@ async function verifyPlatform(platform) {
   ) {
 
     setStatus(
-      "⌛ Sesja wygasła. Rozpocznij ponownie."
+      t("status_session_expired")
     );
 
     updateButtons();
@@ -1694,7 +1694,7 @@ async function verifyPlatform(platform) {
 
 
       setStatus(
-        "⚠️ Wystąpił problem z systemem. Spróbuj ponownie."
+        t("status_error")
       );
 
       return;
@@ -1715,7 +1715,7 @@ async function verifyPlatform(platform) {
 
 
     setStatus(
-      "⚠️ Wystąpił nieoczekiwany błąd."
+      t("status_error")
     );
 
   }
