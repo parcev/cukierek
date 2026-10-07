@@ -1384,7 +1384,7 @@ async function verifyPlatform(platform) {
   ) {
 
     setStatus(
-      t("status_session_expired")
+      "status_session_expired"
     );
 
     updateButtons();
@@ -1423,8 +1423,8 @@ async function verifyPlatform(platform) {
 
   setStatus(
     platform === "facebook"
-      ? t("status_checking_fb")
-      : t("status_checking_ig")
+      ? "status_checking_fb"
+      : "status_checking_ig"
   );
 
 
@@ -1515,8 +1515,8 @@ async function verifyPlatform(platform) {
 
       setStatus(
         platform === "facebook"
-          ? t("status_success_fb")
-          : t("status_success_ig")
+          ? "status_success_fb"
+          : "status_success_ig"
       );
 
       return;
@@ -1553,8 +1553,8 @@ async function verifyPlatform(platform) {
 
       setStatus(
         platform === "facebook"
-          ? t("status_not_verified_fb")
-          : t("status_not_verified_ig")
+          ? "status_not_verified_fb"
+          : "status_not_verified_ig"
       );
 
       return;
@@ -1578,7 +1578,7 @@ async function verifyPlatform(platform) {
       updateButtons();
 
       setStatus(
-        "⌛ Czas skończył się. Spróbuj ponownie."
+        "status_session_expired"
       );
 
       return;
