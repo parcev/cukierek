@@ -14,7 +14,8 @@ const translations = {
 
     // HTML Static Content
     card_title: "🍬 Otrzymaj cukierek!",
-    card_desc: "<span class='red'>Zaobserwuj</span> nasz profil, a następnie <span class='red'>wróć</span> tutaj i <span class='red'>odbierz cukierek</span> za każde media społecznościowe.",
+    card_desc:
+      "<span class='red'>Zaobserwuj</span> nasz profil, a następnie <span class='red'>wróć</span> tutaj i <span class='red'>odbierz cukierek</span> za każde media społecznościowe.",
     header_fb: "🔵 Facebook",
     header_ig: "📸 Instagram",
 
@@ -32,18 +33,42 @@ const translations = {
     // Status Messages & Errors
     status_prep_session: "⏳ Przygotowywanie sesji...",
     status_session_expired: "⌛ Sesja wygasła. Możesz rozpocząć nową.",
-    status_fb_click_verify: "👆 Kliknij przycisk \"Otrzymaj cukierek za Facebook\"",
-    status_ig_click_verify: "👆 Kliknij przycisk \"Otrzymaj cukierek za Instagram\"",
+
+    status_fb_click_verify:
+      "👆 Kliknij przycisk „Otrzymaj cukierek za Facebook”.",
+    status_ig_click_verify:
+      "👆 Kliknij przycisk „Otrzymaj cukierek za Instagram”.",
+
     status_checking_fb: "🔎 Sprawdzam Facebook...",
     status_checking_ig: "🔎 Sprawdzam Instagram...",
-    status_success_fb: "🎉 Facebook zweryfikowany! Zabierz cukierka z podajnika.",
-    status_success_ig: "🎉 Instagram zweryfikowany! Zabierz cukierka z podajnika.",
-    status_not_verified_fb: "❌ Nie wykryto jeszcze nowego obserwującego na Facebooku. Upewnij się, że zaobserwowałeś stronę i spróbuj ponownie.",
-    status_not_verified_ig: "❌ Nie wykryto jeszcze nowego obserwującego na Instagramie. Upewnij się, że zaobserwowałeś profil i spróbuj ponownie.",
+
+    status_success_fb:
+      "🎉 Facebook zweryfikowany! Zabierz cukierka z podajnika.",
+    status_success_ig:
+      "🎉 Instagram zweryfikowany! Zabierz cukierka z podajnika.",
+
+    status_not_verified_fb:
+      "❌ Nie wykryto jeszcze nowego obserwującego na Facebooku. Upewnij się, że zaobserwowałeś stronę i spróbuj ponownie.",
+    status_not_verified_ig:
+      "❌ Nie wykryto jeszcze nowego obserwującego na Instagramie. Upewnij się, że zaobserwowałeś profil i spróbuj ponownie.",
+
     status_claimed_both: "🍬 Odebrałeś już oba cukierki.",
     status_fb_claimed: "🍬 Cukierek Facebook został już odebrany.",
     status_ig_claimed: "🍬 Cukierek Instagram został już odebrany.",
-    status_busy: "⏳ Automat jest obecnie zajęty. Spróbuj ponownie za chwilę.",
+
+    status_fb_claimed_can_ig:
+      "✅ Facebook odebrany. Możesz również odebrać cukierek za Instagram.",
+    status_ig_claimed_can_fb:
+      "✅ Instagram odebrany. Możesz również odebrać cukierek za Facebook.",
+
+    status_popup_blocked_fb:
+      "⚠️ Przeglądarka zablokowała Facebooka. Zezwól na wyskakujące okna i spróbuj ponownie.",
+    status_popup_blocked_ig:
+      "⚠️ Przeglądarka zablokowała Instagram. Zezwól na wyskakujące okna i spróbuj ponownie.",
+
+    status_no_connection: "⚠️ Brak połączenia z serwerem.",
+    status_busy:
+      "⏳ Automat jest obecnie zajęty. Spróbuj ponownie za chwilę.",
     status_error: "⚠️ Wystąpił błąd.",
     session_active: "⏱️ Sesja aktywna"
   },
@@ -54,7 +79,8 @@ const translations = {
 
     // HTML Static Content
     card_title: "🍬 Gaukite saldainį!",
-    card_desc: "<span class='red'>Sekite</span> mūsų profilį, tuomet <span class='red'>grįžkite</span> čia ir <span class='red'>pasiimkite saldainį</span> už kiekvieną socialinį tinklą.",
+    card_desc:
+      "<span class='red'>Sekite</span> mūsų profilį, tuomet <span class='red'>grįžkite</span> čia ir <span class='red'>pasiimkite saldainį</span> už kiekvieną socialinį tinklą.",
     header_fb: "🔵 Facebook",
     header_ig: "📸 Instagram",
 
@@ -71,19 +97,44 @@ const translations = {
 
     // Status Messages & Errors
     status_prep_session: "⏳ Ruošiama sesija...",
-    status_session_expired: "⌛ Sesija pasibaigė. Galite pradėti naują.",
-    status_fb_click_verify: "Spustelėkite mygtuką \"👆 Gaukite saldainį už Facebook\"",
-    status_ig_click_verify: "👆 Spustelėkite mygtuką \"Gaukite saldainį už Instagram\"",
+    status_session_expired:
+      "⌛ Sesija pasibaigė. Galite pradėti naują.",
+
+    status_fb_click_verify:
+      "👆 Spustelėkite mygtuką „Gaukite saldainį už Facebook“.",
+    status_ig_click_verify:
+      "👆 Spustelėkite mygtuką „Gaukite saldainį už Instagram“.",
+
     status_checking_fb: "🔎 Tikrinamas Facebook...",
     status_checking_ig: "🔎 Tikrinamas Instagram...",
-    status_success_fb: "🎉 Facebook patvirtintas! Pasiimkite saldainį.",
-    status_success_ig: "🎉 Instagram patvirtintas! Pasiimkite saldainį.",
-    status_not_verified_fb: "❌ Naujas Facebook sekėjas dar nepastebėtas. Įsitikinkite, kad užsiprenumeravote puslapį, ir bandykite dar kartą.",
-    status_not_verified_ig: "❌ Naujas Instagram sekėjas dar nepastebėtas. Įsitikinkite, kad užsiprenumeravote profilį, ir bandykite dar kartą.",
+
+    status_success_fb:
+      "🎉 Facebook patvirtintas! Pasiimkite saldainį.",
+    status_success_ig:
+      "🎉 Instagram patvirtintas! Pasiimkite saldainį.",
+
+    status_not_verified_fb:
+      "❌ Naujas Facebook sekėjas dar nepastebėtas. Įsitikinkite, kad sekate puslapį, ir bandykite dar kartą.",
+    status_not_verified_ig:
+      "❌ Naujas Instagram sekėjas dar nepastebėtas. Įsitikinkite, kad sekate profilį, ir bandykite dar kartą.",
+
     status_claimed_both: "🍬 Jau atsiėmėte abu saldainius.",
     status_fb_claimed: "🍬 Facebook saldainis jau atsiimtas.",
     status_ig_claimed: "🍬 Instagram saldainis jau atsiimtas.",
-    status_busy: "⏳ Aparatas šiuo metu užimtas. Bandykite dar kartą po akimirkos.",
+
+    status_fb_claimed_can_ig:
+      "✅ Facebook saldainis atsiimtas. Taip pat galite atsiimti saldainį už Instagram.",
+    status_ig_claimed_can_fb:
+      "✅ Instagram saldainis atsiimtas. Taip pat galite atsiimti saldainį už Facebook.",
+
+    status_popup_blocked_fb:
+      "⚠️ Naršyklė užblokavo Facebook. Leiskite iškylančiuosius langus ir bandykite dar kartą.",
+    status_popup_blocked_ig:
+      "⚠️ Naršyklė užblokavo Instagram. Leiskite iškylančiuosius langus ir bandykite dar kartą.",
+
+    status_no_connection: "⚠️ Nėra ryšio su serveriu.",
+    status_busy:
+      "⏳ Aparatas šiuo metu užimtas. Bandykite dar kartą po akimirkos.",
     status_error: "⚠️ Įvyko klaida.",
     session_active: "⏱️ Aktyvi sesija"
   },
@@ -94,7 +145,8 @@ const translations = {
 
     // HTML Static Content
     card_title: "🍬 Get a candy!",
-    card_desc: "<span class='red'>Follow</span> our profile, then <span class='red'>return</span> here and <span class='red'>claim your candy</span> for each social platform.",
+    card_desc:
+      "<span class='red'>Follow</span> our profile, then <span class='red'>return</span> here and <span class='red'>claim your candy</span> for each social platform.",
     header_fb: "🔵 Facebook",
     header_ig: "📸 Instagram",
 
@@ -111,23 +163,55 @@ const translations = {
 
     // Status Messages & Errors
     status_prep_session: "⏳ Preparing session...",
-    status_session_expired: "⌛ Session expired. You can start a new one.",
-    status_fb_click_verify: "👆 Click \"Get candy for Facebook\"",
-    status_ig_click_verify: "👆 Click \"Get candy for Instagram\"",
+    status_session_expired:
+      "⌛ Session expired. You can start a new one.",
+
+    status_fb_click_verify:
+      "👆 Click the „Get candy for Facebook” button.",
+    status_ig_click_verify:
+      "👆 Click the „Get candy for Instagram” button.",
+
     status_checking_fb: "🔎 Checking Facebook...",
     status_checking_ig: "🔎 Checking Instagram...",
-    status_success_fb: "🎉 Facebook verified! Grab your candy.",
-    status_success_ig: "🎉 Instagram verified! Grab your candy.",
-    status_not_verified_fb: "❌ New Facebook follower not detected yet. Make sure you followed the page and try again.",
-    status_not_verified_ig: "❌ New Instagram follower not detected yet. Make sure you followed the profile and try again.",
-    status_claimed_both: "🍬 You have already claimed both candies.",
-    status_fb_claimed: "🍬 Facebook candy already claimed.",
-    status_ig_claimed: "🍬 Instagram candy already claimed.",
-    status_busy: "⏳ Machine is currently busy. Try again in a moment.",
-    status_error: "⚠️ An error occurred.",
-    session_active: "⏱️ Active session"
+
+    status_success_fb:
+      "🎉 Facebook verified! Grab your candy.",
+    status_success_ig:
+      "🎉 Instagram verified! Grab your candy.",
+
+    status_not_verified_fb:
+      "❌ New Facebook follower not detected yet. Make sure you followed the page and try again.",
+    status_not_verified_ig:
+      "❌ New Instagram follower not detected yet. Make sure you followed the profile and try again.",
+
+    status_claimed_both:
+      "🍬 You have already claimed both candies.",
+    status_fb_claimed:
+      "🍬 Facebook candy already claimed.",
+    status_ig_claimed:
+      "🍬 Instagram candy already claimed.",
+
+    status_fb_claimed_can_ig:
+      "✅ Facebook claimed. You can also claim candy for Instagram.",
+    status_ig_claimed_can_fb:
+      "✅ Instagram claimed. You can also claim candy for Facebook.",
+
+    status_popup_blocked_fb:
+      "⚠️ Browser blocked Facebook. Allow popups and try again.",
+    status_popup_blocked_ig:
+      "⚠️ Browser blocked Instagram. Allow popups and try again.",
+
+    status_no_connection:
+      "⚠️ No connection to the server.",
+    status_busy:
+      "⏳ Machine is currently busy. Try again in a moment.",
+    status_error:
+      "⚠️ An error occurred.",
+    session_active:
+      "⏱️ Active session"
   }
 };
+
 
 /*
 ==================================================
@@ -135,65 +219,109 @@ POMOCNIKI TŁUMACZEŃ
 ==================================================
 */
 
-// Pobieranie tekstu tłumaczenia na podstawie klucza
+// Pobieranie tłumaczenia na podstawie klucza
 function t(key) {
-  return (translations[ currentLang ] && translations[ currentLang ][ key ]) || translations[ DEFAULT_LANG ][ key ] || key;
+  return (
+    (translations[currentLang] && translations[currentLang][key]) ||
+    translations[DEFAULT_LANG][key] ||
+    key
+  );
 }
+
 
 // Główna funkcja zmiany języka
 function setLanguage(lang) {
+  // Jeżeli podany język nie istnieje, użyj domyślnego
+  if (!translations[lang]) {
+    lang = DEFAULT_LANG;
+  }
+
   currentLang = lang;
   localStorage.setItem("user_lang", lang);
 
-  // 1. Aktualizacja flagi i napisu w wybranym języku na przycisku rozwijanym
-  const langData = translations[ lang ] || translations[ DEFAULT_LANG ];
+  // Aktualizacja wybranego języka
+  const langData = translations[lang];
+
   const selectedLangEl = document.getElementById("selected-lang");
   const selectedFlagEl = document.getElementById("selected-flag");
 
-  if (selectedLangEl) selectedLangEl.innerText = langData.label;
-  if (selectedFlagEl) selectedFlagEl.src = langData.flag;
+  if (selectedLangEl) {
+    selectedLangEl.innerText = langData.label;
+  }
 
-  // 2. Automatyczne tłumaczenie elementów z data-i18n
+  if (selectedFlagEl) {
+    selectedFlagEl.src = langData.flag;
+  }
+
+  // Tłumaczenie elementów statycznych
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.getAttribute("data-i18n");
-    if (translations[ lang ] && translations[ lang ][ key ]) {
-      el.innerHTML = translations[ lang ][ key ];
+
+    if (langData[key]) {
+      el.innerHTML = langData[key];
     }
   });
 
-  // 3. Re-render dynamicznych elementów strony
-  if (typeof updateButtons === "function") updateButtons();
-  if (typeof updateSessionInfo === "function") updateSessionInfo();
+  // Aktualizacja dynamicznych elementów
+  if (typeof updateButtons === "function") {
+    updateButtons();
+  }
+
+  if (typeof updateSessionInfo === "function") {
+    updateSessionInfo();
+  }
+
+  // Ponowne wyświetlenie aktualnego statusu
+  if (typeof renderStatus === "function") {
+    renderStatus();
+  }
 }
+
 
 /*
 ==================================================
-OBSŁUGA MENU DROPDOWN
+OBSŁUGA MENU JĘZYKOWEGO
 ==================================================
 */
 
 function toggleLangDropdown(event) {
   event.stopPropagation();
-  const menu = document.getElementById("langMenu");
-  if (menu) menu.classList.toggle("show");
-}
 
-function selectLang(langCode) {
   const menu = document.getElementById("langMenu");
-  if (menu) menu.classList.remove("show");
 
-  if (typeof setLanguage === 'function') {
-    setLanguage(langCode);
+  if (menu) {
+    menu.classList.toggle("show");
   }
 }
 
-// Zamknięcie menu po kliknięciu poza nim
-window.addEventListener('click', () => {
+
+function selectLang(langCode) {
   const menu = document.getElementById("langMenu");
-  if (menu) menu.classList.remove("show");
+
+  if (menu) {
+    menu.classList.remove("show");
+  }
+
+  setLanguage(langCode);
+}
+
+
+// Zamknięcie menu po kliknięciu poza nim
+window.addEventListener("click", () => {
+  const menu = document.getElementById("langMenu");
+
+  if (menu) {
+    menu.classList.remove("show");
+  }
 });
 
-// Inicjalizacja języka po załadowaniu drzewa DOM
+
+/*
+==================================================
+INICJALIZACJA
+==================================================
+*/
+
 document.addEventListener("DOMContentLoaded", () => {
   setLanguage(currentLang);
 });
