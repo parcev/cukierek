@@ -943,8 +943,8 @@ async function startPlatform(platform) {
 
     setStatus(
       platform === "facebook"
-        ? "🍬 Cukierek Facebook został już odebrany."
-        : "🍬 Cukierek Instagram został już odebrany."
+        ? t("status_fb_claimed")
+        : t("status_ig_claimed")
     );
 
     return;
@@ -1330,8 +1330,8 @@ async function verifyPlatform(platform) {
 
     setStatus(
       platform === "facebook"
-        ? "🍬 Cukierek Facebook został już odebrany."
-        : "🍬 Cukierek Instagram został już odebrany."
+        ? t("status_fb_claimed")
+        : t("status_ig_claimed")
     );
 
     return;
@@ -1820,7 +1820,7 @@ window.addEventListener(
     ) {
 
       setStatus(
-        "🍬 Odebrałeś już oba cukierki."
+        t("status_claimed_both")
       );
 
     }
