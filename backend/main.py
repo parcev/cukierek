@@ -426,7 +426,7 @@ def root():
     return {"status": "online", "system": "Candy Dispenser Backend"}
 
 
-@app.get("/health, status_code=200")
+@app.get("/health")
 def health_check():
     return {"status": "OK"}
 
