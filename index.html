@@ -770,7 +770,6 @@ function updateSessionInfo() {
   }
 
   const remaining = sessionExpiresAt - Date.now();
-
   if (remaining <= 0) {
     clearSession(true);
     return;
@@ -781,17 +780,13 @@ function updateSessionInfo() {
   const rest = seconds % 60;
 
   let startedText = "";
+  if (facebookStarted && instagramStarted) startedText = " — Facebook + Instagram";
+  else if (facebookStarted) startedText = " — Facebook";
+  else if (instagramStarted) startedText = " — Instagram";
 
-  if (facebookStarted && instagramStarted) {
-    startedText = " — Facebook + Instagram";
-  } else if (facebookStarted) {
-    startedText = " — Facebook";
-  } else if (instagramStarted) {
-    startedText = " — Instagram";
-  }
-
-  sessionInfo.innerText = `⏱️ Sesja aktywna${startedText}: ${minutes}:${String(rest).padStart(2, "0")}`;
+  sessionInfo.innerText = `${t("session_active")}${startedText}: ${minutes}:${String(rest).padStart(2, "0")}`;
 }
+
 
 
 /*
