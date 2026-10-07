@@ -10,7 +10,7 @@ let currentLang = localStorage.getItem("user_lang") || DEFAULT_LANG;
 const translations = {
   pl: {
     label: "PL",
-    flag: "https://flagcdn.com/pl.svg", // Dostosuj ścieżkę do swojej flagi
+    flag: "https://flagcdn.com/pl.svg", 
 
     // HTML Static Content
     card_title: "🍬 Otrzymaj cukierek!",
@@ -50,7 +50,7 @@ const translations = {
 
   lt: {
     label: "LT",
-    flag: "https://flagcdn.com/lt.svg", // Dostosuj ścieżkę do swojej flagi
+    flag: "https://flagcdn.com/lt.svg",
 
     // HTML Static Content
     card_title: "🍬 Gaukite saldainį!",
@@ -90,7 +90,7 @@ const translations = {
 
   en: {
     label: "EN",
-    flag: "https://flagcdn.com/gb.svg", // Dostosuj ścieżkę do swojej flagi
+    flag: "https://flagcdn.com/gb.svg",
 
     // HTML Static Content
     card_title: "🍬 Get a candy!",
