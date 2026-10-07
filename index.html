@@ -456,15 +456,26 @@ const sessionInfo =
 
 /*
 ==================================================
-STATUS
+STATUS MANAGEMENT
 ==================================================
 */
 
-function setStatus(message) {
+let currentStatusKeyOrText = "";
 
-  status.innerText = message;
-
+function setStatus(keyOrText) {
+  currentStatusKeyOrText = keyOrText;
+  renderStatus();
 }
+
+function renderStatus() {
+  if (!status) return;
+  if (!currentStatusKeyOrText) {
+    status.innerText = "";
+    return;
+  }
+  status.innerText = t(currentStatusKeyOrText);
+}
+
 
 
 /*
