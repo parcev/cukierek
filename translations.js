@@ -222,8 +222,8 @@ POMOCNIKI TŁUMACZEŃ
 // Pobieranie tłumaczenia na podstawie klucza
 function t(key) {
   return (
-    (translations[currentLang] && translations[currentLang][key]) ||
-    translations[DEFAULT_LANG][key] ||
+    (translations[ currentLang ] && translations[ currentLang ][ key ]) ||
+    translations[ DEFAULT_LANG ][ key ] ||
     key
   );
 }
@@ -232,7 +232,7 @@ function t(key) {
 // Główna funkcja zmiany języka
 function setLanguage(lang) {
   // Jeżeli podany język nie istnieje, użyj domyślnego
-  if (!translations[lang]) {
+  if (!translations[ lang ]) {
     lang = DEFAULT_LANG;
   }
 
@@ -240,7 +240,7 @@ function setLanguage(lang) {
   localStorage.setItem("user_lang", lang);
 
   // Aktualizacja wybranego języka
-  const langData = translations[lang];
+  const langData = translations[ lang ];
 
   const selectedLangEl = document.getElementById("selected-lang");
   const selectedFlagEl = document.getElementById("selected-flag");
@@ -257,8 +257,8 @@ function setLanguage(lang) {
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.getAttribute("data-i18n");
 
-    if (langData[key]) {
-      el.innerHTML = langData[key];
+    if (langData[ key ]) {
+      el.innerHTML = langData[ key ];
     }
   });
 
