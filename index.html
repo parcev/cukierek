@@ -1200,7 +1200,7 @@ async function startPlatform(platform) {
         clearSession();
 
         throw new Error(
-          "Sesja wygasła. Rozpocznij ponownie."
+          "status_session_expired"
         );
 
       }
@@ -1222,9 +1222,8 @@ async function startPlatform(platform) {
 
         updateButtons();
 
-        setStatus(
-          "🍬 Ten cukierek został już odebrany."
-        );
+        setStatus(platform === "facebook" ? "status_fb_claimed" : "status_ig_claimed");
+
 
         return;
 
@@ -1285,12 +1284,12 @@ async function startPlatform(platform) {
       );*/
 
       setStatus(
-        t("status_fb_click_verify")
+        "status_fb_click_verify"
       )
 
     } else {
 
-      setStatus(t("status_ig_click_verify"))
+      setStatus("status_ig_click_verify")
     }
 
   }
@@ -1338,8 +1337,8 @@ async function verifyPlatform(platform) {
 
     setStatus(
       platform === "facebook"
-        ? t("status_fb_claimed")
-        : t("status_ig_claimed")
+        ? "status_fb_claimed"
+        : "status_ig_claimed"
     );
 
     return;
