@@ -594,7 +594,7 @@ function clearSession(wasExpired = false) {
   updateButtons();
 
   if (wasExpired) {
-    setStatus("⌛ Sesja wygasła. Możesz rozpocząć nową.");
+    setStatus(t("status_session_expired"));
   }
 }
 
@@ -1002,8 +1002,7 @@ async function startPlatform(platform) {
 
 
   setStatus(
-    "⏳ Przygotowywanie sesji..."
-  );
+    t("status_prep_session"));
 
 
   try {
@@ -1278,7 +1277,7 @@ async function startPlatform(platform) {
       );*/
 
       setStatus(
-        "Kliknij przycisk \"Otrzymaj cukierek za Facebook\""
+        t("status_fb_click_verify")
       )
 
     } else {
