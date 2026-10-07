@@ -418,12 +418,17 @@ def send_discord_activity(
         print("Discord activity webhook error:", error)
 
 
-# ROOT
+# ROOT AND HEALTH
 
 
 @app.get("/")
 def root():
     return {"status": "online", "system": "Candy Dispenser Backend"}
+
+
+@app.get("/health, status_code=200")
+def health_check():
+    return {"status": "OK"}
 
 
 # START SESSION
