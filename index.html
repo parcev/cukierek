@@ -605,7 +605,7 @@ function clearSession(wasExpired = false) {
   updateButtons();
 
   if (wasExpired) {
-    setStatus(t("status_session_expired"));
+    setStatus("status_session_expired");
   }
 }
 
@@ -954,8 +954,8 @@ async function startPlatform(platform) {
 
     setStatus(
       platform === "facebook"
-        ? t("status_fb_claimed")
-        : t("status_ig_claimed")
+        ? "status_fb_claimed"
+        : "status_ig_claimed"
     );
 
     return;
@@ -991,11 +991,8 @@ async function startPlatform(platform) {
     !platformWindow
   ) {
 
-    setStatus(
-      platform === "facebook"
-        ? "⚠️ Przeglądarka zablokowała Facebooka. Zezwól na wyskakujące okna i spróbuj ponownie."
-        : "⚠️ Przeglądarka zablokowała Instagram. Zezwól na wyskakujące okna i spróbuj ponownie."
-    );
+    setStatus(platform === "facebook" ? "status_popup_blocked_fb" : "status_popup_blocked_ig");
+
 
     return;
   }
@@ -1013,7 +1010,7 @@ async function startPlatform(platform) {
 
 
   setStatus(
-    t("status_prep_session"));
+    "status_prep_session");
 
 
   try {
@@ -1067,7 +1064,7 @@ async function startPlatform(platform) {
       ) {
 
         throw new Error(
-          t("status_busy")
+          "status_busy"
         );
 
       }
