@@ -348,75 +348,75 @@
   </head>
 
 
-    <!-- Language Selector -->
-    <div class="lang-dropdown" id="langDropdown">
-      <button type="button" class="lang-dropbtn" onclick="toggleLangDropdown(event)">
-        <img src="https://flagcdn.com/pl.svg" id="selected-flag" alt="PL" class="flag-icon">
-        <span id="selected-lang">PL</span>
-        <span class="arrow">▼</span>
+  <!-- Language Selector -->
+  <div class="lang-dropdown" id="langDropdown">
+    <button type="button" class="lang-dropbtn" onclick="toggleLangDropdown(event)">
+      <img src="https://flagcdn.com/pl.svg" id="selected-flag" alt="PL" class="flag-icon">
+      <span id="selected-lang">PL</span>
+      <span class="arrow">▼</span>
+    </button>
+    <div class="lang-dropdown-menu" id="langMenu">
+      <button type="button" onclick="selectLang('pl', 'PL', 'https://flagcdn.com/pl.svg')">
+        <img src="https://flagcdn.com/pl.svg" alt="PL" class="flag-icon"> PL
       </button>
-      <div class="lang-dropdown-menu" id="langMenu">
-        <button type="button" onclick="selectLang('pl', 'PL', 'https://flagcdn.com/pl.svg')">
-          <img src="https://flagcdn.com/pl.svg" alt="PL" class="flag-icon"> PL
-        </button>
-        <button type="button" onclick="selectLang('lt', 'LT', 'https://flagcdn.com/lt.svg')">
-          <img src="https://flagcdn.com/lt.svg" alt="LT" class="flag-icon"> LT
-        </button>
-        <button type="button" onclick="selectLang('en', 'EN', 'https://flagcdn.com/gb.svg')">
-          <img src="https://flagcdn.com/gb.svg" alt="EN" class="flag-icon"> EN
-        </button>
-      </div>
+      <button type="button" onclick="selectLang('lt', 'LT', 'https://flagcdn.com/lt.svg')">
+        <img src="https://flagcdn.com/lt.svg" alt="LT" class="flag-icon"> LT
+      </button>
+      <button type="button" onclick="selectLang('en', 'EN', 'https://flagcdn.com/gb.svg')">
+        <img src="https://flagcdn.com/gb.svg" alt="EN" class="flag-icon"> EN
+      </button>
+    </div>
+  </div>
+
+  <!-- Header Section -->
+  <div class="header-section">
+    <img src="/cukierek/images/LogoNKkolo.png" alt="Nemenčinės Kūrėjai Logo" class="card-logo">
+    <div class="logo-title">Nemenčinės Kūrėjai</div>
+  </div>
+
+  <!-- Main Interaction Card -->
+  <div class="card">
+    <div class="card-header">
+      <h2 data-i18n="card_title">🍬 Otrzymaj cukierek!</h2>
+      <p data-i18n="card_desc">
+        <span class="red">Zaobserwuj</span> nasz profil, a następnie <span class="red">wróć</span> tutaj i <span
+          class="red">odbierz cukierek</span> za każde media społecznościowe.
+      </p>
     </div>
 
-    <!-- Header Section -->
-    <div class="header-section">
-      <img src="/cukierek/images/LogoNKkolo.png" alt="Nemenčinės Kūrėjai Logo" class="card-logo">
-      <div class="logo-title">Nemenčinės Kūrėjai</div>
+    <!-- FACEBOOK SECTION -->
+    <div class="platform">
+      <h3 data-i18n="header_fb">Facebook</h3>
+      <button id="facebookStartBtn" class="btn-fb" onclick="startPlatform('facebook')" data-i18n="btn_fb_start">
+        1. Zaobserwuj nas na Facebooku
+      </button>
+
+      <button id="facebookVerifyBtn" class="btn-candy" onclick="verifyPlatform('facebook')" disabled
+        data-i18n="btn_fb_verify">
+        2. Otrzymaj cukierek
+      </button>
     </div>
 
-    <!-- Main Interaction Card -->
-    <div class="card">
-      <div class="card-header">
-        <h2 data-i18n="card_title">🍬 Otrzymaj cukierek!</h2>
-        <p data-i18n="card_desc">
-          <span class="red">Zaobserwuj</span> nasz profil, a następnie <span class="red">wróć</span> tutaj i <span
-            class="red">odbierz cukierek</span> za każde media społecznościowe.
-        </p>
-      </div>
+    <!-- INSTAGRAM SECTION -->
+    <div class="platform">
+      <h3 data-i18n="header_ig">Instagram</h3>
+      <button id="instagramStartBtn" class="btn-ig" onclick="startPlatform('instagram')" data-i18n="btn_ig_start">
+        1. Zaobserwuj nas na Instagramie
+      </button>
 
-      <!-- FACEBOOK SECTION -->
-      <div class="platform">
-        <h3 data-i18n="header_fb">Facebook</h3>
-        <button id="facebookStartBtn" class="btn-fb" onclick="startPlatform('facebook')" data-i18n="btn_fb_start">
-          1. Zaobserwuj nas na Facebooku
-        </button>
-
-        <button id="facebookVerifyBtn" class="btn-candy" onclick="verifyPlatform('facebook')" disabled
-          data-i18n="btn_fb_verify">
-          2. Otrzymaj cukierek
-        </button>
-      </div>
-
-      <!-- INSTAGRAM SECTION -->
-      <div class="platform">
-        <h3 data-i18n="header_ig">Instagram</h3>
-        <button id="instagramStartBtn" class="btn-ig" onclick="startPlatform('instagram')" data-i18n="btn_ig_start">
-          1. Zaobserwuj nas na Instagramie
-        </button>
-
-        <button id="instagramVerifyBtn" class="btn-candy" onclick="verifyPlatform('instagram')" disabled
-          data-i18n="btn_ig_verify">
-          2. Otrzymaj cukierek
-        </button>
-      </div>
-
-      <div>
-        <p id="status" class="status"></p>
-        <p hidden id="sessionInfo" class="session"></p>
-      </div>
+      <button id="instagramVerifyBtn" class="btn-candy" onclick="verifyPlatform('instagram')" disabled
+        data-i18n="btn_ig_verify">
+        2. Otrzymaj cukierek
+      </button>
     </div>
 
-    <script>
+    <div>
+      <p id="status" class="status"></p>
+      <p hidden id="sessionInfo" class="session"></p>
+    </div>
+  </div>
+
+  <script>
 
 /*
 ==================================================
@@ -2053,6 +2053,6 @@ załadowaniu strony.
 */
 
 </script>
-    </body>
+  </body>
 
-    </html>
+  </html>
