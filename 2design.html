@@ -1,414 +1,420 @@
 <!DOCTYPE html>
 < lang="pl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nemenčinės Kūrėjai</title>
-  <script src="translations.js"></script>
-  <!-- Modern Tech Fonts: Space Grotesk (Headings/Logo) & Plus Jakarta Sans (UI/Body) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --bg-dark: #080a0f;
-      --card-bg: rgba(16, 20, 29, 0.85);
-      --card-border: rgba(255, 255, 255, 0.08);
-      
-      /* Logo Accent Colors */
-      --accent-cyan: #00e5ff;
-      --accent-lime: #38ef7d;
-      
-      --text-main: #f1f5f9;
-      --text-muted: #94a3b8;
-      
-      --btn-fb: #1877f2;
-      --btn-ig: #e1306c;
-    }
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nemenčinės Kūrėjai</title>
+    <script src="translations.js"></script>
+    <!-- Modern Tech Fonts: Space Grotesk (Headings/Logo) & Plus Jakarta Sans (UI/Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap"
+      rel="stylesheet">
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    <style>
+      :root {
+        --bg-dark: #080a0f;
+        --card-bg: rgba(16, 20, 29, 0.85);
+        --card-border: rgba(255, 255, 255, 0.08);
 
-    body {
-      font-family: 'Plus Jakarta Sans', Arial, sans-serif;
-      text-align: center;
-      padding: 16px;
-      background-color: var(--bg-dark);
-      /* Ambient tech glow matching logo colors (Cyan top-left, Lime bottom-right) */
-      background-image: 
-        radial-gradient(circle at 20% 15%, rgba(0, 229, 255, 0.12) 0%, transparent 40%),
-        radial-gradient(circle at 80% 85%, rgba(56, 239, 125, 0.10) 0%, transparent 40%);
-      background-attachment: fixed;
-      color: var(--text-main);
-      min-height: 100vh;
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      overflow: hidden;
-    }
+        /* Logo Accent Colors */
+        --accent-cyan: #00e5ff;
+        --accent-lime: #38ef7d;
 
-    /* Language Switcher */
-    .lang-dropdown {
-      position: fixed;
-      top: 16px;
-      right: 16px;
-      z-index: 1000;
-    }
+        --text-main: #f1f5f9;
+        --text-muted: #94a3b8;
 
-    .lang-dropbtn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      background: rgba(22, 27, 38, 0.75);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 999px;
-      color: var(--text-main);
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
+        --btn-fb: #1877f2;
+        --btn-ig: #e1306c;
+      }
 
-    .lang-dropbtn:hover {
-      border-color: var(--accent-cyan);
-      background: rgba(30, 37, 52, 0.9);
-    }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-    .lang-dropdown-menu {
-      display: none;
-      position: absolute;
-      right: 0;
-      top: calc(100% + 6px);
-      background: #121620;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-      border: 1px solid var(--card-border);
-      overflow: hidden;
-      min-width: 110px;
-    }
+      body {
+        font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+        text-align: center;
+        padding: 16px;
+        background-color: var(--bg-dark);
+        /* Ambient tech glow matching logo colors (Cyan top-left, Lime bottom-right) */
+        background-image:
+          radial-gradient(circle at 20% 15%, rgba(0, 229, 255, 0.12) 0%, transparent 40%),
+          radial-gradient(circle at 80% 85%, rgba(56, 239, 125, 0.10) 0%, transparent 40%);
+        background-attachment: fixed;
+        color: var(--text-main);
+        min-height: 100vh;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        overflow: hidden;
+      }
 
-    .lang-dropdown-menu.show {
-      display: flex;
-      flex-direction: column;
-    }
+      /* Language Switcher */
+      .lang-dropdown {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 1000;
+      }
 
-    .lang-dropdown-menu button {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-      padding: 10px 14px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      background: transparent;
-      color: var(--text-main);
-      border: none;
-      border-radius: 0;
-      box-shadow: none;
-      text-align: left;
-      cursor: pointer;
-      transition: background 0.15s ease;
-    }
+      .lang-dropbtn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        background: rgba(22, 27, 38, 0.75);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 999px;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
 
-    .lang-dropdown-menu button:hover {
-      background: rgba(255, 255, 255, 0.06);
-    }
+      .lang-dropbtn:hover {
+        border-color: var(--accent-cyan);
+        background: rgba(30, 37, 52, 0.9);
+      }
 
-    .flag-icon {
-      width: 18px;
-      height: 13px;
-      object-fit: cover;
-      border-radius: 2px;
-      flex-shrink: 0;
-      display: block;
-    }
+      .lang-dropdown-menu {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: calc(100% + 6px);
+        background: #121620;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        border: 1px solid var(--card-border);
+        overflow: hidden;
+        min-width: 110px;
+      }
 
-    .arrow {
-      font-size: 0.65rem;
-      color: var(--text-muted);
-    }
+      .lang-dropdown-menu.show {
+        display: flex;
+        flex-direction: column;
+      }
 
-    /* Header & Brand Identity */
-    .header-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-top: 12px;
-    }
+      .lang-dropdown-menu button {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        padding: 10px 14px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        background: transparent;
+        color: var(--text-main);
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
 
-    .card-logo {
-      max-height: 12vh;
-      width: auto;
-      margin-bottom: 8px;
-      filter: drop-shadow(0 0 16px rgba(0, 229, 255, 0.25));
-      transition: transform 0.3s ease;
-    }
+      .lang-dropdown-menu button:hover {
+        background: rgba(255, 255, 255, 0.06);
+      }
 
-    .card-logo:hover {
-      transform: scale(1.03);
-    }
+      .flag-icon {
+        width: 18px;
+        height: 13px;
+        object-fit: cover;
+        border-radius: 2px;
+        flex-shrink: 0;
+        display: block;
+      }
 
-    /* Clean Tech Branding */
-    .logo-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-      font-size: clamp(1.4rem, 3.8vh, 2rem);
-      margin: 0;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      color: #ffffff;
-      position: relative;
-    }
+      .arrow {
+        font-size: 0.65rem;
+        color: var(--text-muted);
+      }
 
-    /* Subtle cyan/lime underline bar */
-    .logo-title::after {
-      content: '';
-      display: block;
-      width: 40px;
-      height: 2px;
-      margin: 6px auto 0;
-      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-lime));
-      border-radius: 2px;
-    }
+      /* Header & Brand Identity */
+      .header-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 12px;
+      }
 
-    /* Main Container Card */
-    .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      padding: 24px 20px;
-      border-radius: 20px;
-      width: 100%;
-      max-width: 420px;
-      
-      /* Subtle border mimicking the logo's split cyan/lime frame */
-      border: 1px solid transparent;
-      border-image: linear-gradient(180deg, rgba(0, 229, 255, 0.3), rgba(56, 239, 125, 0.15)) 1;
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-      
-      flex: 1;
-      max-height: 72vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      margin-top: 12px;
-    }
+      .card-logo {
+        max-height: 12vh;
+        width: auto;
+        margin-bottom: 8px;
+        filter: drop-shadow(0 0 16px rgba(0, 229, 255, 0.25));
+        transition: transform 0.3s ease;
+      }
 
-    .card-header {
-      margin-bottom: 1vh;
-    }
+      .card-logo:hover {
+        transform: scale(1.03);
+      }
 
-    .card-header h2 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(1.15rem, 2.5vh, 1.35rem);
-      margin: 0 0 6px 0;
-      color: var(--text-main);
-      font-weight: 700;
-      letter-spacing: -0.2px;
-    }
+      /* Clean Tech Branding */
+      .logo-title {
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 700;
+        font-size: clamp(1.4rem, 3.8vh, 2rem);
+        margin: 0;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: #ffffff;
+        position: relative;
+      }
 
-    .card-header p {
-      font-size: clamp(0.8rem, 1.7vh, 0.9rem);
-      margin: 0;
-      color: var(--text-muted);
-      line-height: 1.45;
-    }
+      /* Subtle cyan/lime underline bar */
+      .logo-title::after {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 2px;
+        margin: 6px auto 0;
+        background: linear-gradient(90deg, var(--accent-cyan), var(--accent-lime));
+        border-radius: 2px;
+      }
 
-    .red {
-      color: var(--accent-lime);
-      font-weight: 600;
-    }
+      /* Main Container Card */
+      .card {
+        background: var(--card-bg);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        padding: 24px 20px;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 420px;
 
-    /* Platform Interactive Items */
-    .platform {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding-top: 12px;
-      border-top: 1px solid var(--card-border);
-      text-align: left;
-    }
+        /* Subtle border mimicking the logo's split cyan/lime frame */
+        border: 1px solid transparent;
+        border-image: linear-gradient(180deg, rgba(0, 229, 255, 0.3), rgba(56, 239, 125, 0.15)) 1;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 
-    .platform:first-of-type {
-      border-top: none;
-      padding-top: 0;
-    }
+        flex: 1;
+        max-height: 72vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        margin-top: 12px;
+      }
 
-    h3 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(0.95rem, 2vh, 1.05rem);
-      margin: 0 0 4px 0;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+      .card-header {
+        margin-bottom: 1vh;
+      }
 
-    /* Tactile Buttons */
-    button {
-      width: 100%;
-      padding: clamp(10px, 1.8vh, 13px);
-      font-size: clamp(0.85rem, 1.9vh, 0.95rem);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      border: 1px solid transparent;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
+      .card-header h2 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: clamp(1.15rem, 2.5vh, 1.35rem);
+        margin: 0 0 6px 0;
+        color: var(--text-main);
+        font-weight: 700;
+        letter-spacing: -0.2px;
+      }
 
-    button:active:not(:disabled) {
-      transform: scale(0.98);
-    }
+      .card-header p {
+        font-size: clamp(0.8rem, 1.7vh, 0.9rem);
+        margin: 0;
+        color: var(--text-muted);
+        line-height: 1.45;
+      }
 
-    /* Action: Follow Facebook */
-    .btn-fb {
-      background: rgba(24, 119, 242, 0.12);
-      color: #60a5fa;
-      border-color: rgba(24, 119, 242, 0.3);
-    }
+      .red {
+        color: var(--accent-lime);
+        font-weight: 600;
+      }
 
-    .btn-fb:hover:not(:disabled) {
-      background: rgba(24, 119, 242, 0.25);
-      border-color: rgba(24, 119, 242, 0.6);
-      color: #ffffff;
-      box-shadow: 0 0 12px rgba(24, 119, 242, 0.2);
-    }
+      /* Platform Interactive Items */
+      .platform {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-top: 12px;
+        border-top: 1px solid var(--card-border);
+        text-align: left;
+      }
 
-    /* Action: Follow Instagram */
-    .btn-ig {
-      background: rgba(225, 48, 108, 0.12);
-      color: #f472b6;
-      border-color: rgba(225, 48, 108, 0.3);
-    }
+      .platform:first-of-type {
+        border-top: none;
+        padding-top: 0;
+      }
 
-    .btn-ig:hover:not(:disabled) {
-      background: rgba(225, 48, 108, 0.25);
-      border-color: rgba(225, 48, 108, 0.6);
-      color: #ffffff;
-      box-shadow: 0 0 12px rgba(225, 48, 108, 0.2);
-    }
+      h3 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: clamp(0.95rem, 2vh, 1.05rem);
+        margin: 0 0 4px 0;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
 
-    /* Primary Action: Claim Reward */
-    .btn-candy {
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-lime));
-      color: #06080c;
-      font-weight: 700;
-      box-shadow: 0 4px 16px rgba(0, 229, 255, 0.25);
-    }
+      /* Tactile Buttons */
+      button {
+        width: 100%;
+        padding: clamp(10px, 1.8vh, 13px);
+        font-size: clamp(0.85rem, 1.9vh, 0.95rem);
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        border: 1px solid transparent;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
 
-    .btn-candy:hover:not(:disabled) {
-      box-shadow: 0 6px 20px rgba(56, 239, 125, 0.4);
-      filter: brightness(1.08);
-    }
+      button:active:not(:disabled) {
+        transform: scale(0.98);
+      }
 
-    /* Disabled State */
-    button:disabled {
-      background: rgba(255, 255, 255, 0.04) !important;
-      border-color: rgba(255, 255, 255, 0.05) !important;
-      color: #475569 !important;
-      cursor: not-allowed;
-      box-shadow: none !important;
-    }
+      /* Action: Follow Facebook */
+      .btn-fb {
+        background: rgba(24, 119, 242, 0.12);
+        color: #60a5fa;
+        border-color: rgba(24, 119, 242, 0.3);
+      }
 
-    .status {
-      font-weight: 600;
-      min-height: 24px;
-      font-size: clamp(0.8rem, 1.7vh, 0.9rem);
-      margin: 1vh 0 0 0;
-      color: var(--accent-cyan);
-    }
+      .btn-fb:hover:not(:disabled) {
+        background: rgba(24, 119, 242, 0.25);
+        border-color: rgba(24, 119, 242, 0.6);
+        color: #ffffff;
+        box-shadow: 0 0 12px rgba(24, 119, 242, 0.2);
+      }
 
-    .session {
-      font-size: clamp(0.7rem, 1.4vh, 0.78rem);
-      color: var(--text-muted);
-      margin: 2px 0 0 0;
-      font-family: monospace;
-    }
-  </style>
-</head>
+      /* Action: Follow Instagram */
+      .btn-ig {
+        background: rgba(225, 48, 108, 0.12);
+        color: #f472b6;
+        border-color: rgba(225, 48, 108, 0.3);
+      }
 
-<>  
-  <!-- Language Selector -->  
-  <div class="lang-dropdown" id="langDropdown">  
-    <button type="button" class="lang-dropbtn" onclick="toggleLangDropdown(event)">  
-      <img src="https://flagcdn.com/pl.svg" id="selected-flag" alt="PL" class="flag-icon">  
-      <span id="selected-lang">PL</span>  
-      <span class="arrow">▼</span>  
-    </button>  
-    <div class="lang-dropdown-menu" id="langMenu">  
-      <button type="button" onclick="selectLang('pl', 'PL', 'https://flagcdn.com/pl.svg')">  
-        <img src="https://flagcdn.com/pl.svg" alt="PL" class="flag-icon"> PL  
-      </button>  
-      <button type="button" onclick="selectLang('lt', 'LT', 'https://flagcdn.com/lt.svg')">  
-        <img src="https://flagcdn.com/lt.svg" alt="LT" class="flag-icon"> LT  
-      </button>  
-      <button type="button" onclick="selectLang('en', 'EN', 'https://flagcdn.com/gb.svg')">  
-        <img src="https://flagcdn.com/gb.svg" alt="EN" class="flag-icon"> EN  
-      </button>  
-    </div>  
-  </div>  
+      .btn-ig:hover:not(:disabled) {
+        background: rgba(225, 48, 108, 0.25);
+        border-color: rgba(225, 48, 108, 0.6);
+        color: #ffffff;
+        box-shadow: 0 0 12px rgba(225, 48, 108, 0.2);
+      }
 
-  <!-- Header Section -->  
-  <div class="header-section">  
-    <img src="/cukierek/images/LogoNKkolo.png" alt="Nemenčinės Kūrėjai Logo" class="card-logo">  
-    <div class="logo-title">Nemenčinės Kūrėjai</div>  
-  </div>  
+      /* Primary Action: Claim Reward */
+      .btn-candy {
+        background: linear-gradient(135deg, var(--accent-cyan), var(--accent-lime));
+        color: #06080c;
+        font-weight: 700;
+        box-shadow: 0 4px 16px rgba(0, 229, 255, 0.25);
+      }
 
-  <!-- Main Interaction Card -->  
-  <div class="card">  
-    <div class="card-header">  
-      <h2 data-i18n="card_title">🍬 Otrzymaj cukierek!</h2>  
-      <p data-i18n="card_desc">  
-        <span class="red">Zaobserwuj</span> nasz profil, a następnie <span class="red">wróć</span> tutaj i <span class="red">odbierz cukierek</span> za każde media społecznościowe.  
-      </p>  
-    </div>  
+      .btn-candy:hover:not(:disabled) {
+        box-shadow: 0 6px 20px rgba(56, 239, 125, 0.4);
+        filter: brightness(1.08);
+      }
 
-    <!-- FACEBOOK SECTION -->  
-    <div class="platform">  
-      <h3 data-i18n="header_fb">Facebook</h3>  
-      <button id="facebookStartBtn" class="btn-fb" onclick="startPlatform('facebook')" data-i18n="btn_fb_start">  
-        1. Zaobserwuj nas na Facebooku  
-      </button>  
+      /* Disabled State */
+      button:disabled {
+        background: rgba(255, 255, 255, 0.04) !important;
+        border-color: rgba(255, 255, 255, 0.05) !important;
+        color: #475569 !important;
+        cursor: not-allowed;
+        box-shadow: none !important;
+      }
 
-      <button id="facebookVerifyBtn" class="btn-candy" onclick="verifyPlatform('facebook')" disabled data-i18n="btn_fb_verify">  
-        2. Otrzymaj cukierek  
-      </button>  
-    </div>  
+      .status {
+        font-weight: 600;
+        min-height: 24px;
+        font-size: clamp(0.8rem, 1.7vh, 0.9rem);
+        margin: 1vh 0 0 0;
+        color: var(--accent-cyan);
+      }
 
-    <!-- INSTAGRAM SECTION -->  
-    <div class="platform">  
-      <h3 data-i18n="header_ig">Instagram</h3>  
-      <button id="instagramStartBtn" class="btn-ig" onclick="startPlatform('instagram')" data-i18n="btn_ig_start">  
-        1. Zaobserwuj nas na Instagramie  
-      </button>  
+      .session {
+        font-size: clamp(0.7rem, 1.4vh, 0.78rem);
+        color: var(--text-muted);
+        margin: 2px 0 0 0;
+        font-family: monospace;
+      }
+    </style>
+  </head>
 
-      <button id="instagramVerifyBtn" class="btn-candy" onclick="verifyPlatform('instagram')" disabled data-i18n="btn_ig_verify">  
-        2. Otrzymaj cukierek  
-      </button>  
-    </div>  
+  <>
+    <!-- Language Selector -->
+    <div class="lang-dropdown" id="langDropdown">
+      <button type="button" class="lang-dropbtn" onclick="toggleLangDropdown(event)">
+        <img src="https://flagcdn.com/pl.svg" id="selected-flag" alt="PL" class="flag-icon">
+        <span id="selected-lang">PL</span>
+        <span class="arrow">▼</span>
+      </button>
+      <div class="lang-dropdown-menu" id="langMenu">
+        <button type="button" onclick="selectLang('pl', 'PL', 'https://flagcdn.com/pl.svg')">
+          <img src="https://flagcdn.com/pl.svg" alt="PL" class="flag-icon"> PL
+        </button>
+        <button type="button" onclick="selectLang('lt', 'LT', 'https://flagcdn.com/lt.svg')">
+          <img src="https://flagcdn.com/lt.svg" alt="LT" class="flag-icon"> LT
+        </button>
+        <button type="button" onclick="selectLang('en', 'EN', 'https://flagcdn.com/gb.svg')">
+          <img src="https://flagcdn.com/gb.svg" alt="EN" class="flag-icon"> EN
+        </button>
+      </div>
+    </div>
 
-    <div>  
-      <p id="status" class="status"></p>  
-      <p hidden id="sessionInfo" class="session"></p>  
-    </div>  
-  </div>  
+    <!-- Header Section -->
+    <div class="header-section">
+      <img src="/cukierek/images/LogoNKkolo.png" alt="Nemenčinės Kūrėjai Logo" class="card-logo">
+      <div class="logo-title">Nemenčinės Kūrėjai</div>
+    </div>
+
+    <!-- Main Interaction Card -->
+    <div class="card">
+      <div class="card-header">
+        <h2 data-i18n="card_title">🍬 Otrzymaj cukierek!</h2>
+        <p data-i18n="card_desc">
+          <span class="red">Zaobserwuj</span> nasz profil, a następnie <span class="red">wróć</span> tutaj i <span
+            class="red">odbierz cukierek</span> za każde media społecznościowe.
+        </p>
+      </div>
+
+      <!-- FACEBOOK SECTION -->
+      <div class="platform">
+        <h3 data-i18n="header_fb">Facebook</h3>
+        <button id="facebookStartBtn" class="btn-fb" onclick="startPlatform('facebook')" data-i18n="btn_fb_start">
+          1. Zaobserwuj nas na Facebooku
+        </button>
+
+        <button id="facebookVerifyBtn" class="btn-candy" onclick="verifyPlatform('facebook')" disabled
+          data-i18n="btn_fb_verify">
+          2. Otrzymaj cukierek
+        </button>
+      </div>
+
+      <!-- INSTAGRAM SECTION -->
+      <div class="platform">
+        <h3 data-i18n="header_ig">Instagram</h3>
+        <button id="instagramStartBtn" class="btn-ig" onclick="startPlatform('instagram')" data-i18n="btn_ig_start">
+          1. Zaobserwuj nas na Instagramie
+        </button>
+
+        <button id="instagramVerifyBtn" class="btn-candy" onclick="verifyPlatform('instagram')" disabled
+          data-i18n="btn_ig_verify">
+          2. Otrzymaj cukierek
+        </button>
+      </div>
+
+      <div>
+        <p id="status" class="status"></p>
+        <p hidden id="sessionInfo" class="session"></p>
+      </div>
+    </div>
 
     <script>
 
@@ -2047,6 +2053,6 @@ załadowaniu strony.
 */
 
 </script>
-  </body>
+    </body>
 
-</html>
+    </html>
