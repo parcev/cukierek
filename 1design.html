@@ -1,357 +1,1004 @@
-<!DOCTYPE html5>
-<html>
-<lang="pl">
+<!DOCTYPE html>
+< lang="lt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nemenčinės Kūrėjai</title>
-    <script src="translations.js"></script>
+  <meta
+    name="theme-color"
+    content="#0B0F12"
+  >
 
-    <!-- Import nowoczesnej czcionki Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,600;0,700;1,700;1,800&display=swap"
-      rel="stylesheet">
+  <meta
+    name="description"
+    content="Nemenčinės Kūrėjai — sekite mus socialiniuose tinkluose ir atsiimkite saldainį."
+  >
 
-    <style>
-      * {
-        box-sizing: border-box;
-      }
+  <title>Nemenčinės Kūrėjai</title>
+  <script src="translations.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    /* =========================================
+       1. DESIGN TOKENS
+    ========================================= */
+
+    :root {
+      color-scheme: dark;
+
+      --bg: #0B0F12;
+      --surface: #13191E;
+      --surface-raised: #1A2229;
+      --surface-hover: #202B33;
+
+      --text: #F4F7F8;
+      --text-secondary: #A1ADB6;
+      --text-muted: #77858F;
+
+      --cyan: #00C8F0;
+      --lime: #A3E635;
+
+      --border: #28343C;
+      --border-strong: #394852;
+
+      --facebook: #1877F2;
+
+      --instagram-start: #F09433;
+      --instagram-mid: #E6683C;
+      --instagram-end: #C13584;
+
+      --danger: #FF7373;
+      --success: #A3E635;
+
+      --radius-sm: 10px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+
+      --content-width: 440px;
+
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-7: 32px;
+    }
+
+
+    /* =========================================
+       2. RESET AND BASE
+    ========================================= */
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--bg);
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      min-height: 100dvh;
+
+      margin: 0;
+      padding: 24px 18px;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      background:
+        radial-gradient(
+          ellipse at 50% 0%,
+          rgba(0, 200, 240, 0.055),
+          transparent 48%
+        ),
+        var(--bg);
+
+      color: var(--text);
+
+      font-family: "Poppins", Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+
+      overflow-x: hidden;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid var(--cyan);
+      outline-offset: 4px;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+
+    /* =========================================
+       3. LANGUAGE SELECTOR
+    ========================================= */
+
+    .lang-dropdown {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 1000;
+    }
+
+    .lang-dropbtn {
+      width: auto !important;
+      min-height: 36px;
+
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      padding: 7px 10px !important;
+
+      color: var(--text-secondary) !important;
+      background: rgba(19, 25, 30, 0.96) !important;
+
+      border: 1px solid var(--border) !important;
+      border-radius: var(--radius-sm) !important;
+
+      box-shadow: none !important;
+
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.04em;
+
+      cursor: pointer;
+
+      transition:
+        background 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease;
+    }
+
+    .lang-dropbtn:hover {
+      color: var(--text) !important;
+      background: var(--surface-raised) !important;
+      border-color: var(--border-strong) !important;
+    }
+
+    .flag-icon {
+      display: block;
+      flex-shrink: 0;
+
+      width: 19px !important;
+      height: 13px !important;
+
+      object-fit: cover;
+
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 2px;
+    }
+
+    .arrow {
+      color: var(--text-muted);
+      font-size: 9px;
+      transition: transform 160ms ease;
+    }
+
+    .lang-dropdown-menu {
+      display: none;
+
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+
+      min-width: 108px;
+      padding: 5px;
+
+      background: var(--surface-raised);
+
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+    }
+
+    .lang-dropdown-menu.show {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .lang-dropdown-menu button {
+      width: 100% !important;
+      min-height: 38px;
+
+      display: flex !important;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+
+      padding: 8px 10px !important;
+
+      color: var(--text-secondary) !important;
+      background: transparent !important;
+
+      border: 0 !important;
+      border-radius: 7px !important;
+
+      box-shadow: none !important;
+
+      font-size: 12px !important;
+      font-weight: 500 !important;
+      text-align: left;
+
+      cursor: pointer;
+    }
+
+    .lang-dropdown-menu button:hover {
+      color: var(--text) !important;
+      background: var(--surface-hover) !important;
+    }
+
+
+    /* =========================================
+       4. PAGE HEADER AND BRAND
+    ========================================= */
+
+    .header-section {
+      width: 100%;
+      max-width: var(--content-width);
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      margin: 26px 0 24px;
+      padding: 0 24px;
+
+      text-align: center;
+    }
+
+    .card-logo {
+      display: block;
+
+      width: 94px;
+      height: 94px;
+
+      max-width: none;
+      max-height: none;
+
+      object-fit: contain;
+
+      margin: 0 0 13px;
+
+      filter: none;
+    }
+
+    .logo-title {
+      margin: 0;
+
+      color: var(--text);
+
+      font-size: clamp(21px, 5vw, 27px);
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.8px;
+
+      background: none;
+      -webkit-background-clip: initial;
+      background-clip: initial;
+      -webkit-text-fill-color: currentColor;
+
+      filter: none;
+      animation: none;
+    }
+
+    .brand-accent {
+      display: block;
+
+      width: 43px;
+      height: 3px;
+
+      margin: 13px auto 0;
+
+      background: linear-gradient(
+        90deg,
+        var(--cyan) 0%,
+        var(--cyan) 48%,
+        var(--lime) 52%,
+        var(--lime) 100%
+      );
+
+      border-radius: 2px;
+    }
+
+
+    /* =========================================
+       5. MAIN CARD
+    ========================================= */
+
+    .card {
+      width: 100%;
+      max-width: var(--content-width);
+
+      flex: 0 0 auto;
+
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+
+      padding: 24px 20px 20px;
+
+      background: var(--surface);
+
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+    }
+
+
+    /* =========================================
+       6. CARD HEADER
+    ========================================= */
+
+    .card-header {
+      margin: 0 0 22px;
+      text-align: left;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      margin: 0 0 10px;
+
+      color: var(--cyan);
+
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.4;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+
+      width: 7px;
+      height: 7px;
+
+      flex: 0 0 7px;
+
+      background: var(--lime);
+      border-radius: 2px;
+    }
+
+    .card-header h2 {
+      margin: 0 0 9px;
+
+      color: var(--text);
+
+      font-size: clamp(21px, 5vw, 25px);
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -0.7px;
+    }
+
+    .card-header p {
+      margin: 0;
+
+      color: var(--text-secondary);
+
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.8;
+    }
+
+    .red {
+      color: var(--lime);
+      font-weight: 600;
+    }
+
+
+    /* =========================================
+       7. SOCIAL PLATFORM SECTIONS
+    ========================================= */
+
+    .platform {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+
+      min-width: 0;
+
+      margin: 0;
+      padding: 19px 0 0;
+
+      border-top: 1px solid var(--border);
+    }
+
+    .platform + .platform {
+      margin-top: 19px !important;
+    }
+
+    .platform h3 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      margin: 0 0 3px;
+
+      color: var(--text);
+
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.5;
+      letter-spacing: -0.2px;
+    }
+
+    .platform-icon {
+      width: 30px;
+      height: 30px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      flex: 0 0 30px;
+
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+
+      font-size: 15px;
+      line-height: 1;
+    }
+
+
+    /* =========================================
+       8. BUTTONS
+    ========================================= */
+
+    button {
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .platform button {
+      width: 100%;
+      min-height: 46px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+
+      padding: 11px 13px;
+
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.55;
+      text-align: center;
+
+      cursor: pointer;
+
+      transition:
+        background-color 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease,
+        transform 160ms ease,
+        opacity 160ms ease;
+    }
+
+    .platform button:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    .btn-fb {
+      color: #FFFFFF;
+      background: var(--facebook);
+      border-color: var(--facebook);
+    }
+
+    .btn-fb:hover:not(:disabled) {
+      background: #1268D8;
+      border-color: #1268D8;
+    }
+
+    .btn-ig {
+      color: #FFFFFF;
+
+      background: linear-gradient(
+        110deg,
+        var(--instagram-start),
+        var(--instagram-mid) 48%,
+        var(--instagram-end)
+      );
+
+      border-color: transparent;
+    }
+
+    .btn-ig:hover:not(:disabled) {
+      filter: brightness(1.08);
+    }
+
+    .btn-candy {
+      color: #10160A;
+      background: var(--lime);
+      border-color: var(--lime);
+    }
+
+    .btn-candy:hover:not(:disabled) {
+      background: #B5F45A;
+      border-color: #B5F45A;
+    }
+
+    .platform button:disabled {
+      color: #748087 !important;
+
+      background: #20272D !important;
+      border-color: #2A343B !important;
+
+      opacity: 1;
+
+      box-shadow: none !important;
+      cursor: not-allowed;
+    }
+
+
+    /* =========================================
+       9. STATUS AND SESSION INFORMATION
+    ========================================= */
+
+    .status-area {
+      margin-top: 20px;
+      padding-top: 15px;
+
+      border-top: 1px solid var(--border);
+    }
+
+    .status {
+      min-height: 22px;
+
+      margin: 0;
+
+      color: var(--text-secondary);
+
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.7;
+
+      overflow-wrap: anywhere;
+    }
+
+    .status:empty {
+      display: none;
+    }
+
+    .session {
+      margin: 7px 0 0;
+
+      color: var(--text-muted);
+
+      font-size: 11px;
+      line-height: 1.6;
+
+      overflow-wrap: anywhere;
+    }
+
+
+    /* =========================================
+       10. FOOTER
+    ========================================= */
+
+    .page-footer {
+      width: 100%;
+      max-width: var(--content-width);
+
+      margin: 22px 0 0;
+      padding: 0 8px;
+
+      color: var(--text-muted);
+
+      font-size: 10px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .footer-accent {
+      color: var(--cyan);
+    }
+
+
+    /* =========================================
+       11. RESPONSIVE: SHORT SCREENS
+    ========================================= */
+
+    @media (max-height: 760px) {
       body {
-        font-family: 'Poppins', Arial, sans-serif;
-        text-align: center;
-        padding: 16px 16px 20px 16px;
-        margin: 0;
-        background: #f4f4f9;
-        height: 100vh;
-        height: 100dvh;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        /* Rozciąga górną sekcję i kartę na pełną wysokość */
-        align-items: center;
-        overflow: hidden;
-        /* Brak paska przewijania */
+        padding-top: 18px;
+        padding-bottom: 16px;
       }
 
-      /* Górna sekcja z logo i napisem */
       .header-section {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        margin-top: 8px;
+        margin-top: 25px;
+        margin-bottom: 18px;
       }
 
       .card-logo {
-        max-height: 11vh;
-        width: auto;
-        margin-bottom: 6px;
-        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.12));
+        width: 76px;
+        height: 76px;
+        margin-bottom: 10px;
       }
 
-      /* Animowany, kolorowy tekst logo */
       .logo-title {
-        font-style: italic;
-        font-weight: 800;
-        font-size: clamp(1.5rem, 4vh, 2.2rem);
-        margin: 0;
-        letter-spacing: 0.5px;
-
-        /* Animowany gradient w barwach akcentowych logo (turkus / zieleń) */
-        background: linear-gradient(120deg, #00b4db, #00d2ff, #20e2d7, #38ef7d, #00b4db);
-        background-size: 300% 300%;
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-
-        /* Animacja przesunięcia koloru */
-        animation: gradientFlow 5s ease infinite;
-
-        /* Delikatny efekt poświaty */
-        filter: drop-shadow(0px 3px 6px rgba(0, 180, 219, 0.25));
+        font-size: 22px;
       }
 
-      @keyframes gradientFlow {
-        0% {
-          background-position: 0% 50%;
-        }
-
-        50% {
-          background-position: 100% 50%;
-        }
-
-        100% {
-          background-position: 0% 50%;
-        }
-      }
-
-      /* Główna karta rozciągnięta w pionie */
       .card {
-        background: white;
-        padding: 20px 18px;
-        border-radius: 20px;
-        width: 100%;
-        max-width: 400px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-        flex: 1;
-        /* Wypełnia wolną przestrzeń na ekranie */
-        max-height: 72vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        /* Równomiernie rozkłada zawartość od góry do dołu */
-        margin-top: 10px;
-      }
-
-      .card-header h2 {
-        font-size: clamp(1.15rem, 2.6vh, 1.4rem);
-        margin: 0 0 4px 0;
-        color: #1a1a1a;
-        font-weight: 700;
+        padding: 20px 18px 18px;
       }
 
       .card-header {
-        margin-bottom: 1.1vh;
+        margin-bottom: 17px;
       }
 
-      .card-header p {
-        font-size: clamp(0.82rem, 1.8vh, 0.95rem);
-        margin: 0;
-        color: #666;
-      }
-
-      .red {
-        color: red;
+      .card-header h2 {
+        font-size: 21px;
       }
 
       .platform {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        padding-top: 10px;
-        border-top: 1px solid #f0f0f0;
+        gap: 8px;
+        padding-top: 15px;
       }
 
-      .platform:first-of-type {
-        border-top: none;
-        padding-top: 0;
+      .platform + .platform {
+        margin-top: 15px !important;
       }
 
-      h3 {
-        font-size: clamp(1.15rem, 2.6vh, 1.4rem);
-        margin: 0 0 2px 0;
-        color: #222;
+      .platform button {
+        min-height: 42px;
+        padding: 9px 11px;
       }
 
-      button {
-        width: 100%;
-        padding: clamp(10px, 1.8vh, 14px);
-        font-size: clamp(0.95rem, 2.1vh, 1.05rem);
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: transform 0.1s ease, background 0.2s ease;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+      .page-footer {
+        margin-top: 16px;
+      }
+    }
+
+
+    /* =========================================
+       12. RESPONSIVE: SMALL MOBILE
+    ========================================= */
+
+    @media (max-width: 360px) {
+      body {
+        padding-right: 12px;
+        padding-left: 12px;
       }
 
-      button:active {
-        transform: scale(0.98);
+      .header-section {
+        padding-right: 18px;
+        padding-left: 18px;
       }
 
-      button:disabled {
-        background: #e0e0e0 !important;
-        color: #888 !important;
-        cursor: not-allowed;
-        box-shadow: none;
+      .card {
+        padding-right: 15px;
+        padding-left: 15px;
       }
 
-      .btn-fb {
-        background: #1877f2;
-        color: white;
+      .card-logo {
+        width: 76px;
+        height: 76px;
       }
 
-      .btn-ig {
-        background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-        color: white;
+      .logo-title {
+        font-size: 20px;
+        letter-spacing: -0.5px;
       }
 
-      .btn-candy {
-        background: #28a745;
-        color: white;
+      .card-header p {
+        font-size: 12px;
       }
 
-      .status {
-        font-weight: 600;
-        min-height: 24px;
-        font-size: clamp(0.8rem, 1.7vh, 0.9rem);
-        margin: 1.1vh 0 0 0;
-        margin: 1.1dvh 0 0 0;
-        color: #333;
-      }
-
-      .session {
-        font-size: clamp(0.7rem, 1.4vh, 0.8rem);
-        color: #888;
-        margin: 0;
+      .platform button {
+        font-size: 11px;
       }
 
       .lang-dropdown {
-        position: fixed;
-        top: 12px;
-        right: 12px;
-        z-index: 1000;
+        top: 10px;
+        right: 10px;
+      }
+    }
+
+
+    /* =========================================
+       13. RESPONSIVE: TABLET AND DESKTOP
+    ========================================= */
+
+    @media (min-width: 700px) {
+      body {
+        padding-top: 34px;
+        padding-bottom: 28px;
       }
 
-      .lang-dropbtn {
-        display: flex !important;
-        align-items: center;
-        gap: 6px;
-        width: auto !important;
-        padding: 6px 10px !important;
-        font-size: 0.8rem !important;
-        font-weight: 600 !important;
-        background: rgba(255, 255, 255, 0.95) !important;
-        backdrop-filter: blur(6px);
-        border: 1px solid rgba(0, 0, 0, 0.12) !important;
-        border-radius: 20px !important;
-        color: #333 !important;
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+      .header-section {
+        margin-top: 18px;
+        margin-bottom: 28px;
       }
 
-      .lang-dropdown-menu {
-        display: none;
-        position: absolute;
-        right: 0;
-        top: 100%;
-        margin-top: 4px;
-        background: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-        border: 1px solid rgba(0, 0, 0, 0.08);
-        overflow: hidden;
-        min-width: 90px;
+      .card-logo {
+        width: 104px;
+        height: 104px;
       }
 
-      .lang-dropdown-menu.show {
-        display: flex;
-        flex-direction: column;
+      .card {
+        padding: 28px 26px 24px;
       }
 
-      .lang-dropdown-menu button {
-        display: flex !important;
-        align-items: center;
-        gap: 8px;
-        width: 100% !important;
-        padding: 8px 12px !important;
-        font-size: 0.8rem !important;
-        font-weight: 500 !important;
-        background: transparent !important;
-        color: #333 !important;
-        border: none !important;
-        border-radius: 0 !important;
-        box-shadow: none !important;
-        text-align: left;
-        cursor: pointer;
+      .card-header {
+        margin-bottom: 25px;
       }
 
-      .lang-dropdown-menu button:hover {
-        background: #f0f4f8 !important;
+      .platform button {
+        font-size: 13px;
       }
+    }
 
-      /* Prostokątne flagi SVG */
-      .flag-icon {
-        width: 20px !important;
-        height: 14px !important;
-        object-fit: cover;
-        border-radius: 2px;
-        border: 1px solid rgba(0, 0, 0, 0.15);
-        /* Obramowanie widoczne na białym tle */
-        flex-shrink: 0;
-        display: block;
+
+    /* =========================================
+       14. ACCESSIBILITY: REDUCED MOTION
+    ========================================= */
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
       }
+    }
+  </style>
+</head>
 
-      .arrow {
-        font-size: 0.6rem;
-        color: #777;
-      }
-    </style>
-  </head>
+<>
 
-  <body>
-    <!-- język wybierac -->
-    <div class="lang-dropdown" id="langDropdown">
-      <button type="button" class="lang-dropbtn" onclick="toggleLangDropdown(event)">
-        <img src="https://flagcdn.com/pl.svg" id="selected-flag" alt="PL" class="flag-icon">
-        <span id="selected-lang">PL</span>
-        <span class="arrow">▼</span>
+  <!-- LANGUAGE SELECTOR -->
+
+  <div class="lang-dropdown" id="langDropdown">
+    <button
+      type="button"
+      class="lang-dropbtn"
+      onclick="toggleLangDropdown(event)"
+      aria-label="Select language"
+      aria-haspopup="true"
+      aria-controls="langMenu"
+      aria-expanded="false"
+    >
+      <img
+        src="https://flagcdn.com/pl.svg"
+        id="selected-flag"
+        alt=""
+        class="flag-icon"
+      >
+
+      <span id="selected-lang">PL</span>
+
+      <span class="arrow" aria-hidden="true">▼</span>
+    </button>
+
+    <div
+      class="lang-dropdown-menu"
+      id="langMenu"
+    >
+      <button
+        type="button"
+        onclick="selectLang('pl', 'PL', 'https://flagcdn.com/pl.svg')"
+        lang="pl"
+      >
+        <img src="https://flagcdn.com/pl.svg" alt="" class="flag-icon">
+        PL
       </button>
 
-      <div class="lang-dropdown-menu" id="langMenu">
-        <button type="button" onclick="selectLang('pl', 'PL', 'https://flagcdn.com/pl.svg')">
-          <img src="https://flagcdn.com/pl.svg" alt="PL" class="flag-icon"> PL
-        </button>
-        <button type="button" onclick="selectLang('lt', 'LT', 'https://flagcdn.com/lt.svg')">
-          <img src="https://flagcdn.com/lt.svg" alt="LT" class="flag-icon"> LT
-        </button>
-        <button type="button" onclick="selectLang('en', 'EN', 'https://flagcdn.com/gb.svg')">
-          <img src="https://flagcdn.com/gb.svg" alt="EN" class="flag-icon"> EN
-        </button>
-      </div>
+      <button
+        type="button"
+        onclick="selectLang('lt', 'LT', 'https://flagcdn.com/lt.svg')"
+        lang="lt"
+      >
+        <img src="https://flagcdn.com/lt.svg" alt="" class="flag-icon">
+        LT
+      </button>
+
+      <button
+        type="button"
+        onclick="selectLang('en', 'EN', 'https://flagcdn.com/gb.svg')"
+        lang="en"
+      >
+        <img src="https://flagcdn.com/gb.svg" alt="" class="flag-icon">
+        EN
+      </button>
+    </div>
+  </div>
+
+
+  <!-- BRAND HEADER -->
+
+  <header class="header-section">
+
+    <img
+      src="/cukierek/images/LogoNKkolo.png"
+      alt="Nemenčinės Kūrėjai logo"
+      class="card-logo"
+      width="104"
+      height="104"
+    >
+
+    <h1 class="logo-title">
+      Nemenčinės Kūrėjai
+    </h1>
+
+    <span class="brand-accent" aria-hidden="true"></span>
+
+  </header>
+
+
+  <!-- MAIN CONTENT -->
+
+  <main class="card">
+
+    <header class="card-header">
+
+      <p class="eyebrow">
+        Nemenčinės Kūrėjai
+      </p>
+
+      <h2 data-i18n="card_title">
+        🍬 Otrzymaj cukierek!
+      </h2>
+
+      <p data-i18n="card_desc">
+        <span class="red">Zaobserwuj</span>
+        nasz profil, a następnie
+        <span class="red">wróć</span>
+        tutaj i
+        <span class="red">odbierz cukierek</span>
+        za każde media społecznościowe.
+      </p>
+
+    </header>
+
+
+    <!-- FACEBOOK -->
+
+    <section class="platform" aria-labelledby="facebookHeading">
+
+      <h3 id="facebookHeading" data-i18n="header_fb">
+        <span class="platform-icon" aria-hidden="true">f</span>
+        Facebook
+      </h3>
+
+      <button
+        type="button"
+        id="facebookStartBtn"
+        class="btn-fb"
+        onclick="startPlatform('facebook')"
+        data-i18n="btn_fb_start"
+      >
+        1. Zaobserwuj nas na Facebooku
+      </button>
+
+      <button
+        type="button"
+        id="facebookVerifyBtn"
+        class="btn-candy"
+        onclick="verifyPlatform('facebook')"
+        disabled
+        data-i18n="btn_fb_verify"
+      >
+        2. Otrzymaj cukierek za zaobserwowanie na Facebooku
+      </button>
+
+    </section>
+
+
+    <!-- INSTAGRAM -->
+
+    <section class="platform" aria-labelledby="instagramHeading">
+
+      <h3 id="instagramHeading" data-i18n="header_ig">
+        <span class="platform-icon" aria-hidden="true">◎</span>
+        Instagram
+      </h3>
+
+      <button
+        type="button"
+        id="instagramStartBtn"
+        class="btn-ig"
+        onclick="startPlatform('instagram')"
+        data-i18n="btn_ig_start"
+      >
+        1. Zaobserwuj nas na Instagramie
+      </button>
+
+      <button
+        type="button"
+        id="instagramVerifyBtn"
+        class="btn-candy"
+        onclick="verifyPlatform('instagram')"
+        disabled
+        data-i18n="btn_ig_verify"
+      >
+        2. Otrzymaj cukierek za zaobserwowanie na Instagramie
+      </button>
+
+    </section>
+
+
+    <!-- STATUS -->
+
+    <div class="status-area">
+
+      <p
+        id="status"
+        class="status"
+        role="status"
+        aria-live="polite"
+      ></p>
+
+      <p
+        hidden
+        id="sessionInfo"
+        class="session"
+      ></p>
+
     </div>
 
+  </main>
 
 
+  <!-- FOOTER -->
 
-    <!-- Górna sekcja -->
-    <div class="header-section">
-      <img src="/cukierek/images/LogoNKkolo.png" alt="Logo" class="card-logo">
-      <div class="logo-title">Nemenčinės Kūrėjai</div>
-    </div>
-
-    <!-- Karta ze stałym wyważeniem pionowym -->
-    <div class="card">
-      <div class="card-header">
-        <h2 data-i18n="card_title">🍬 Otrzymaj cukierek!</h2>
-        <p data-i18n="card_desc">
-          <span class="red">Zaobserwuj</span> nasz profil, a następnie <span class="red">wróć</span> tutaj i <span
-            class="red">odbierz cukierek</span> za każde media społecznościowe.
-        </p>
-      </div>
-
-      <!-- FACEBOOK -->
-      <div class="platform">
-        <h3 data-i18n="header_fb">🔵 Facebook</h3>
-        <button id="facebookStartBtn" class="btn-fb" onclick="startPlatform('facebook')" data-i18n="btn_fb_start">
-          1. Zaobserwuj nas na Facebooku
-        </button>
-
-        <button id="facebookVerifyBtn" class="btn-candy" onclick="verifyPlatform('facebook')" disabled
-          data-i18n="btn_fb_verify">
-          2. Otrzymaj cukierek za zaobserwowanie na Facebooku
-        </button>
-      </div>
-
-      <!-- INSTAGRAM -->
-      <div class="platform" style="margin-top: 2.2dvh;">
-        <h3 data-i18n="header_ig">📸 Instagram</h3>
-        <button id="instagramStartBtn" class="btn-ig" onclick="startPlatform('instagram')" data-i18n="btn_ig_start">
-          1. Zaobserwuj nas na Instagramie
-        </button>
-
-        <button id="instagramVerifyBtn" class="btn-candy" onclick="verifyPlatform('instagram')" disabled
-          data-i18n="btn_ig_verify">
-          2. Otrzymaj cukierek za zaobserwowanie na Instagramie
-        </button>
-      </div>
-
-      <div>
-        <p id="status" class="status"></p>
-        <p hidden id="sessionInfo" class="session"></p>
-      </div>
-    </div>
+  <footer class="page-footer">
+    Powered by
+    <span class="footer-accent">Nemenčinės Kūrėjai</span>
+  </footer>
 
     <script>
 
