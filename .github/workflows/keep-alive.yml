@@ -12,4 +12,4 @@ jobs:
     steps:
       - name: Warm up Render Server
         run: |
-          curl -s --max-time 120 cukierek-4p2a.onrender.com/health || true
+          curl -s --max-time 120 https://cukierek-4p2a.onrender.com/health || true
