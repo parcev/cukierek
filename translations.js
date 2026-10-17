@@ -78,65 +78,65 @@ const translations = {
     flag: "https://flagcdn.com/lt.svg",
 
     // HTML Static Content
-    card_title: "🍬 Gaukite saldainį!",
-    card_desc:
-      "<span class='red'>Sekite</span> mūsų profilį, tuomet <span class='red'>grįžkite</span> čia ir <span class='red'>pasiimkite saldainį</span> už kiekvieną socialinį tinklą.",
-    header_fb: "🔵 Facebook",
-    header_ig: "📸 Instagram",
+card_title: "🍬 Gaukite saldainį!",
+card_desc:
+  "<span class='red'>Stebėkite</span> mus „Facebook“ arba <span class='red'>sekite</span> „Instagram“, tada <span class='red'>grįžkite</span> čia ir <span class='red'>atsiimkite saldainį</span> už kiekvieną socialinį tinklą.",
+header_fb: "🔵 Facebook",
+header_ig: "📸 Instagram",
 
-    // Buttons
-    btn_fb_start: "1. Sekite mus Facebooke",
-    btn_fb_claimed: "✅ Facebook — saldainis atsiimtas",
-    btn_fb_goto: "✅ Eiti į Facebook",
-    btn_fb_verify: "2. Gaukite saldainį už Facebook sekimą",
+// Buttons
+btn_fb_start: "1. Stebėkite mus „Facebook“",
+btn_fb_claimed: "✅ „Facebook“ saldainis atsiimtas",
+btn_fb_goto: "✅ Atidaryti „Facebook“",
+btn_fb_verify: "2. Atsiimti saldainį už stebėjimą „Facebook“",
 
-    btn_ig_start: "1. Sekite mus Instagram",
-    btn_ig_claimed: "✅ Instagram — saldainis atsiimtas",
-    btn_ig_goto: "✅ Eiti į Instagram",
-    btn_ig_verify: "2. Gaukite saldainį už Instagram sekimą",
+btn_ig_start: "1. Sekite mus „Instagram“",
+btn_ig_claimed: "✅ „Instagram“ saldainis atsiimtas",
+btn_ig_goto: "✅ Atidaryti „Instagram“",
+btn_ig_verify: "2. Atsiimti saldainį už sekimą „Instagram“",
 
-    // Status Messages & Errors
-    status_prep_session: "⏳ Ruošiama sesija...",
-    status_session_expired:
-      "⌛ Sesija pasibaigė. Galite pradėti naują.",
+// Status Messages & Errors
+status_prep_session: "⏳ Ruošiama sesija...",
+status_session_expired:
+  "⌛ Sesija baigėsi. Galite pradėti iš naujo.",
 
-    status_fb_click_verify:
-      "👆 Spustelėkite mygtuką „Gaukite saldainį už Facebook“.",
-    status_ig_click_verify:
-      "👆 Spustelėkite mygtuką „Gaukite saldainį už Instagram“.",
+status_fb_click_verify:
+  "👆 Spustelėkite mygtuką „Atsiimti saldainį už stebėjimą „Facebook““.",
+status_ig_click_verify:
+  "👆 Spustelėkite mygtuką „Atsiimti saldainį už sekimą „Instagram““.",
 
-    status_checking_fb: "🔎 Tikrinamas Facebook...",
-    status_checking_ig: "🔎 Tikrinamas Instagram...",
+status_checking_fb: "🔎 Tikrinama, ar stebite „Facebook“ puslapį...",
+status_checking_ig: "🔎 Tikrinama, ar sekate „Instagram“ profilį...",
 
-    status_success_fb:
-      "🎉 Facebook patvirtintas! Pasiimkite saldainį.",
-    status_success_ig:
-      "🎉 Instagram patvirtintas! Pasiimkite saldainį.",
+status_success_fb:
+  "🎉 „Facebook“ stebėjimas patvirtintas! Atsiimkite savo saldainį.",
+status_success_ig:
+  "🎉 „Instagram“ sekimas patvirtintas! Atsiimkite savo saldainį.",
 
-    status_not_verified_fb:
-      "❌ Naujas Facebook sekėjas dar nepastebėtas. Įsitikinkite, kad sekate puslapį, ir bandykite dar kartą.",
-    status_not_verified_ig:
-      "❌ Naujas Instagram sekėjas dar nepastebėtas. Įsitikinkite, kad sekate profilį, ir bandykite dar kartą.",
+status_not_verified_fb:
+  "❌ Nepavyko patvirtinti, kad stebite mūsų „Facebook“ puslapį. Įsitikinkite, kad jį stebite, ir bandykite dar kartą.",
+status_not_verified_ig:
+  "❌ Nepavyko patvirtinti, kad sekate mūsų „Instagram“ profilį. Įsitikinkite, kad jį sekate, ir bandykite dar kartą.",
 
-    status_claimed_both: "🍬 Jau atsiėmėte abu saldainius.",
-    status_fb_claimed: "🍬 Facebook saldainis jau atsiimtas.",
-    status_ig_claimed: "🍬 Instagram saldainis jau atsiimtas.",
+status_claimed_both: "🍬 Jau atsiėmėte abu saldainius!",
+status_fb_claimed: "🍬 Saldainis už „Facebook“ puslapio stebėjimą jau atsiimtas.",
+status_ig_claimed: "🍬 Saldainis už „Instagram“ profilio sekimą jau atsiimtas.",
 
-    status_fb_claimed_can_ig:
-      "✅ Facebook saldainis atsiimtas. Taip pat galite atsiimti saldainį už Instagram.",
-    status_ig_claimed_can_fb:
-      "✅ Instagram saldainis atsiimtas. Taip pat galite atsiimti saldainį už Facebook.",
+status_fb_claimed_can_ig:
+  "✅ Saldainį už „Facebook“ puslapio stebėjimą jau atsiėmėte. Taip pat galite atsiimti saldainį už „Instagram“ profilio sekimą.",
+status_ig_claimed_can_fb:
+  "✅ Saldainį už „Instagram“ profilio sekimą jau atsiėmėte. Taip pat galite atsiimti saldainį už „Facebook“ puslapio stebėjimą.",
 
-    status_popup_blocked_fb:
-      "⚠️ Naršyklė užblokavo Facebook. Leiskite iškylančiuosius langus ir bandykite dar kartą.",
-    status_popup_blocked_ig:
-      "⚠️ Naršyklė užblokavo Instagram. Leiskite iškylančiuosius langus ir bandykite dar kartą.",
+status_popup_blocked_fb:
+  "⚠️ Naršyklė užblokavo „Facebook“ langą. Leiskite atidaryti iššokančiuosius langus ir bandykite dar kartą.",
+status_popup_blocked_ig:
+  "⚠️ Naršyklė užblokavo „Instagram“ langą. Leiskite atidaryti iššokančiuosius langus ir bandykite dar kartą.",
 
-    status_no_connection: "⚠️ Nėra ryšio su serveriu.",
-    status_busy:
-      "⏳ Aparatas šiuo metu užimtas. Bandykite dar kartą po akimirkos.",
-    status_error: "⚠️ Įvyko klaida.",
-    session_active: "⏱️ Aktyvi sesija"
+status_no_connection: "⚠️ Nepavyksta susisiekti su serveriu. Patikrinkite interneto ryšį.",
+status_busy:
+  "⏳ Saldainių aparatas šiuo metu užimtas. Pabandykite dar kartą po akimirkos.",
+status_error: "⚠️ Įvyko klaida. Bandykite dar kartą.",
+session_active: "⏱️ Sesija aktyvi"
   },
 
   en: {
