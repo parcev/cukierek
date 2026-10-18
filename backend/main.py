@@ -12,7 +12,7 @@ from pydantic import BaseModel
 
 # CONFIG
 
-SESSION_DURATION = 4 * 60
+SESSION_DURATION = 1 * 90
 
 MAX_ACTIVE_SESSIONS = 3
 
