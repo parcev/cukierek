@@ -12,65 +12,67 @@ const translations = {
     label: "PL",
     flag: "https://flagcdn.com/pl.svg",
 
-    // HTML Static Content
-    card_title: "🍬 Otrzymaj cukierek!",
+    
+ // HTML Static Content
+    card_title: "🍬 Odbierz cukierka!",
     card_desc:
-      "<span class='red'>Zaobserwuj</span> nasz profil, a następnie <span class='red'>wróć</span> tutaj i <span class='red'>odbierz cukierek</span> za każde media społecznościowe.",
+      "<span class='red'>Zaobserwuj</span> nasz profil, a następnie <span class='red'>wróć</span> tutaj i <span class='red'>odbierz cukierka</span> za każde medium społecznościowe.",
     header_fb: "🔵 Facebook",
     header_ig: "📸 Instagram",
 
     // Buttons
     btn_fb_start: "1. Zaobserwuj nas na Facebooku",
     btn_fb_claimed: "✅ Facebook — cukierek odebrany",
-    btn_fb_goto: "✅ Przejdź na Facebooka",
-    btn_fb_verify: "2. Otrzymaj cukierek za zaobserwowanie na Facebooku",
+    btn_fb_goto: "✅ Otwórz Facebook",
+    btn_fb_verify: "2. Odbierz cukierka za obserwowanie na Facebooku",
 
     btn_ig_start: "1. Zaobserwuj nas na Instagramie",
     btn_ig_claimed: "✅ Instagram — cukierek odebrany",
-    btn_ig_goto: "✅ Przejdź na Instagram",
-    btn_ig_verify: "2. Otrzymaj cukierek za zaobserwowanie na Instagramie",
+    btn_ig_goto: "✅ Otwórz Instagram",
+    btn_ig_verify: "2. Odbierz cukierka za obserwowanie na Instagramie",
 
     // Status Messages & Errors
-    status_prep_session: "⏳ Przygotowywanie sesji...",
-    status_session_expired: "⌛ Sesja wygasła. Możesz rozpocząć nową.",
+    status_prep_session: "⏳ Przygotowujemy sesję...",
+    status_session_expired: "⌛ Sesja wygasła. Rozpocznij nową.",
 
     status_fb_click_verify:
-      "👆 Kliknij przycisk „Otrzymaj cukierek za Facebook”.",
+      "👆 Kliknij „Odbierz cukierka za Facebooka”.",
     status_ig_click_verify:
-      "👆 Kliknij przycisk „Otrzymaj cukierek za Instagram”.",
+      "👆 Kliknij „Odbierz cukierka za Instagram”.",
 
-    status_checking_fb: "🔎 Sprawdzam Facebook...",
-    status_checking_ig: "🔎 Sprawdzam Instagram...",
+    status_checking_fb: "🔎 Sprawdzamy Facebooka...",
+    status_checking_ig: "🔎 Sprawdzamy Instagrama...",
 
     status_success_fb:
-      "🎉 Facebook zweryfikowany! Zabierz cukierka z podajnika.",
+      "🎉 Facebook zweryfikowany! Odbierz cukierka z automatu.",
     status_success_ig:
-      "🎉 Instagram zweryfikowany! Zabierz cukierka z podajnika.",
+      "🎉 Instagram zweryfikowany! Odbierz cukierka z automatu.",
 
     status_not_verified_fb:
-      "❌ Nie wykryto jeszcze nowego obserwującego na Facebooku. Upewnij się, że zaobserwowałeś stronę i spróbuj ponownie.",
+      "❌ Nie wykryliśmy jeszcze nowego obserwującego na Facebooku. Upewnij się, że obserwujesz naszą stronę, i spróbuj ponownie.",
     status_not_verified_ig:
-      "❌ Nie wykryto jeszcze nowego obserwującego na Instagramie. Upewnij się, że zaobserwowałeś profil i spróbuj ponownie.",
+      "❌ Nie wykryliśmy jeszcze nowego obserwującego na Instagramie. Upewnij się, że obserwujesz nasz profil, i spróbuj ponownie.",
 
     status_claimed_both: "🍬 Odebrałeś już oba cukierki.",
-    status_fb_claimed: "🍬 Cukierek Facebook został już odebrany.",
-    status_ig_claimed: "🍬 Cukierek Instagram został już odebrany.",
+    status_fb_claimed: "🍬 Cukierek za Facebooka został już odebrany.",
+    status_ig_claimed: "🍬 Cukierek za Instagram został już odebrany.",
 
     status_fb_claimed_can_ig:
-      "✅ Facebook odebrany. Możesz również odebrać cukierek za Instagram.",
+      "✅ Cukierek za Facebooka odebrany. Możesz też odebrać cukierka za Instagram.",
     status_ig_claimed_can_fb:
-      "✅ Instagram odebrany. Możesz również odebrać cukierek za Facebook.",
+      "✅ Cukierek za Instagram odebrany. Możesz też odebrać cukierka za Facebooka.",
 
     status_popup_blocked_fb:
-      "⚠️ Przeglądarka zablokowała Facebooka. Zezwól na wyskakujące okna i spróbuj ponownie.",
+      "⚠️ Przeglądarka zablokowała otwarcie Facebooka. Zezwól na wyskakujące okna i spróbuj ponownie.",
     status_popup_blocked_ig:
-      "⚠️ Przeglądarka zablokowała Instagram. Zezwól na wyskakujące okna i spróbuj ponownie.",
+      "⚠️ Przeglądarka zablokowała otwarcie Instagrama. Zezwól na wyskakujące okna i spróbuj ponownie.",
 
     status_no_connection: "⚠️ Brak połączenia z serwerem.",
     status_busy:
-      "⏳ Automat jest obecnie zajęty. Spróbuj ponownie za chwilę.",
-    status_error: "⚠️ Wystąpił błąd.",
+      "⏳ Automat jest zajęty. Spróbuj ponownie za chwilę.",
+    status_error: "⚠️ Coś poszło nie tak.",
     session_active: "⏱️ Sesja aktywna"
+
   },
 
   lt: {
