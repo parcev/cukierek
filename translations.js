@@ -14,7 +14,7 @@ const translations = {
 
 
     // HTML Static Content
-    card_title: "🍬 Odbierz cukierka!",
+    card_title: "🍬 Otrzymaj cukierek!",
     card_desc:
       "<span class='red'>Zaobserwuj</span> nasz profil, a następnie <span class='red'>wróć</span> tutaj i <span class='red'>odbierz cukierka</span> za każde medium społecznościowe.",
     header_fb: "🔵 Facebook",
@@ -70,7 +70,7 @@ const translations = {
     status_no_connection: "⚠️ Brak połączenia z serwerem.",
     status_busy:
       "⏳ Automat jest zajęty. Spróbuj ponownie za chwilę.",
-    status_error: "⚠️ Coś poszło nie tak.",
+    status_error: "⚠️ Coś poszło nie tak. Spróbuj ponownie.",
     session_active: "⏱️ Sesja aktywna"
 
   },
@@ -98,22 +98,22 @@ const translations = {
     btn_ig_verify: "2. Atsiimti saldainį už sekimą „Instagram“",
 
     // Status Messages & Errors
-    status_prep_session: "⏳ Ruošiama sesija...",
+    status_prep_session: "⏳ Ruošiame sesija...",
     status_session_expired:
-      "⌛ Sesija baigėsi. Galite pradėti iš naujo.",
+      "⌛ Sesija baigėsi. Pradėkite iš naujo.",
 
     status_fb_click_verify:
       "👆 Spustelėkite mygtuką „Atsiimti saldainį už stebėjimą „Facebook““.",
     status_ig_click_verify:
       "👆 Spustelėkite mygtuką „Atsiimti saldainį už sekimą „Instagram““.",
 
-    status_checking_fb: "🔎 Tikrinama, ar stebite „Facebook“ puslapį...",
-    status_checking_ig: "🔎 Tikrinama, ar sekate „Instagram“ profilį...",
+    status_checking_fb: "🔎 Tikriname „Facebook“...",
+    status_checking_ig: "🔎 Tikriname „Instagram“...",
 
     status_success_fb:
-      "🎉 „Facebook“ stebėjimas patvirtintas! Atsiimkite savo saldainį.",
+      "🎉 Atsiimkite savo saldainį!",
     status_success_ig:
-      "🎉 „Instagram“ sekimas patvirtintas! Atsiimkite savo saldainį.",
+      "🎉 Atsiimkite savo saldainį!",
 
     status_not_verified_fb:
       "❌ Nepavyko patvirtinti, kad stebite mūsų „Facebook“ puslapį. Įsitikinkite, kad jį stebite, ir bandykite dar kartą.",
@@ -134,10 +134,10 @@ const translations = {
     status_popup_blocked_ig:
       "⚠️ Naršyklė užblokavo „Instagram“ langą. Leiskite atidaryti iššokančiuosius langus ir bandykite dar kartą.",
 
-    status_no_connection: "⚠️ Nepavyksta susisiekti su serveriu. Patikrinkite interneto ryšį.",
+    status_no_connection: "⚠️ Nėra ryšio su serveriu.",
     status_busy:
       "⏳ Saldainių aparatas šiuo metu užimtas. Pabandykite dar kartą po akimirkos.",
-    status_error: "⚠️ Įvyko klaida. Bandykite dar kartą.",
+    status_error: "⚠️ Kažkas nepavyko. Bandykite dar kartą.",
     session_active: "⏱️ Sesija aktyvi"
   },
 
