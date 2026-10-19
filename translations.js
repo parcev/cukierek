@@ -12,8 +12,8 @@ const translations = {
     label: "PL",
     flag: "https://flagcdn.com/pl.svg",
 
-    
- // HTML Static Content
+
+    // HTML Static Content
     card_title: "🍬 Odbierz cukierka!",
     card_desc:
       "<span class='red'>Zaobserwuj</span> nasz profil, a następnie <span class='red'>wróć</span> tutaj i <span class='red'>odbierz cukierka</span> za każde medium społecznościowe.",
@@ -33,20 +33,20 @@ const translations = {
 
     // Status Messages & Errors
     status_prep_session: "⏳ Przygotowujemy sesję...",
-    status_session_expired: "⌛ Sesja wygasła. Rozpocznij nową.",
+    status_session_expired: "⌛ Sesja się zakończyła. Rozpocznij nową.",
 
     status_fb_click_verify:
-      "👆 Kliknij „Odbierz cukierka za Facebooka”.",
+      "👆 Kliknij „Odbierz cukierka za Facebook”.",
     status_ig_click_verify:
       "👆 Kliknij „Odbierz cukierka za Instagram”.",
 
-    status_checking_fb: "🔎 Sprawdzamy Facebooka...",
-    status_checking_ig: "🔎 Sprawdzamy Instagrama...",
+    status_checking_fb: "🔎 Sprawdzamy Facebook...",
+    status_checking_ig: "🔎 Sprawdzamy Instagram...",
 
     status_success_fb:
-      "🎉 Facebook zweryfikowany! Odbierz cukierka z automatu.",
+      "🎉 Odbierz cukierek z automatu!",
     status_success_ig:
-      "🎉 Instagram zweryfikowany! Odbierz cukierka z automatu.",
+      "🎉 Odbierz cukierek z automatu!",
 
     status_not_verified_fb:
       "❌ Nie wykryliśmy jeszcze nowego obserwującego na Facebooku. Upewnij się, że obserwujesz naszą stronę, i spróbuj ponownie.",
@@ -54,11 +54,11 @@ const translations = {
       "❌ Nie wykryliśmy jeszcze nowego obserwującego na Instagramie. Upewnij się, że obserwujesz nasz profil, i spróbuj ponownie.",
 
     status_claimed_both: "🍬 Odebrałeś już oba cukierki.",
-    status_fb_claimed: "🍬 Cukierek za Facebooka został już odebrany.",
+    status_fb_claimed: "🍬 Cukierek za Facebook został już odebrany.",
     status_ig_claimed: "🍬 Cukierek za Instagram został już odebrany.",
 
     status_fb_claimed_can_ig:
-      "✅ Cukierek za Facebooka odebrany. Możesz też odebrać cukierka za Instagram.",
+      "✅ Cukierek za Facebook odebrany. Możesz też odebrać cukierka za Instagram.",
     status_ig_claimed_can_fb:
       "✅ Cukierek za Instagram odebrany. Możesz też odebrać cukierka za Facebooka.",
 
@@ -80,65 +80,65 @@ const translations = {
     flag: "https://flagcdn.com/lt.svg",
 
     // HTML Static Content
-card_title: "🍬 Gaukite saldainį!",
-card_desc:
-  "<span class='red'>Stebėkite</span> mus „Facebook“ arba <span class='red'>sekite</span> „Instagram“, tada <span class='red'>grįžkite</span> čia ir <span class='red'>atsiimkite saldainį</span> už kiekvieną socialinį tinklą.",
-header_fb: "🔵 Facebook",
-header_ig: "📸 Instagram",
+    card_title: "🍬 Gaukite saldainį!",
+    card_desc:
+      "<span class='red'>Stebėkite</span> mus „Facebook“ arba <span class='red'>sekite</span> „Instagram“, tada <span class='red'>grįžkite</span> čia ir <span class='red'>atsiimkite saldainį</span> už kiekvieną socialinį tinklą.",
+    header_fb: "🔵 Facebook",
+    header_ig: "📸 Instagram",
 
-// Buttons
-btn_fb_start: "1. Stebėkite mus „Facebook“",
-btn_fb_claimed: "✅ „Facebook“ saldainis atsiimtas",
-btn_fb_goto: "✅ Atidaryti „Facebook“",
-btn_fb_verify: "2. Atsiimti saldainį už stebėjimą „Facebook“",
+    // Buttons
+    btn_fb_start: "1. Stebėkite mus „Facebook“",
+    btn_fb_claimed: "✅ „Facebook“ saldainis atsiimtas",
+    btn_fb_goto: "✅ Atidaryti „Facebook“",
+    btn_fb_verify: "2. Atsiimti saldainį už stebėjimą „Facebook“",
 
-btn_ig_start: "1. Sekite mus „Instagram“",
-btn_ig_claimed: "✅ „Instagram“ saldainis atsiimtas",
-btn_ig_goto: "✅ Atidaryti „Instagram“",
-btn_ig_verify: "2. Atsiimti saldainį už sekimą „Instagram“",
+    btn_ig_start: "1. Sekite mus „Instagram“",
+    btn_ig_claimed: "✅ „Instagram“ saldainis atsiimtas",
+    btn_ig_goto: "✅ Atidaryti „Instagram“",
+    btn_ig_verify: "2. Atsiimti saldainį už sekimą „Instagram“",
 
-// Status Messages & Errors
-status_prep_session: "⏳ Ruošiama sesija...",
-status_session_expired:
-  "⌛ Sesija baigėsi. Galite pradėti iš naujo.",
+    // Status Messages & Errors
+    status_prep_session: "⏳ Ruošiama sesija...",
+    status_session_expired:
+      "⌛ Sesija baigėsi. Galite pradėti iš naujo.",
 
-status_fb_click_verify:
-  "👆 Spustelėkite mygtuką „Atsiimti saldainį už stebėjimą „Facebook““.",
-status_ig_click_verify:
-  "👆 Spustelėkite mygtuką „Atsiimti saldainį už sekimą „Instagram““.",
+    status_fb_click_verify:
+      "👆 Spustelėkite mygtuką „Atsiimti saldainį už stebėjimą „Facebook““.",
+    status_ig_click_verify:
+      "👆 Spustelėkite mygtuką „Atsiimti saldainį už sekimą „Instagram““.",
 
-status_checking_fb: "🔎 Tikrinama, ar stebite „Facebook“ puslapį...",
-status_checking_ig: "🔎 Tikrinama, ar sekate „Instagram“ profilį...",
+    status_checking_fb: "🔎 Tikrinama, ar stebite „Facebook“ puslapį...",
+    status_checking_ig: "🔎 Tikrinama, ar sekate „Instagram“ profilį...",
 
-status_success_fb:
-  "🎉 „Facebook“ stebėjimas patvirtintas! Atsiimkite savo saldainį.",
-status_success_ig:
-  "🎉 „Instagram“ sekimas patvirtintas! Atsiimkite savo saldainį.",
+    status_success_fb:
+      "🎉 „Facebook“ stebėjimas patvirtintas! Atsiimkite savo saldainį.",
+    status_success_ig:
+      "🎉 „Instagram“ sekimas patvirtintas! Atsiimkite savo saldainį.",
 
-status_not_verified_fb:
-  "❌ Nepavyko patvirtinti, kad stebite mūsų „Facebook“ puslapį. Įsitikinkite, kad jį stebite, ir bandykite dar kartą.",
-status_not_verified_ig:
-  "❌ Nepavyko patvirtinti, kad sekate mūsų „Instagram“ profilį. Įsitikinkite, kad jį sekate, ir bandykite dar kartą.",
+    status_not_verified_fb:
+      "❌ Nepavyko patvirtinti, kad stebite mūsų „Facebook“ puslapį. Įsitikinkite, kad jį stebite, ir bandykite dar kartą.",
+    status_not_verified_ig:
+      "❌ Nepavyko patvirtinti, kad sekate mūsų „Instagram“ profilį. Įsitikinkite, kad jį sekate, ir bandykite dar kartą.",
 
-status_claimed_both: "🍬 Jau atsiėmėte abu saldainius!",
-status_fb_claimed: "🍬 Saldainis už „Facebook“ puslapio stebėjimą jau atsiimtas.",
-status_ig_claimed: "🍬 Saldainis už „Instagram“ profilio sekimą jau atsiimtas.",
+    status_claimed_both: "🍬 Jau atsiėmėte abu saldainius!",
+    status_fb_claimed: "🍬 Saldainis už „Facebook“ puslapio stebėjimą jau atsiimtas.",
+    status_ig_claimed: "🍬 Saldainis už „Instagram“ profilio sekimą jau atsiimtas.",
 
-status_fb_claimed_can_ig:
-  "✅ Saldainį už „Facebook“ puslapio stebėjimą jau atsiėmėte. Taip pat galite atsiimti saldainį už „Instagram“ profilio sekimą.",
-status_ig_claimed_can_fb:
-  "✅ Saldainį už „Instagram“ profilio sekimą jau atsiėmėte. Taip pat galite atsiimti saldainį už „Facebook“ puslapio stebėjimą.",
+    status_fb_claimed_can_ig:
+      "✅ Saldainį už „Facebook“ puslapio stebėjimą jau atsiėmėte. Taip pat galite atsiimti saldainį už „Instagram“ profilio sekimą.",
+    status_ig_claimed_can_fb:
+      "✅ Saldainį už „Instagram“ profilio sekimą jau atsiėmėte. Taip pat galite atsiimti saldainį už „Facebook“ puslapio stebėjimą.",
 
-status_popup_blocked_fb:
-  "⚠️ Naršyklė užblokavo „Facebook“ langą. Leiskite atidaryti iššokančiuosius langus ir bandykite dar kartą.",
-status_popup_blocked_ig:
-  "⚠️ Naršyklė užblokavo „Instagram“ langą. Leiskite atidaryti iššokančiuosius langus ir bandykite dar kartą.",
+    status_popup_blocked_fb:
+      "⚠️ Naršyklė užblokavo „Facebook“ langą. Leiskite atidaryti iššokančiuosius langus ir bandykite dar kartą.",
+    status_popup_blocked_ig:
+      "⚠️ Naršyklė užblokavo „Instagram“ langą. Leiskite atidaryti iššokančiuosius langus ir bandykite dar kartą.",
 
-status_no_connection: "⚠️ Nepavyksta susisiekti su serveriu. Patikrinkite interneto ryšį.",
-status_busy:
-  "⏳ Saldainių aparatas šiuo metu užimtas. Pabandykite dar kartą po akimirkos.",
-status_error: "⚠️ Įvyko klaida. Bandykite dar kartą.",
-session_active: "⏱️ Sesija aktyvi"
+    status_no_connection: "⚠️ Nepavyksta susisiekti su serveriu. Patikrinkite interneto ryšį.",
+    status_busy:
+      "⏳ Saldainių aparatas šiuo metu užimtas. Pabandykite dar kartą po akimirkos.",
+    status_error: "⚠️ Įvyko klaida. Bandykite dar kartą.",
+    session_active: "⏱️ Sesija aktyvi"
   },
 
   en: {
